@@ -35,10 +35,14 @@ class LockfileGems < GemsCommand
 
   end
 
+  def get_data
+    Dir.chdir(@dirname)
+    return File.open(@filename).read
+  end
+
   def execute
     puts "reading #{@path}"
-    Dir.chdir(@dirname)
-    file_data = File.open(@filename).read
+    file_data = get_data
     lockfile = Bundler::LockfileParser.new(file_data)
     lockfile.specs.each do |spec|
       #TODO: fetch gem and md5?

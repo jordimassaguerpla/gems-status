@@ -29,10 +29,14 @@ class RubyGemsGems < GemsCommand
 
   end
 
-  def execute
+  def get_data
     source = open(@url)
     gz = Zlib::GzipReader.new(source)
-    response = gz.read
+    return gz.read
+  end
+
+  def execute
+    response = get_data
     data = Marshal.load(response)
     data.each do |line|
       #TODO: fetch gem and md5

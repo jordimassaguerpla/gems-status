@@ -32,6 +32,7 @@ class OBSGems < GemsCommand
       exit
     end
   end
+
   def initialize(conf)
     check_parameters(conf)
     @result = {}
@@ -66,10 +67,14 @@ class OBSGems < GemsCommand
     parse_rpm_data(repo, package)
   end
 
+  def get_data(url)
+    return open(url, :http_basic_authentication => [@username, @password]).read
+  end
+
   def parse_rpm_data(project, package)
     url = @obs_url + "/" + project
     rpm_url = url + "/" + package
-    response = open(rpm_url, :http_basic_authentication => [@username, @password]).read
+    response = get_data(rpm_url) 
     data = XmlSimple.xml_in(response)
     if data["linkinfo"] then
       puts "DEBUG: #{data["name"]} is a link."
@@ -88,7 +93,7 @@ class OBSGems < GemsCommand
 
   def execute
     url = @obs_url + "/" + @repo
-    response = open(url, :http_basic_authentication => [@username, @password]).read
+    response = get_data(url)
     data = XmlSimple.xml_in(response)
     data["entry"].each do |entry|
       entry.each do |k,v|
