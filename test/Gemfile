@@ -1,0 +1,104 @@
+source 'http://rubygems.org'
+
+gem 'rake', '>=0.9.2'
+gem 'rails', '3.1.1'
+
+gem 'sqlite3-ruby', '>=1.3.3', :require => 'sqlite3'
+
+# Use unicorn as the web server
+# gem 'unicorn'
+
+# Deploy with Capistrano
+# gem 'capistrano'
+
+# To use debugger
+# gem 'ruby-debug'
+
+# Bundle the extra gems:
+# gem 'bj'
+# gem 'nokogiri'
+# gem 'sqlite3-ruby', :require => 'sqlite3'
+# gem 'aws-s3', :require => 'aws/s3'
+
+gem 'newrelic_rpm'
+
+# Bundle gems for the local environment. Make sure to
+# put test-only gems in this group so their generators
+# and rake tasks are available in development mode:
+group :test do
+  gem 'timecop'
+  gem 'shoulda'
+  gem 'ci_reporter'
+  gem 'factory_girl'
+  gem 'factory_girl_rails'
+  gem 'migration_test_helper'
+  gem 'mocha', :require => false
+  gem 'webmock', :require => 'webmock/test_unit'
+  gem 'fakefs', :require => 'fakefs/safe'
+end
+
+group :development do
+  gem 'parallel_tests'
+end
+
+gem 'multi_db'
+gem 'haml'
+gem 'sass'
+gem 'friendly_id', '~> 3.3.0.rc2'
+gem 'uuid_it'
+gem 'RedCloth'
+gem "gettext", '>=1.9.3'
+#gem "gettext_activerecord"
+gem "has_alter_ego"
+gem 'oauth', '>=0.4.1'
+gem "oauth-plugin"
+gem 'thinking-sphinx', '~>2.0.5', :require => 'thinking_sphinx'
+gem 'memcache-client'
+gem 'system_timer'
+gem 'ruby-openid'
+gem 'fastercsv'
+gem 'amazon-ec2'
+gem 'aws-s3'
+gem 'pg'
+gem 'gruff'
+gem 'rmagick', '=2.12.2'
+gem 'awesome_nested_set'
+gem 'verification', '>=1.0.2'
+#, :git => 'git://github.com/collectiveidea/awesome_nested_set'
+gem 'http_accept_language'
+#, :git => 'git://github.com/iain/http_accept_language.git'
+gem "will_paginate", '~> 3.0.pre4'
+gem "net-ssh"
+gem 'sass-rails'
+gem "uglifier"
+gem "yui-compressor"
+# We need prototype-rails for the "render :update" blocks
+gem 'prototype-rails'
+gem 'daemons'
+gem 'coffee-rails'
+gem 'abingo'
+gem 'dynamic_form'
+gem 'private_pub'
+gem 'faye'
+
+gem "omniauth", '>=0.2.6'
+gem "has_mobile_views"
+
+## Feedzirra not needed for Onsite or kiosk
+#unless OPTS.onsite_mode or OPTS.kiosk_mode
+  gem 'feedzirra', '>=0.0.24'
+#end
+
+# TODO: Handle those special cases:
+#if !OPTS.onsite_mode and OPTS.graylog2['enabled']
+  gem 'gelf'
+#end
+
+# to work around https://github.com/mikel/mail/issues/260,
+# let's use https://github.com/mikel/mail/pull/265/files
+gem 'mail'
+#, :git => 'git://github.com/zimbatm/mail.git'
+
+group :test do
+  gem "rcov"
+end
