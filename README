@@ -1,0 +1,14 @@
+First of all you need to create a configuration file in conf called test.yaml.
+In order to do that you can copy the conf/test.yaml.example
+
+If you want to use the obs you need to change the credentials (username/password)
+ to yours in the build service at the conf/test.yaml
+
+After you have a conf/test.yaml file, you can run it by:
+cd lib
+./gems-status.rb
+
+have fun
+
+TODO: write something else here :) !
+
