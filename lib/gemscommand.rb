@@ -11,7 +11,7 @@ class GemsCommand
     name = gem[0...pos]
     pos = name.rindex("-")
     if ! pos then
-      return gem
+      return name
     end
     return name[0...pos]
   end
@@ -19,12 +19,12 @@ class GemsCommand
   def gem_version(gem)
     pos = gem.rindex(".gem")
     if ! pos then
-      return -1
+      return '-1'
     end
     name = gem[0...pos]
     pos = name.rindex("-")
     if ! pos then
-      return -1
+      return '-1'
     end
     pos = pos + 1
     return name[pos..-1]
