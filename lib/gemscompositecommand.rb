@@ -12,11 +12,16 @@ class GemsCompositeCommand < GemsCommand
   end
 
   def execute
-    if @commands then
-      @commands.each do |command|
-        command.execute
-        @results << command.result
-      end
+    threads = []
+    if !@commands then
+      return
+    end
+    @commands.each do |command|
+      threads << Thread.new { command.execute }
+    end
+    threads.each { |aThread| aThread.join }
+    @commands.each do |command|
+      @results << command.result
     end
   end
 
