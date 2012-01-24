@@ -1,14 +1,31 @@
-First of all you need to create a configuration file in conf called test.yaml.
-In order to do that you can copy the conf/test.yaml.example
+gem-status compares rubygems information from different sources as for reporting which gems are outdated.
+
+Source can be:
+
+- OpenSUSE BuildService
+- Rubygems.org
+- Gemfile.lock file
+
+Data compared is:
+
+- version
+- md5sum
+
+gem-status will output a report for each gem that is in all the sources, comparing versions and md5sums.
+
+== INSTRUCTIONS
+
+First of all you need to create a configuration file where you specify your sources.
+In order to do that you can copy the conf/test.yaml.example and use it as a template.
 
 If you want to use the obs you need to change the credentials (username/password)
- to yours in the build service at the conf/test.yaml
+ to yours in the build service at the configuration file.
 
-After you have a conf/test.yaml file, you can run it by:
-cd lib
-./gems-status.rb
+After you have a configuration file, you can run it by:
 
-have fun
+bin/gems-status.rb conf_file
 
-TODO: write something else here :) !
+have fun!
+
+jordi massaguer pla - jmassaguerpla@suse.de
 
