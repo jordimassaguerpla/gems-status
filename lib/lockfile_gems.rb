@@ -4,8 +4,8 @@ require "open-uri"
 require "zlib"
 
 require "bundler"
-require "gemsimple"
-require "gemscommand"
+require "gem_simple"
+require "gems_command"
 
 class LockfileGems < GemsCommand
   def check_parameters(conf)

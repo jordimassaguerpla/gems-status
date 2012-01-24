@@ -3,8 +3,8 @@ require "xmlsimple"
 require "open-uri"
 require "zlib"
 
-require "gemsimple"
-require "gemscommand"
+require "gem_simple"
+require "gems_command"
 
 class RubyGemsGems_GemSimple < GemSimple
 

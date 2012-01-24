@@ -2,8 +2,8 @@ require "rubygems"
 require "xmlsimple"
 require "open-uri"
 
-require "gemsimple"
-require "gemscommand"
+require "gem_simple"
+require "gems_command"
 
 class OBSGems < GemsCommand
   def check_parameters(conf)

@@ -8,11 +8,11 @@ require "xmlsimple"
 require "open-uri"
 require "yaml"
 
-require "gemsimple"
-require "obsgems"
-require "lockfilegems"
-require "rubygemsgems"
-require "gemscompositecommand"
+require "gem_simple"
+require "obs_gems"
+require "lockfile_gems"
+require "ruby_gems_gems"
+require "gems_composite_command"
 
 class GemStatus
   def initialize(conf_file)

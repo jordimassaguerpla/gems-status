@@ -1,5 +1,5 @@
-require "gemsimple"
-require "gemscommand"
+require "gem_simple"
+require "gems_command"
 
 class GemsCompositeCommand < GemsCommand
   def initialize

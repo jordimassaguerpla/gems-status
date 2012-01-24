@@ -1,6 +1,6 @@
 $:.unshift File.join(File.dirname(__FILE__), "..", "lib")
 require 'test/unit'
-require 'rubygemsgems'
+require 'ruby_gems_gems'
 
 class RubyGemsGemsTest < Test::Unit::TestCase
  def test_not_implemented
