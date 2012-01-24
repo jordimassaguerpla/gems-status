@@ -81,6 +81,10 @@ class OBSGems < GemsCommand
       parse_link(data["linkinfo"])
       return
     end
+    if !data["entry"]
+      puts "ERROR: something went wrong retrieving info from #{project} : #{package}"
+      return
+    end
     data["entry"].each do |entry|
       if entry["name"].end_with?(".gem") then
         name = gem_name(entry['name'])
