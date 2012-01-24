@@ -2,7 +2,6 @@
 #TODO: implement license checker: ninka??
 #TODO: do we need other checkers?
 #TODO: implement a nicer interface
-#TODO: implement tests (need refactoring on getting the data)
  
 require "rubygems"
 require "xmlsimple"
