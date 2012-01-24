@@ -3,5 +3,20 @@
 $:.unshift File.join(File.dirname(__FILE__), "..", "lib")
 require "gems-status"
 
-GemStatus.new("../conf/test.yaml").execute
+def echo_usage
+  puts "usage: gem-status conf_file"
+end 
+
+if ARGV.length == 0 then
+  echo_usage
+  exit
+end
+
+if !File::exists?(ARGV[0]) then
+  puts "ERROR: File does not exists: #{ARGV[1]}"
+  echo_usage
+  exit
+end
+
+GemStatus.new(ARGV[0]).execute
 
