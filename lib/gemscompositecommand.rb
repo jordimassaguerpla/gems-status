@@ -26,6 +26,9 @@ class GemsCompositeCommand < GemsCommand
   end
 
   def common_key?(k)
+    if !@results or @results.empty?
+      return false
+    end
     @results.each do |result|
       if !result[k] then
         return false
