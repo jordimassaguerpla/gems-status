@@ -45,10 +45,9 @@ class LockfileGems < GemsCommand
     file_data = get_data
     lockfile = Bundler::LockfileParser.new(file_data)
     lockfile.specs.each do |spec|
-      #TODO: fetch gem and md5?
       name = spec.name
       version = spec.version
-      @result[name] = GemSimple.new(name, version , 'md5', @dirname + "/" + @filename)
+      @result[name] = GemSimple.new(name, version , '', @dirname + "/" + @filename)
     end
   end
 
