@@ -6,6 +6,24 @@ require "zlib"
 require "gemsimple"
 require "gemscommand"
 
+class RubyGemsGems_GemSimple < GemSimple
+
+  def md5
+    puts "DEBUG: download and md5 for #{@name}"
+    gem_spec_uri = "#{@origin}/api/v1/gems/rails.yaml"
+    source = open(gem_spec_uri)
+    gem_uri = ""
+    YAML::load_documents(source) {|c| gem_uri = c["gem_uri"]}
+    if !gem_uri
+      return ""
+    end
+    source = open(gem_uri)
+    digest = Digest::MD5.hexdigest(source.read)
+    return digest
+  end
+end
+
+
 class RubyGemsGems < GemsCommand
   def check_parameters(conf)
     if !conf['classname'] then
@@ -20,28 +38,33 @@ class RubyGemsGems < GemsCommand
       puts "ERROR: parameter url not found for RubyGemsGems"
       exit
     end
+    if !conf['specs'] then
+      puts "ERROR: parameter specs not found for RubyGemsGems"
+      exit
+    end
   end
 
   def initialize(conf)
     check_parameters(conf)
     @url = conf['url']
+    @specs = conf['specs']
     @result = {}
 
   end
 
   def get_data
-    source = open(@url)
+    specs_url = @url + "/" + @specs 
+    source = open(specs_url)
     gz = Zlib::GzipReader.new(source)
     return gz.read
   end
+
 
   def execute
     response = get_data
     data = Marshal.load(response)
     data.each do |line|
-      #TODO: fetch gem and md5
-      #curl /api/v1/gems/[GEM NAME].(json|xml|yaml) <- version and download url
-      @result[line[0]] = GemSimple.new(line[0], line[1], 'md5', @url)
+      @result[line[0]] = RubyGemsGems_GemSimple.new(line[0], line[1],'' , @url)
     end
   end
 
