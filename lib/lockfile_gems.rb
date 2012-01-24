@@ -8,6 +8,13 @@ require "gem_simple"
 require "gems_command"
 
 class LockfileGems < GemsCommand
+  def initialize(conf)
+    check_parameters(conf)
+    @dirname = conf['dirname']
+    @filename = conf['filename']
+    @result = {}
+  end
+
   def check_parameters(conf)
     if !conf['classname'] then
       puts "ERROR: trying to initialize LockfileGems  when parameter classname does not exists"
@@ -25,14 +32,6 @@ class LockfileGems < GemsCommand
       puts "ERROR: parameter filename not found for RubyGemsGems"
       exit
     end
-  end
-
-  def initialize(conf)
-    check_parameters(conf)
-    @dirname = conf['dirname']
-    @filename = conf['filename']
-    @result = {}
-
   end
 
   def get_data

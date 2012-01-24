@@ -25,6 +25,15 @@ end
 
 
 class RubyGemsGems < GemsCommand
+
+  def initialize(conf)
+    check_parameters(conf)
+    @url = conf['url']
+    @specs = conf['specs']
+    @result = {}
+
+  end
+
   def check_parameters(conf)
     if !conf['classname'] then
       puts "ERROR: trying to initialize RubyGemsGems when parameter classname does not exists"
@@ -42,14 +51,6 @@ class RubyGemsGems < GemsCommand
       puts "ERROR: parameter specs not found for RubyGemsGems"
       exit
     end
-  end
-
-  def initialize(conf)
-    check_parameters(conf)
-    @url = conf['url']
-    @specs = conf['specs']
-    @result = {}
-
   end
 
   def get_data

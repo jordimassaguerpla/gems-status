@@ -6,6 +6,16 @@ require "gem_simple"
 require "gems_command"
 
 class OBSGems < GemsCommand
+  def initialize(conf)
+    check_parameters(conf)
+    @result = {}
+    @username = conf['username']
+    @password = conf['password']
+    @obs_url = conf['url']
+    @repo = conf['obs_repo']
+
+  end
+
   def check_parameters(conf)
     if !conf['classname'] then
       puts "ERROR: trying to initialize OBSGem when parameter classname does not exists"
@@ -31,16 +41,6 @@ class OBSGems < GemsCommand
       puts "ERROR: parameter obs_repo not found for OBSGems"
       exit
     end
-  end
-
-  def initialize(conf)
-    check_parameters(conf)
-    @result = {}
-    @username = conf['username']
-    @password = conf['password']
-    @obs_url = conf['url']
-    @repo = conf['obs_repo']
-
   end
 
   def parse_link(linkinfo)
