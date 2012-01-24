@@ -45,6 +45,7 @@ class GemsCompositeCommand < GemsCommand
           puts "#{result[k].origin}"
           puts " version : #{result[k].version}"
           puts " md5: #{result[k].md5}"
+          puts "---------"
         end
       end
     end
