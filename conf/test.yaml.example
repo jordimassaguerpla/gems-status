@@ -10,4 +10,5 @@
 - classname: 'LockfileGems'
   dirname: '/home/jordi/work/suse/gems-status/test'
   filename: 'Gemfile.lock'
+  gems_url: 'http://rubygems.org/gems'
 

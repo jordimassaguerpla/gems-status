@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
 
 $:.unshift File.join(File.dirname(__FILE__), "..", "lib")
-require "gems-status"
+require "gems_status"
 
 def echo_usage
   puts "usage: gem-status conf_file"

@@ -18,71 +18,80 @@ class OBSGems < GemsCommand
 
   def check_parameters(conf)
     if !conf['classname'] then
-      puts "ERROR: trying to initialize OBSGem when parameter classname does not exists"
+      $stderr.puts "ERROR: trying to initialize OBSGem when parameter classname does not exists"
       exit
     end
     if conf['classname'] != "OBSGems" then
-      puts "ERROR: trying to initialize OBSGems when parameter classname is #{conf['classname']}"
+      $stderr.puts "ERROR: trying to initialize OBSGems when parameter classname is #{conf['classname']}"
       exit
     end
     if !conf['username'] then
-      puts "ERROR: parameter username not found for OBSGems"
+      $stderr.puts "ERROR: parameter username not found for OBSGems"
       exit
     end
     if !conf['password'] then
-      puts "ERROR: parameter password not found for OBSGems"
+      $stderr.puts "ERROR: parameter password not found for OBSGems"
       exit
     end
     if !conf["url"] then
-      puts "ERROR: parameter url not found for OBSGems"
+      $stderr.puts "ERROR: parameter url not found for OBSGems"
       exit
     end
     if !conf["obs_repo"] then
-      puts "ERROR: parameter obs_repo not found for OBSGems"
+      $stderr.puts "ERROR: parameter obs_repo not found for OBSGems"
       exit
     end
   end
 
   def parse_link(linkinfo)
     if linkinfo.length > 1 then
-      puts "ERROR: There is more than one linkinfo element"
+      $stderr.puts "ERROR: There is more than one linkinfo element"
       return
     end
     if !linkinfo[0]["project"] then
-      puts "ERROR: Project element does not exists in linkinfo"
+      $stderr.puts "ERROR: Project element does not exists in linkinfo"
       return
     end
     if !linkinfo[0]["package"] then
-      puts "ERROR: Package element does not exists in linkinfo"
+      $stderr.puts "ERROR: Package element does not exists in linkinfo"
       return
     end
     repo = linkinfo[0]["project"]
     package = linkinfo[0]["package"]
     if linkinfo[0]["rev"] then
       rev = linkinfo[0]["rev"]
-      puts "DEBUG: Revision in link: #{rev}."
+      $stderr.puts "DEBUG: Revision in link: #{rev}."
       package = package + "?rev=" + rev
     end
-    puts "DEBUG: follow link to project: #{repo} package: #{package}"
+    $stderr.puts "DEBUG: follow link to project: #{repo} package: #{package}"
     parse_rpm_data(repo, package)
   end
 
   def get_data(url)
-    return open(url, :http_basic_authentication => [@username, @password]).read
+    data = ""
+    begin
+      data = open(url, :http_basic_authentication => [@username, @password]).read
+    rescue
+      $stderr.puts "ERROR: There was a problem opening #{url} " 
+    end
+    return data 
   end
 
   def parse_rpm_data(project, package)
     url = @obs_url + "/" + project
     rpm_url = url + "/" + package
     response = get_data(rpm_url) 
+    if response.empty? then
+      return
+    end
     data = XmlSimple.xml_in(response)
     if data["linkinfo"] then
-      puts "DEBUG: #{data["name"]} is a link."
+      $stderr.puts "DEBUG: #{data["name"]} is a link."
       parse_link(data["linkinfo"])
       return
     end
-    if !data["entry"]
-      puts "ERROR: something went wrong retrieving info from #{project} : #{package}"
+    if !data["entry"] then
+      $stderr.puts "ERROR: something went wrong retrieving info from #{project} : #{package}"
       return
     end
     data["entry"].each do |entry|
@@ -90,7 +99,7 @@ class OBSGems < GemsCommand
         name = gem_name(entry['name'])
         version = gem_version(entry['name'])
         md5 = entry['md5']
-        @result[name] = GemSimple.new(name, version, md5, url)
+        @result[name] = GemSimple.new(name, Gem::Version.create(version), md5, url)
       end
     end
   end
@@ -98,6 +107,9 @@ class OBSGems < GemsCommand
   def execute
     url = @obs_url + "/" + @repo
     response = get_data(url)
+    if response.empty? then
+      return
+    end
     data = XmlSimple.xml_in(response)
     data["entry"].each do |entry|
       entry.each do |k,v|

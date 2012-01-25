@@ -17,7 +17,11 @@ require "gems_composite_command"
 class GemStatus
   def initialize(conf_file)
     @conf_file = conf_file
-    @conf = YAML::load(File::open(conf_file))
+    begin
+      @conf = YAML::load(File::open(conf_file))
+    rescue
+      $stderr.puts "ERROR: There was a problem opening #{conf_file}"
+    end
   end
 
   def execute
