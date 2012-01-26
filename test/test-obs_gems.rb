@@ -5,11 +5,6 @@ require 'obs_gems'
 class OBSGemsTest < OBSGems
   attr_accessor :result
   def get_data(url)
-    if !url then
-        return '<directory count="1"> 
-                <entry name="rubygem-test"/>
-                </directory>'
-    end
     return '<directory name="rubygem-test" rev="3" vrev="3" srcmd5="85dff037c5d450f68e3724af3624c6b4">
              <entry name="rubygem-test.changes" md5="410f50267b43b7dba33b54cb3f588ecb" size="284" mtime="1276279120" />
              <entry name="rubygem-test.spec" md5="6a519f6a782a6f3cb151feef1ab69aaa" size="1827" mtime="1276279120" />
