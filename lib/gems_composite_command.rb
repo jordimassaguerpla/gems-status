@@ -37,25 +37,11 @@ class GemsCompositeCommand < GemsCommand
     return true
   end
 
-  def print_commons
-    @results[0].each do |k,v| 
-      if common_key?(k) then 
-        puts "=== #{k}"
-        @results.each do |result|
-          puts "#{result[k].origin}"
-          puts " version : #{result[k].version}"
-          puts " md5: #{result[k].md5}"
-          puts "---------"
-        end
-      end
-    end
-  end
-
   def equal_gems?(k)
-    if !common_key?(k)
+    if !@results or @results.empty?
       return false
     end
-    if !@results or @results.empty?
+    if !common_key?(k)
       return false
     end
     version = @results[0][k].version
@@ -63,9 +49,6 @@ class GemsCompositeCommand < GemsCommand
     @results.each do |result|
       if result[k].version != version
         return false
-      end
-      if !result[k].md5 then
-        next
       end
       if result[k].md5 != md5
         return false
@@ -76,13 +59,25 @@ class GemsCompositeCommand < GemsCommand
     return true
   end
 
-  def print_commons_diff
+  def are_there_results?
+    if !@results
+      return false
+    end
+    if !@results[0]
+      return false
+    end
+    if !@results[1]
+      return false
+    end
+    return true
+  end
+
+  def print
+    if !are_there_results?
+      return
+    end
     @results[0].each do |k,v| 
       if common_key?(k) then 
-        if equal_gems?(k) then
-          $stderr.puts "DEBUG:  equal gems: #{k}"
-          next
-        end
         puts "=== #{k}"
         @results.each do |result|
           puts "#{result[k].origin}"
@@ -94,30 +89,23 @@ class GemsCompositeCommand < GemsCommand
     end
   end
 
-  def print
-    if !@results
-      return
-    end
-    if !@results[0]
-      return
-    end
-    if !@results[1]
-      return
-    end
-    print_commons
-  end
-
   def print_diff
-    if !@results
+    if !are_there_results?
       return
     end
-    if !@results[0]
-      return
+    @results[0].each do |k,v| 
+      if equal_gems?(k) then
+        $stderr.puts "DEBUG:  equal gems: #{k}"
+        next
+      end
+      puts "=== #{k}"
+      @results.each do |result|
+        puts "#{result[k].origin}"
+        puts " version : #{result[k].version}"
+        puts " md5: #{result[k].md5}"
+        puts "---------"
+      end
     end
-    if !@results[1]
-      return
-    end
-    print_commons_diff
   end
 
 end
