@@ -2,9 +2,27 @@ $:.unshift File.join(File.dirname(__FILE__), "..", "lib")
 require 'test/unit'
 require 'ruby_gems_gems'
 
-class RubyGemsGemsTest < Test::Unit::TestCase
- def test_not_implemented
-  assert(false);
+class RubyGemsGemsTest < RubyGemsGems
+  def initialize
+    @url = ""
+    @specs  = ""
+    @result = {}
+  end
+
+  def get_data
+    return Marshal.dump([["test","0.8.6"]])
+  end
+end
+
+class TestRubyGemsGems < Test::Unit::TestCase
+ def test_get_rubygems_data
+   rubygemsgems = RubyGemsGemsTest.new 
+   rubygemsgems.execute
+   rubygemsgems.result.each {|k,v| puts "k: #{k} v: #{v}"}
+   result = rubygemsgems.result["test"].name
+   assert_equal("test",result)
+   result = rubygemsgems.result["test"].version
+   assert_equal(Gem::Version.new("0.8.6"), result)
  end
 end
 

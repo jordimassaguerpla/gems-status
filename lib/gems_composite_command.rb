@@ -52,7 +52,6 @@ class GemsCompositeCommand < GemsCommand
   end
 
   def equal_gems?(k)
-    #TODO: test this!!!!
     if !common_key?(k)
       return false
     end

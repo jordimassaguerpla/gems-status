@@ -13,6 +13,8 @@ Data compared is:
 
 gem-status will output a report for each gem that is in all the sources, comparing versions and md5sums.
 
+NOTE: In OBS, when it founds a link it follows that. However, having patches in links that affect the gem file is not supported.
+
 == INSTRUCTIONS
 
 First of all you need to create a configuration file where you specify your sources.

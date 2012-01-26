@@ -33,7 +33,7 @@ class TestObsGems < Test::Unit::TestCase
    result = obsgems.result["test"].name
    assert_equal("test", result)
    result = obsgems.result["test"].version
-   assert_equal("0.8.6", result)
+   assert_equal(Gem::Version.new("0.8.6"), result)
    result = obsgems.result["test"].md5
    assert_equal("123", result)
  end

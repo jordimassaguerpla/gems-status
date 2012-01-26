@@ -6,37 +6,15 @@ require "zlib"
 require "bundler"
 require "ruby_gems_gems_gem_simple"
 require "gems_command"
+require "utils"
 
 class LockfileGems < GemsCommand
   def initialize(conf)
-    check_parameters(conf)
+    Utils::check_parameters('LockfileGems', conf, ["dirname", "filename", "gems_url"])
     @dirname = conf['dirname']
     @filename = conf['filename']
     @gems_url = conf['gems_url']
     @result = {}
-  end
-
-  def check_parameters(conf)
-    if !conf['classname'] then
-      $stderr.puts "ERROR: trying to initialize LockfileGems  when parameter classname does not exists"
-      exit
-    end
-    if conf['classname']!="LockfileGems" then
-      $stderr.puts "ERROR: trying to initialize LockfileGems when parameter classname is #{conf['classname']}"
-      exit
-    end
-    if !conf['dirname'] then
-      $stderr.puts "ERROR: parameter dirname not found for RubyGemsGems"
-      exit
-    end
-    if !conf['filename'] then
-      $stderr.puts "ERROR: parameter filename not found for RubyGemsGems"
-      exit
-    end
-    if !conf['gems_url'] then
-      $stderr.puts "ERROR: parameter gems_url not found for RubyGemsGems"
-      exit
-    end
   end
 
   def get_data

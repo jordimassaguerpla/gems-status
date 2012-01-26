@@ -4,43 +4,17 @@ require "open-uri"
 
 require "gem_simple"
 require "gems_command"
+require "utils"
 
 class OBSGems < GemsCommand
   def initialize(conf)
-    check_parameters(conf)
+    Utils::check_parameters('OBSGems', conf, ["username", "password", "url", "obs_repo"])
     @result = {}
     @username = conf['username']
     @password = conf['password']
     @obs_url = conf['url']
     @repo = conf['obs_repo']
 
-  end
-
-  def check_parameters(conf)
-    if !conf['classname'] then
-      $stderr.puts "ERROR: trying to initialize OBSGem when parameter classname does not exists"
-      exit
-    end
-    if conf['classname'] != "OBSGems" then
-      $stderr.puts "ERROR: trying to initialize OBSGems when parameter classname is #{conf['classname']}"
-      exit
-    end
-    if !conf['username'] then
-      $stderr.puts "ERROR: parameter username not found for OBSGems"
-      exit
-    end
-    if !conf['password'] then
-      $stderr.puts "ERROR: parameter password not found for OBSGems"
-      exit
-    end
-    if !conf["url"] then
-      $stderr.puts "ERROR: parameter url not found for OBSGems"
-      exit
-    end
-    if !conf["obs_repo"] then
-      $stderr.puts "ERROR: parameter obs_repo not found for OBSGems"
-      exit
-    end
   end
 
   def parse_link(linkinfo)
@@ -99,7 +73,7 @@ class OBSGems < GemsCommand
         name = gem_name(entry['name'])
         version = gem_version(entry['name'])
         md5 = entry['md5']
-        @result[name] = GemSimple.new(name, Gem::Version.create(version), md5, url)
+        @result[name] = GemSimple.new(name, Gem::Version.new(version), md5, url)
       end
     end
   end
