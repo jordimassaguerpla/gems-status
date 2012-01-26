@@ -31,7 +31,9 @@ class GemStatus
       gems_composite_command.add_command(gems)
     end
     gems_composite_command.execute
-    gems_composite_command.print
+    puts "<html><head></head><body>"
+    gems_composite_command.print_html_diff
+    puts "</html"
   end
 
 end

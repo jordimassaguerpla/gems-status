@@ -72,40 +72,58 @@ class GemsCompositeCommand < GemsCommand
     return true
   end
 
-  def print
+  def print_html_diff
     if !are_there_results?
       return
     end
+    puts "<table width='100%'>"
     @results[0].each do |k,v| 
-      if common_key?(k) then 
-        puts "=== #{k}"
-        @results.each do |result|
-          puts "#{result[k].origin}"
-          puts " version : #{result[k].version}"
-          puts " md5: #{result[k].md5}"
-          puts "---------"
-        end
+      if !common_key?(k) then 
+        next
       end
-    end
-  end
-
-  def print_diff
-    if !are_there_results?
-      return
-    end
-    @results[0].each do |k,v| 
       if equal_gems?(k) then
         $stderr.puts "DEBUG:  equal gems: #{k}"
         next
       end
-      puts "=== #{k}"
+      puts "<tr><td><span style='font-weight:bold;'>#{k}</span></td></tr>"
+      version = @results[0][k].version
+      md5 = @results[0][k].md5
       @results.each do |result|
+        puts "<tr>"
+        puts "<td>"
         puts "#{result[k].origin}"
-        puts " version : #{result[k].version}"
-        puts " md5: #{result[k].md5}"
-        puts "---------"
+        puts "</td>"
+        puts "<td>"
+        v_color = "black"
+        md5_color = "black"
+        if version != result[k].version then
+          v_color = "red"
+        else
+          if md5 != result[k].md5 then
+            md5_color = "red"
+          end
+        end
+        puts "<span style='color: #{v_color}'>"
+        if !version then
+          puts "error: look error log"
+        end
+        puts "#{result[k].version}"
+        puts "</span>"
+        puts "</td>"
+        puts "<td>"
+        puts "<span style='color: #{md5_color}'>"
+        if result[k].md5.empty? then
+          puts "error: look error log"
+        end
+        puts "#{result[k].md5}"
+        puts "</span>"
+        puts "</td>"
+        puts "</tr>"
+        version = result[k].version
+        md5 = result[k].md5
       end
     end
+    puts "</table>"
   end
 
 end
