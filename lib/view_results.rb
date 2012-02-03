@@ -78,7 +78,7 @@ class ViewResults
       html_string << "</td>"
       html_string << "<td>"
       html_string << "<span class='#{md5_color}'>"
-      if result[k].md5.empty? then
+      if !result[k].md5 || result[k].md5.empty? then
         html_string << "error: look error log"
       end
       html_string << "#{result[k].md5}"
