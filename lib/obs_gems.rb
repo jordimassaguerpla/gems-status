@@ -72,9 +72,11 @@ class OBSGems < GemsCommand
     data["entry"].each do |entry|
       if entry["name"].end_with?(".gem") then
         name = gem_name(entry['name'])
-        version = gem_version(entry['name'])
+        version = Gem::Version.new(gem_version(entry['name']))
         md5 = entry['md5']
-        @result[name] = GemSimple.new(name, Gem::Version.new(version), md5, url)
+        if !@result[name] || @result[name].version < version    
+          @result[name] = GemSimple.new(name, version, md5, url)
+        end
       end
     end
   end
