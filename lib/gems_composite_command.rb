@@ -3,6 +3,7 @@ require "gems_command"
 require "not_native_gem_checker"
 require "not_rails_checker"
 require "exists_in_upstream"
+require "view_results"
 
 class GemsCompositeCommand < GemsCommand
   def initialize(target)
@@ -16,6 +17,10 @@ class GemsCompositeCommand < GemsCommand
     @commands << command
   end
 
+  def add_checker(check_class)
+    @checkers << check_class
+  end
+
   def execute
     threads = []
     if !@commands then
@@ -26,7 +31,7 @@ class GemsCompositeCommand < GemsCommand
     end
     threads.each { |aThread| aThread.join }
     @commands.each do |command|
-      @results[command.id] = command.result
+      @results[command.ident] = command.result
     end
   end
 
@@ -77,11 +82,14 @@ class GemsCompositeCommand < GemsCommand
     return true
   end
 
-  def print_html_diff
+  def print
+    ViewResults::print_head
+    ids = []
+    @commands.each { |c| ids << c.ident }
+    ViewResults::print_description(ids)
     if !are_there_results?
       return
     end
-    puts "<table width='100%'>"
     @results[@target].each do |k,v| 
       if !common_key?(k) then 
         $stderr.puts "ERROR: #{k} in #{@target} but not found in all the sources!"
@@ -90,57 +98,13 @@ class GemsCompositeCommand < GemsCommand
       if equal_gems?(k) then
         next
       end
-      puts "<tr><td><span style='font-weight:bold;'>#{k}</span></td></tr>"
-      version = @results[@target][k].version
-      md5 = @results[@target][k].md5
-      @results.each do |key, result|
-        puts "<tr>"
-        puts "<td>"
-        puts "#{result[k].origin}"
-        puts "</td>"
-        puts "<td>"
-        v_color = "black"
-        md5_color = "black"
-        if version != result[k].version then
-          v_color = "red"
-        else
-          if md5 != result[k].md5 then
-            md5_color = "red"
-          end
-        end
-        puts "<span style='color: #{v_color}'>"
-        if !version then
-          puts "error: look error log"
-        end
-        puts "#{result[k].version}"
-        puts "</span>"
-        puts "</td>"
-        puts "<td>"
-        puts "<span style='color: #{md5_color}'>"
-        if result[k].md5.empty? then
-          puts "error: look error log"
-        end
-        puts "#{result[k].md5}"
-        puts "</span>"
-        puts "</td>"
-        puts "</tr>"
-        version = result[k].version
-        md5 = result[k].md5
-      end
+      ViewResults::print_diff(k, @results, @target)
     end
-    puts "</table>"
-  end
-
-  def add_checker(check_class)
-    @checkers << check_class
-  end
-
-  def print_html_check
     @checkers.each do |check_class|
-      puts "<br/>Checker: #{check_class} failed on:<br/>"
       @results[@target].each do |k, gem|
-        puts "  #{k}<br/>" unless check_class::check?(gem)
+        ViewResults::print_check(check_class::description, gem.name) unless check_class::check?(gem)
       end
     end
+    ViewResults::print_tail
   end
 end

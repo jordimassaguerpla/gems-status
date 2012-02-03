@@ -1,8 +1,9 @@
 require 'rubygems/format'
 require 'rubygems/old_format'
 require 'open-uri'
+require 'gem_checker'
 
-class NotNativeGemChecker
+class NotNativeGemChecker < GemChecker
   def NotNativeGemChecker.check?(gem)
     result = nil
     gem_uri = "#{gem.gems_url}/#{gem.name}-#{gem.version}.gem" 
@@ -20,6 +21,9 @@ class NotNativeGemChecker
     end
     return false unless result 
     return result.spec.extensions.empty?
+  end
+  def NotNativeGemChecker.description
+    "This gem is a native gem or could not get specs: "
   end
 end
 

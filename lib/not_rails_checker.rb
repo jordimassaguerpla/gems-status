@@ -1,8 +1,9 @@
 require 'rubygems/format'
 require 'rubygems/old_format'
 require 'open-uri'
+require 'gem_checker'
 
-class NotRailsChecker
+class NotRailsChecker < GemChecker
   def NotRailsChecker.check?(gem)
     result = nil
     gem_uri = "#{gem.gems_url}/#{gem.name}-#{gem.version}.gem" 
@@ -23,6 +24,10 @@ class NotRailsChecker
       return false if gem.name == "rails"
     end
     return true
+  end
+
+  def NotRailsChecker.description
+    "This gem depends on rails or could not get spec: "
   end
 end
 

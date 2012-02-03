@@ -15,7 +15,7 @@ class RubyGemsGems < GemsCommand
     @url = conf['url']
     @specs = conf['specs']
     @result = {}
-    @id = conf['id']
+    @ident = conf['id']
 
   end
 

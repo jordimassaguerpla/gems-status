@@ -14,7 +14,7 @@ class OBSGems < GemsCommand
     @password = conf['password']
     @obs_url = conf['url']
     @repo = conf['obs_repo']
-    @id = conf['id']
+    @ident = conf['id']
 
   end
 

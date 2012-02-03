@@ -31,15 +31,13 @@ class GemStatus
       gems = eval(c["classname"]).new(c)
       gems_composite_command.add_command(gems)
     end
-    @conf["checkers"].each do |c|
-      gems_composite_command.add_checker(eval(c["classname"]))
+    if @conf["checkers"]
+      @conf["checkers"].each do |c|
+       gems_composite_command.add_checker(eval(c["classname"]))
+      end
     end
     gems_composite_command.execute
-    puts "<html><head></head><body>"
-    gems_composite_command.print_html_diff
-    gems_composite_command.print_html_check
-    puts "</body></html>"
+    gems_composite_command.print
   end
-
 end
 

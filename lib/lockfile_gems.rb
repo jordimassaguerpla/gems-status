@@ -15,7 +15,7 @@ class LockfileGems < GemsCommand
     @filename = conf['filename']
     @gems_url = conf['gems_url']
     @result = {}
-    @id = conf['id']
+    @ident = conf['id']
   end
 
   def get_data

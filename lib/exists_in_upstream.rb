@@ -1,7 +1,8 @@
 require 'rubygems'
 require 'open-uri'
+require 'gem_checker'
 
-class ExistsInUpstream
+class ExistsInUpstream < GemChecker
   def ExistsInUpstream.check?(gem)
     $stderr.puts "DEBUG: Looking for #{gem.name}"
     result = nil
@@ -12,6 +13,9 @@ class ExistsInUpstream
     rescue
       return false
     end
+  end
+  def ExistsInUpstream.description
+    "This gem does not exist in upstream: "
   end
 end
 
