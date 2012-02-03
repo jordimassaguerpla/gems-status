@@ -10,11 +10,12 @@ require "utils"
 
 class LockfileGems < GemsCommand
   def initialize(conf)
-    Utils::check_parameters('LockfileGems', conf, ["dirname", "filename", "gems_url"])
+    Utils::check_parameters('LockfileGems', conf, ["id", "dirname", "filename", "gems_url"])
     @dirname = conf['dirname']
     @filename = conf['filename']
     @gems_url = conf['gems_url']
     @result = {}
+    @id = conf['id']
   end
 
   def get_data

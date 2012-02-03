@@ -2,6 +2,19 @@
 #TODO: implement license checker: ninka??
 #TODO: do we need other checkers?
 #TODO: implement a nicer interface
+#TODO: is_native? == has extensions
+#require 'rubygems/format'
+#Gem::Format.from_file_by_path("curb-0.8.0.gem").spec.extensions
+#
+#open "curb-0.8.0.gem", Gem.binary_mode do |io|
+#result = Gem::Format.from_io io
+#end
+#result.spec.extensions
+#
+#and for rails:
+#result.spec.requirements
+#result.spec.dependencies
+
  
 require "rubygems"
 require "xmlsimple"
@@ -25,8 +38,8 @@ class GemStatus
   end
 
   def execute
-    gems_composite_command = GemsCompositeCommand.new
-    @conf.each do |c| 
+    gems_composite_command = GemsCompositeCommand.new(@conf["target"])
+    @conf["sources"].each do |c| 
       gems = eval(c["classname"]).new(c)
       gems_composite_command.add_command(gems)
     end

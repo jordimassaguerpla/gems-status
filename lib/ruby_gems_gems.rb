@@ -11,10 +11,11 @@ require "utils"
 class RubyGemsGems < GemsCommand
 
   def initialize(conf)
-    Utils::check_parameters('RubyGemsGems', conf, ["url", "specs"])
+    Utils::check_parameters('RubyGemsGems', conf, ["id", "url", "specs"])
     @url = conf['url']
     @specs = conf['specs']
     @result = {}
+    @id = conf['id']
 
   end
 

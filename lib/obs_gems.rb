@@ -8,12 +8,13 @@ require "utils"
 
 class OBSGems < GemsCommand
   def initialize(conf)
-    Utils::check_parameters('OBSGems', conf, ["username", "password", "url", "obs_repo"])
+    Utils::check_parameters('OBSGems', conf, ["id", "username", "password", "url", "obs_repo"])
     @result = {}
     @username = conf['username']
     @password = conf['password']
     @obs_url = conf['url']
     @repo = conf['obs_repo']
+    @id = conf['id']
 
   end
 

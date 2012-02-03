@@ -3,6 +3,7 @@ require "gem_simple"
 
 class GemsCommand
   attr_reader :result
+  attr_reader :id
   def gem_name(gem)
     pos = gem.rindex(".gem")
     if ! pos then

@@ -1,14 +1,19 @@
 --- 
+sources:
 - classname: 'OBSGems'
+  id: 'obs'
   url: 'https://api.opensuse.org/source'
   username: 'jordimassaguerpla'
   password: 'secret'
   obs_repo: 'home:jordimassaguerpla'
 - classname: 'RubyGemsGems'
+  id: 'rubygems.org'
   url: 'http://rubygems.org'
   specs: 'latest_specs.4.8.gz'
 - classname: 'LockfileGems'
-  dirname: '/home/jordi/work/suse/gems-status/test'
+  id: 'lockfile'
+  dirname: '/home/jordi/work/suse/gems-status/test/'
   filename: 'Gemfile.lock'
   gems_url: 'http://rubygems.org/gems'
+target: 'lockfile'
 

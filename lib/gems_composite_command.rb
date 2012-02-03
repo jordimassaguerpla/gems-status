@@ -2,9 +2,10 @@ require "gem_simple"
 require "gems_command"
 
 class GemsCompositeCommand < GemsCommand
-  def initialize
+  def initialize(target)
     @commands = []
-    @results = []
+    @results = {}
+    @target = target
   end
 
   def add_command(command)
@@ -21,15 +22,15 @@ class GemsCompositeCommand < GemsCommand
     end
     threads.each { |aThread| aThread.join }
     @commands.each do |command|
-      @results << command.result
+      @results[command.id] = command.result
     end
   end
 
   def common_key?(k)
-    if !@results or @results.empty?
+    if !are_there_results?
       return false
     end
-    @results.each do |result|
+    @results.each do |key, result|
       if !result[k] then
         return false
       end
@@ -38,15 +39,15 @@ class GemsCompositeCommand < GemsCommand
   end
 
   def equal_gems?(k)
-    if !@results or @results.empty?
+    if !are_there_results?
       return false
     end
     if !common_key?(k)
       return false
     end
-    version = @results[0][k].version
-    md5 = @results[0][k].md5
-    @results.each do |result|
+    version = @results[@target][k].version
+    md5 = @results[@target][k].md5
+    @results.each do |key, result|
       if result[k].version != version
         return false
       end
@@ -60,13 +61,13 @@ class GemsCompositeCommand < GemsCommand
   end
 
   def are_there_results?
-    if !@results
+    if !@results or @results.empty?
       return false
     end
-    if !@results[0]
+    if !@results.has_key?(@target)
       return false
     end
-    if !@results[1]
+    if @results.length<2
       return false
     end
     return true
@@ -77,18 +78,17 @@ class GemsCompositeCommand < GemsCommand
       return
     end
     puts "<table width='100%'>"
-    @results[0].each do |k,v| 
+    @results[@target].each do |k,v| 
       if !common_key?(k) then 
         next
       end
       if equal_gems?(k) then
-        $stderr.puts "DEBUG:  equal gems: #{k}"
         next
       end
       puts "<tr><td><span style='font-weight:bold;'>#{k}</span></td></tr>"
-      version = @results[0][k].version
-      md5 = @results[0][k].md5
-      @results.each do |result|
+      version = @results[@target][k].version
+      md5 = @results[@target][k].md5
+      @results.each do |key, result|
         puts "<tr>"
         puts "<td>"
         puts "#{result[k].origin}"
