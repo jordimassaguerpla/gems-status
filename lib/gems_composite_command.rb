@@ -1,9 +1,13 @@
 require "gem_simple"
 require "gems_command"
+require "not_native_gem_checker"
+require "not_rails_checker"
+require "exists_in_upstream"
 
 class GemsCompositeCommand < GemsCommand
   def initialize(target)
     @commands = []
+    @checkers = []
     @results = {}
     @target = target
   end
@@ -80,6 +84,7 @@ class GemsCompositeCommand < GemsCommand
     puts "<table width='100%'>"
     @results[@target].each do |k,v| 
       if !common_key?(k) then 
+        $stderr.puts "ERROR: #{k} in #{@target} but not found in all the sources!"
         next
       end
       if equal_gems?(k) then
@@ -126,4 +131,16 @@ class GemsCompositeCommand < GemsCommand
     puts "</table>"
   end
 
+  def add_checker(check_class)
+    @checkers << check_class
+  end
+
+  def print_html_check
+    @checkers.each do |check_class|
+      puts "<br/>Checker: #{check_class} failed on:<br/>"
+      @results[@target].each do |k, gem|
+        puts "  #{k}<br/>" unless check_class::check?(gem)
+      end
+    end
+  end
 end

@@ -3,8 +3,7 @@ require "gem_simple"
 class RubyGemsGems_GemSimple < GemSimple
 
   def initialize(name, version, md5, origin, gems_url)
-    super(name, version, md5, origin)
-    @gems_url = gems_url
+    super(name, version, md5, origin, gems_url)
   end
 
   def md5

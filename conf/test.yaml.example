@@ -16,4 +16,6 @@ sources:
   filename: 'Gemfile.lock'
   gems_url: 'http://rubygems.org/gems'
 target: 'lockfile'
+checkers:
+ - classname: NotNaviteGemChecker
 

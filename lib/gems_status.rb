@@ -1,19 +1,7 @@
 #!/usr/bin/ruby
-#TODO: implement license checker: ninka??
-#TODO: do we need other checkers?
 #TODO: implement a nicer interface
-#TODO: is_native? == has extensions
-#require 'rubygems/format'
-#Gem::Format.from_file_by_path("curb-0.8.0.gem").spec.extensions
 #
-#open "curb-0.8.0.gem", Gem.binary_mode do |io|
-#result = Gem::Format.from_io io
-#end
-#result.spec.extensions
-#
-#and for rails:
-#result.spec.requirements
-#result.spec.dependencies
+
 
  
 require "rubygems"
@@ -43,10 +31,14 @@ class GemStatus
       gems = eval(c["classname"]).new(c)
       gems_composite_command.add_command(gems)
     end
+    @conf["checkers"].each do |c|
+      gems_composite_command.add_checker(eval(c["classname"]))
+    end
     gems_composite_command.execute
     puts "<html><head></head><body>"
     gems_composite_command.print_html_diff
-    puts "</html"
+    gems_composite_command.print_html_check
+    puts "</body></html>"
   end
 
 end
