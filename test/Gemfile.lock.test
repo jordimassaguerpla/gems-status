@@ -2,8 +2,12 @@ GEM
   remote: http://rubygems.org/
   specs:
     test (0.8.6)
+      test2 (1.2.3)
+    test2 (1.2.3)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+test
+

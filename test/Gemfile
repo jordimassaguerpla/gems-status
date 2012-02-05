@@ -1,9 +1,10 @@
 source 'http://rubygems.org'
 
 gem 'system_timer'
-gem 'abingo'
+#gem 'abingo'
 gem 'factory_girl_rails'
 gem 'curb'
 gem 'xml-simple'
 gem 'fakefs'
+gem 'gem2rpm'
 
