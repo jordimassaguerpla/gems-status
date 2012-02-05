@@ -62,6 +62,9 @@ class OBSGems < GemsCommand
     data = XmlSimple.xml_in(response)
     if data["linkinfo"] then
       $stderr.puts "DEBUG: #{data["name"]} is a link."
+      if data["entry"].length != 1
+        $stderr.puts "ERROR: when parsing the link for #{project} : #{package}. There are more entries than expected. That may be a patched link and the result may not be correct"
+      end
       parse_link(data["linkinfo"])
       return
     end
@@ -70,6 +73,9 @@ class OBSGems < GemsCommand
       return
     end
     data["entry"].each do |entry|
+      if !(entry["name"] =~ /\w\.(gem|spec|changes|rpmlintrc)/)
+        $stderr.puts "ERROR: when parsing data for #{project} : #{package}. Entry not expected. That may be a patched rpm and the result may not be correct. #{entry["name"]}"
+      end
       if entry["name"].end_with?(".gem") then
         name = gem_name(entry['name'])
         version = Gem::Version.new(gem_version(entry['name']))
