@@ -162,7 +162,7 @@ class ViewResults
 
   def ViewResults.print_tail
     puts "<h2>errors:</h2>"
-    Utils.errors.each {|e| puts "<br/><span class='alert'>#{e}</span>"}
+    Utils.errors.each {|e| puts "<br/><span class='footer'><span class='alert'>#{e}</span></span>"}
     date = Time.now.strftime('%F0')
     puts "<p class='footer'>run by <a href=\"https://github.com/jordimassaguerpla/gems-status\">gems-status</a> - #{date} - version: #{GemsStatusMetadata::VERSION}</p>
     </body>
