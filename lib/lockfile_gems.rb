@@ -30,7 +30,7 @@ class LockfileGems < GemsCommand
   end
 
   def execute
-    Utils.log_error "DEBUG: reading #{@filename}"
+    Utils.log_debug "DEBUG: reading #{@filename}"
     file_data = get_data
     if file_data.empty?
       return

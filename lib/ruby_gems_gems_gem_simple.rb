@@ -11,7 +11,7 @@ class RubyGemsGems_GemSimple < GemSimple
       return @md5
     end
     gem_uri = "#{@gems_url}/#{@name}-#{@version}.gem" 
-    Utils.log_error "DEBUG: download and md5 for #{@name} from #{gem_uri}"
+    Utils.log_debug "DEBUG: download and md5 for #{@name} from #{gem_uri}"
     begin
       source = open(gem_uri)
       @md5 = Digest::MD5.hexdigest(source.read)

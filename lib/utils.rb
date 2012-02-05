@@ -25,4 +25,8 @@ class Utils
     $stderr.puts msg
   end
 
+  def Utils.log_debug(msg)
+    $stderr.puts msg
+  end
+
 end

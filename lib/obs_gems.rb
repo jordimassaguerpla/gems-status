@@ -35,10 +35,10 @@ class OBSGems < GemsCommand
     package = linkinfo[0]["package"]
     if linkinfo[0]["rev"] then
       rev = linkinfo[0]["rev"]
-      Utils.log_error "DEBUG: Revision in link: #{rev}."
+      Utils.log_debug "DEBUG: Revision in link: #{rev}."
       package = package + "?rev=" + rev
     end
-    Utils.log_error "DEBUG: follow link to project: #{repo} package: #{package}"
+    Utils.log_debug "DEBUG: follow link to project: #{repo} package: #{package}"
     parse_rpm_data(repo, package)
   end
 
@@ -61,7 +61,7 @@ class OBSGems < GemsCommand
     end
     data = XmlSimple.xml_in(response)
     if data["linkinfo"] then
-      Utils.log_error "DEBUG: #{data["name"]} is a link."
+      Utils.log_debug "DEBUG: #{data["name"]} is a link."
       if data["entry"].length != 1
         Utils.log_error "ERROR: when parsing the link for #{project} : #{package}. There are more entries than expected. That may be a patched link and the result may not be correct"
       end
