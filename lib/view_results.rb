@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'gems_status_metadata'
+require 'utils'
 
 class ViewResults
 
@@ -32,16 +33,18 @@ class ViewResults
     <ol>
     <li> Maintain those gems that have been patched but are not outdated
     </li>
-    <li> Update does gems that have been patched and are outdated
+    <li> Update those gems that have been patched and are outdated
     </li>
-    <li> Update does gems that are outdated
+    <li> Update those gems that are outdated
     </li>
     </ol>
     <p>
     After the comparison there are some checks that have been performed. Those checks imply also there is some kind of work to do
     </p>
+    <p> At the end there are the errors. Look them carefully.
+    </p>
     <p>
-    You should run gems-status periodically until the lists of patched, outdated and checks are gone.
+    You should run gems-status periodically until the lists of errors, patched, outdated and checks are gone.
     </p>
     "
   end
@@ -88,7 +91,7 @@ class ViewResults
       version = result[k].version
       md5 = result[k].md5
     end
-    puts "<tr><td><span class='#{name_color}'>#{k}</span></td></tr>"
+    puts "<tr><td width='50%'><span class='#{name_color}'>#{k}</span></td><td width='10%'>version</td><td width='40%'>md5</td></tr>"
     puts html_string
     puts "</table>"
     puts "</p>"
@@ -109,6 +112,11 @@ class ViewResults
     h1
     {
     font-size: 110%;
+    font-weight: bold;
+    }
+    h2
+    {
+    font-size: 100%;
     font-weight: bold;
     }
     .gem_name
@@ -153,6 +161,8 @@ class ViewResults
   end
 
   def ViewResults.print_tail
+    puts "<h2>errors:</h2>"
+    Utils.errors.each {|e| puts "<br/><span class='alert'>#{e}</span>"}
     date = Time.now.strftime('%F0')
     puts "<p class='footer'>run by <a href=\"https://github.com/jordimassaguerpla/gems-status\">gems-status</a> - #{date} - version: #{GemsStatusMetadata::VERSION}</p>
     </body>

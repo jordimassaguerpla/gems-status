@@ -17,7 +17,7 @@ class NotRailsChecker < GemChecker
       #io.close if io && !io.closed? 
       #or is a bug on rubygems???
     rescue => e
-      $stderr.puts "ERROR: There was a problem opening #{gem_uri} #{e.class} #{e.message}" 
+      Utils.log_error "ERROR: There was a problem opening #{gem_uri} #{e.class} #{e.message}" 
     end
     return false unless result 
     result.spec.dependencies.each do |gem|

@@ -21,7 +21,7 @@ class GemStatus
     begin
       @conf = YAML::load(File::open(conf_file))
     rescue
-      $stderr.puts "ERROR: There was a problem opening #{conf_file}"
+      Utils.log_error "ERROR: There was a problem opening #{conf_file}"
     end
   end
 

@@ -24,13 +24,13 @@ class LockfileGems < GemsCommand
     begin
       data = File.open(@filename).read
     rescue
-      $stderr.puts "ERROR: There was a problem opening file #{filename} "
+      Utils.log_error "ERROR: There was a problem opening file #{filename} "
     end
     return data
   end
 
   def execute
-    $stderr.puts "DEBUG: reading #{@filename}"
+    Utils.log_error "DEBUG: reading #{@filename}"
     file_data = get_data
     if file_data.empty?
       return

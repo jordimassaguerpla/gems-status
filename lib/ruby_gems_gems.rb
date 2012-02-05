@@ -26,7 +26,7 @@ class RubyGemsGems < GemsCommand
       gz = Zlib::GzipReader.new(source)
       return gz.read
     rescue
-      $stderr.puts "ERROR: There was a problem opening #{specs_url} "
+      Utils.log_error "ERROR: There was a problem opening #{specs_url} "
     end
     return ""
   end

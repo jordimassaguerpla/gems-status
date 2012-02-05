@@ -92,7 +92,7 @@ class GemsCompositeCommand < GemsCommand
     end
     @results[@target].each do |k,v| 
       if !common_key?(k) then 
-        $stderr.puts "ERROR: #{k} in #{@target} but not found in all the sources!"
+        Utils.log_error "ERROR: #{k} in #{@target} but not found in all the sources!"
         next
       end
       if equal_gems?(k) then
