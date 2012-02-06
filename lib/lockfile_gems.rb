@@ -23,14 +23,14 @@ class LockfileGems < GemsCommand
     begin
       data = File.open(filename).read
     rescue
-      Utils.log_error "ERROR: There was a problem opening file #{filename} "
+      Utils::log_error "ERROR: There was a problem opening file #{filename} "
     end
     return data
   end
 
   def execute
     @filenames.each do |filename|
-      Utils.log_debug "DEBUG: reading #{filename}"
+      Utils::log_debug "DEBUG: reading #{filename}"
       file_data = get_data(File::dirname(filename), File::basename(filename))
       if file_data.empty?
         Utils::log_error "ERROR: file empty #{filename}"
