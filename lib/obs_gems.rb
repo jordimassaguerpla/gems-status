@@ -63,8 +63,9 @@ class OBSGems < GemsCommand
     if data["linkinfo"] then
       Utils::log_debug "DEBUG: #{data["name"]} is a link."
       if data["entry"].length != 1
-        Utils::log_error "ERROR: when parsing the link for #{project} : #{package}. There are more entries than expected. That may be a patched link and the result may not be correct"
-        data["entry"].each {|e| Utils::log_error e["name"]}
+        msg = ""
+        data["entry"].each {|e| msg << e["name"]}
+        Utils::log_error "ERROR: when parsing the link for #{project} : #{package}. There are more entries than expected. That may be a patched link and the result may not be correct" + msg
       end
       parse_link(data["linkinfo"])
       return
