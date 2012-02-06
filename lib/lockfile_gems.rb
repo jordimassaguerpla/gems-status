@@ -10,19 +10,18 @@ require "utils"
 
 class LockfileGems < GemsCommand
   def initialize(conf)
-    Utils::check_parameters('LockfileGems', conf, ["id", "dirname", "filename", "gems_url"])
-    @dirname = conf['dirname']
-    @filename = conf['filename']
+    Utils::check_parameters('LockfileGems', conf, ["id", "filenames", "gems_url"])
+    @filenames = conf['filenames']
     @gems_url = conf['gems_url']
     @result = {}
     @ident = conf['id']
   end
 
-  def get_data
-    Dir.chdir(@dirname)
+  def get_data(dirname, filename)
+    Dir.chdir(dirname)
     data = ""
     begin
-      data = File.open(@filename).read
+      data = File.open(filename).read
     rescue
       Utils.log_error "ERROR: There was a problem opening file #{filename} "
     end
@@ -30,16 +29,22 @@ class LockfileGems < GemsCommand
   end
 
   def execute
-    Utils.log_debug "DEBUG: reading #{@filename}"
-    file_data = get_data
-    if file_data.empty?
-      return
-    end
-    lockfile = Bundler::LockfileParser.new(file_data)
-    lockfile.specs.each do |spec|
-      name = spec.name
-      version = spec.version
-      @result[name] = RubyGemsGems_GemSimple.new(name, Gem::Version.create(version) , '', @filename, @gems_url)
+    @filenames.each do |filename|
+      Utils.log_debug "DEBUG: reading #{filename}"
+      file_data = get_data(File::dirname(filename), File::basename(filename))
+      if file_data.empty?
+        Utils::log_error "ERROR: file empty #{filename}"
+        next
+      end
+      lockfile = Bundler::LockfileParser.new(file_data)
+      lockfile.specs.each do |spec|
+        name = spec.name
+        version = Gem::Version.create(spec.version)
+        if @result[name] && @result[name].version != version
+          Utils::log_error "ERROR: Same gem with different versions: #{name} - #{version} - #{filename}\n       #{name} - #{@result[name].version} - #{@result[name].origin} "
+        end
+        @result[name] = RubyGemsGems_GemSimple.new(name, version , '', filename, @gems_url)
+      end
     end
   end
 

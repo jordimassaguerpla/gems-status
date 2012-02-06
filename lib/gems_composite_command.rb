@@ -90,7 +90,7 @@ class GemsCompositeCommand < GemsCommand
     if !are_there_results?
       return
     end
-    @results[@target].each do |k,v| 
+    @results[@target].sort.each do |k,v| 
       if !common_key?(k) then 
         Utils.log_error "ERROR: #{k} in #{@target} but not found in all the sources!"
         next
@@ -101,7 +101,7 @@ class GemsCompositeCommand < GemsCommand
       ViewResults::print_diff(k, @results, @target)
     end
     @checkers.each do |check_class|
-      @results[@target].each do |k, gem|
+      @results[@target].sort.each do |k, gem|
         ViewResults::print_check(check_class::description, gem.name) unless check_class::check?(gem)
       end
     end

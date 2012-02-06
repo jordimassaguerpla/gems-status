@@ -12,8 +12,15 @@ sources:
   specs: 'latest_specs.4.8.gz'
 - classname: 'LockfileGems'
   id: 'lockfile'
-  dirname: '/home/jordi/work/suse/gems-status/test/'
-  filename: 'Gemfile.lock'
+  filenames:
+    - '/home/nfs/work/studio/ui-server/Gemfile.lock'
+    - '/home/nfs/work/studio/common/Gemfile.lock'
+    - '/home/nfs/work/studio/gerald/Gemfile.lock'
+    - '/home/nfs/work/studio/common/Gemfile.lock'
+    - '/home/nfs/work/studio/bot/Gemfile.lock'
+    - '/home/nfs/work/studio/runner/Gemfile.lock'
+    - '/home/nfs/work/studio/sid/Gemfile.lock'
+    - '/home/nfs/work/studio/cockpit/Gemfile.lock'
   gems_url: 'http://rubygems.org/gems'
 target: 'lockfile'
 checkers:

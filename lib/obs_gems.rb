@@ -64,6 +64,7 @@ class OBSGems < GemsCommand
       Utils.log_debug "DEBUG: #{data["name"]} is a link."
       if data["entry"].length != 1
         Utils.log_error "ERROR: when parsing the link for #{project} : #{package}. There are more entries than expected. That may be a patched link and the result may not be correct"
+        data["entry"].each {|e| Utils.log_error e["name"]}
       end
       parse_link(data["linkinfo"])
       return
@@ -73,7 +74,7 @@ class OBSGems < GemsCommand
       return
     end
     data["entry"].each do |entry|
-      if !(entry["name"] =~ /\w\.(gem|spec|changes|rpmlintrc)/)
+      if !(entry["name"] =~ /\w(\.gem|\.spec|\.changes|\.rpmlintrc|-rpm-lintrc|-rpmlintrc)/)
         Utils.log_error "ERROR: when parsing data for #{project} : #{package}. Entry not expected. That may be a patched rpm and the result may not be correct. #{entry["name"]}"
       end
       if entry["name"].end_with?(".gem") then
