@@ -2,8 +2,8 @@ require "gem_simple"
 
 class RubyGemsGems_GemSimple < GemSimple
 
-  def initialize(name, version, md5, origin, gems_url)
-    super(name, version, nil, origin, gems_url)
+  def initialize(name, version, md5, origin, gems_url, dependencies=nil)
+    super(name, version, nil, origin, gems_url, dependencies)
   end
 
   def md5

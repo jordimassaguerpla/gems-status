@@ -28,6 +28,25 @@ class LockfileGems < GemsCommand
     return data
   end
 
+  def update_gem_dependencies(gem)
+    Utils::log_debug("DEBUG: updating dependencies for #{gem.name}")
+    changes = false
+    @result.each do |k, gem2|
+      if gem.depends?(gem2)
+        changes = gem.merge_deps(gem2) || changes
+      end
+    end
+    return changes
+  end
+
+  def update_dependencies
+    changes = false
+    @result.each do |k, gem|
+      changes = update_gem_dependencies(gem) || changes
+    end
+    update_dependencies if changes
+  end
+
   def execute
     @filenames.each do |filename|
       Utils::log_debug "DEBUG: reading #{filename}"
@@ -41,10 +60,17 @@ class LockfileGems < GemsCommand
         name = spec.name
         version = Gem::Version.create(spec.version)
         if @result[name] && @result[name].version != version
-          Utils::log_error "ERROR: Same gem with different versions: #{name} - #{version} - #{filename}\n       #{name} - #{@result[name].version} - #{@result[name].origin} "
+          Utils::log_error 
+            "ERROR: Same gem with different versions: 
+            #{name} - #{version} - #{filename}\n
+            #{name} - #{@result[name].version} - #{@result[name].origin} "
         end
-        @result[name] = RubyGemsGems_GemSimple.new(name, version , '', filename, @gems_url)
+        dependencies = spec.dependencies
+        Utils::log_debug "DEBUG: dependencies for #{name} #{dependencies}"
+        @result[name] = RubyGemsGems_GemSimple.new(name, version , '', filename,
+                                                   @gems_url, dependencies)
       end
+      update_dependencies
     end
   end
 
