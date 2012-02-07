@@ -60,8 +60,8 @@ class LockfileGems < GemsCommand
         name = spec.name
         version = Gem::Version.create(spec.version)
         if @result[name] && @result[name].version != version
-          Utils::log_error 
-            "ERROR: Same gem with different versions: 
+          Utils::log_error " 
+            ERROR: Same gem with different versions: 
             #{name} - #{version} - #{filename}\n
             #{name} - #{@result[name].version} - #{@result[name].origin} "
         end
