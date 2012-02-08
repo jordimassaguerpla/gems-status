@@ -7,6 +7,7 @@ require "gems_command"
 require "utils"
 
 class OBSGems < GemsCommand
+  FILES_TO_IGNORE = /(\w(\.gem|\.spec|\.changes|\.rpmlintrc|-rpm-lintrc|-rpmlintrc))|README.SuSE/
   def initialize(conf)
     Utils::check_parameters('OBSGems', conf, ["id", "username", "password", "url", "obs_repo"])
     @result = {}
@@ -75,7 +76,7 @@ class OBSGems < GemsCommand
       return
     end
     data["entry"].each do |entry|
-      if !(entry["name"] =~ /\w(\.gem|\.spec|\.changes|\.rpmlintrc|-rpm-lintrc|-rpmlintrc)/)
+      if !(entry["name"] =~ OBSGems::FILES_TO_IGNORE)
         Utils::log_error "ERROR: when parsing data for #{project} : #{package}. Entry not expected. That may be a patched rpm and the result may not be correct. #{entry["name"]}"
       end
       if entry["name"].end_with?(".gem") then
