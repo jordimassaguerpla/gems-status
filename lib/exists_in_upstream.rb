@@ -1,10 +1,11 @@
 require 'rubygems'
 require 'open-uri'
 require 'gem_checker'
+require 'utils'
 
 class ExistsInUpstream < GemChecker
   def ExistsInUpstream.check?(gem)
-    $stderr.puts "DEBUG: Looking for #{gem.name}"
+    Utils::log_debug("Looking for #{gem.name}")
     result = nil
     gem_uri = "#{gem.gems_url}/#{gem.name}-#{gem.version}.gem" 
     begin

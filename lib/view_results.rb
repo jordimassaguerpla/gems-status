@@ -39,9 +39,9 @@ class ViewResults
     </li>
     </ol>
     <p>
-    After the comparison there are some checks that have been performed. Those checks imply also there is some kind of work to do
+    After the comparison there are some checks that have been performed, errors related and comments. Look those results as they imply there is some kind of work to do
     </p>
-    <p> At the end there are the errors. Look them carefully.
+    <p> At the end there are the errors, checks and comments that do not apply to any of the gems. Look them carefully.
     </p>
     <p>
     You should run gems-status periodically until the lists of errors, patched, outdated and checks are gone.
@@ -49,7 +49,7 @@ class ViewResults
     "
   end
 
-  def ViewResults.print_diff(k, results, target)
+  def ViewResults.print_results(k, results, target, checker_results, comments)
     puts "<p>"
     puts "<table width='100%' class='table_results'>"
     version = results[target][k].version
@@ -91,16 +91,20 @@ class ViewResults
       version = result[k].version
       md5 = result[k].md5
     end
-    puts "<tr><td width='50%'><span class='#{name_color}'>#{k}</span></td><td width='10%'>version</td><td width='40%'>md5</td></tr>"
+    puts "<tr><td width='50%'><span class='#{name_color}'>#{k.upcase}</span></td><td width='10%'>version</td><td width='40%'>md5</td></tr>"
     puts html_string
     puts "</table>"
     puts "</p>"
+    puts "<p> <span class='check'>checks:"
+    puts "<br/>#{checker_results}</span>" if checker_results
+    puts "</p><p><span class='errors'>errors: "
+    puts "<br/>#{Utils::errors[k]}</span>" if Utils::errors[k]
+    Utils.errors.delete(k)
+    puts "</p><p><span class='comment'>comments: "
+    puts "<br/>#{comments}</span>" if comments
+    puts "</p>"
   end
 
-  def ViewResults.print_check(description, name_gem)
-      puts "<span class='check'> #{description}  #{name_gem}</span><br/>" 
-  end
-  
   def ViewResults.print_head
     puts "<html>
     <head>
@@ -145,11 +149,23 @@ class ViewResults
     color: #aaaaaa;
     font-size: 60%;
     }
-    .check
+    .errors
     {
-    font-style: italic;
     color: #ff0000;
     font-size: 80%;
+    font-style: italic;
+    }
+    .check
+    {
+    color: #a0a0a0;
+    font-size: 80%;
+    font-style: italic;
+    }
+    .comment
+    {
+    color: #a0a0a0;
+    font-size: 80%;
+    font-style: italic;
     }
     .table_results
     {
@@ -160,9 +176,17 @@ class ViewResults
     <body>"
   end
 
-  def ViewResults.print_tail
-    puts "<h2>errors:#{Utils::errors.length}</h2>"
-    Utils::errors.each {|e| puts "<br/><span class='footer'><span class='alert'>#{e}</span></span>"}
+  def ViewResults.print_hash(desc, data, style)
+    puts "<p>"
+    puts "<h2>#{desc}: #{data.length}</h2>"
+    data.each {|k,v| puts "<span class='#{style}'>#{k.upcase} : #{v}</span><br/>"}
+    puts "</p>"
+  end
+
+  def ViewResults.print_tail(checker_results, comments)
+    self.print_hash("checks", checker_results, "check")
+    self.print_hash("comments", comments, "comment")
+    self.print_hash("errors", Utils::errors, "errors")
     date = Time.now.strftime('%F0')
     puts "<p class='footer'>run by <a href=\"https://github.com/jordimassaguerpla/gems-status\">gems-status</a> - #{date} - version: #{GemsStatusMetadata::VERSION}</p>
     </body>

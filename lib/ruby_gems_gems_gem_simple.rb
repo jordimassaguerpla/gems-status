@@ -11,13 +11,13 @@ class RubyGemsGems_GemSimple < GemSimple
       return @md5
     end
     gem_uri = "#{@gems_url}/#{@name}-#{@version}.gem" 
-    Utils::log_debug "DEBUG: download and md5 for #{@name} from #{gem_uri}"
+    Utils::log_debug "download and md5 for #{@name} from #{gem_uri}"
     begin
       source = open(gem_uri)
       @md5 = Digest::MD5.hexdigest(source.read)
       return @md5
     rescue
-      Utils::log_error "ERROR: There was a problem opening #{gem_uri}" 
+      Utils::log_error(@name, "There was a problem opening #{gem_uri}")
     end 
     return nil
   end

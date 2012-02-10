@@ -23,13 +23,13 @@ class LockfileGems < GemsCommand
     begin
       data = File.open(filename).read
     rescue
-      Utils::log_error "ERROR: There was a problem opening file #{filename} "
+      Utils::log_error("?", "There was a problem opening file #{filename} ")
     end
     return data
   end
 
   def update_gem_dependencies(gem)
-    Utils::log_debug("DEBUG: updating dependencies for #{gem.name}")
+    Utils::log_debug("updating dependencies for #{gem.name}")
     changes = false
     @result.each do |k, gem2|
       if gem.depends?(gem2)
@@ -49,10 +49,10 @@ class LockfileGems < GemsCommand
 
   def execute
     @filenames.each do |filename|
-      Utils::log_debug "DEBUG: reading #{filename}"
+      Utils::log_debug "reading #{filename}"
       file_data = get_data(File::dirname(filename), File::basename(filename))
       if file_data.empty?
-        Utils::log_error "ERROR: file empty #{filename}"
+        Utils::log_error("?", "file empty #{filename}")
         next
       end
       lockfile = Bundler::LockfileParser.new(file_data)
@@ -60,13 +60,13 @@ class LockfileGems < GemsCommand
         name = spec.name
         version = Gem::Version.create(spec.version)
         if @result[name] && @result[name].version != version
-          Utils::log_error " 
-            ERROR: Same gem with different versions: 
+          Utils::log_error(name, " 
+            Same gem with different versions: 
             #{name} - #{version} - #{filename}\n
-            #{name} - #{@result[name].version} - #{@result[name].origin} "
+            #{name} - #{@result[name].version} - #{@result[name].origin} ")
         end
         dependencies = spec.dependencies
-        Utils::log_debug "DEBUG: dependencies for #{name} #{dependencies}"
+        Utils::log_debug "dependencies for #{name} #{dependencies}"
         @result[name] = RubyGemsGems_GemSimple.new(name, version , '', filename,
                                                    @gems_url, dependencies)
       end

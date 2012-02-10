@@ -14,17 +14,13 @@ sources:
   id: 'lockfile'
   filenames:
     - '/home/nfs/work/studio/ui-server/Gemfile.lock'
-    - '/home/nfs/work/studio/common/Gemfile.lock'
-    - '/home/nfs/work/studio/gerald/Gemfile.lock'
-    - '/home/nfs/work/studio/common/Gemfile.lock'
-    - '/home/nfs/work/studio/bot/Gemfile.lock'
-    - '/home/nfs/work/studio/runner/Gemfile.lock'
-    - '/home/nfs/work/studio/sid/Gemfile.lock'
-    - '/home/nfs/work/studio/cockpit/Gemfile.lock'
   gems_url: 'http://rubygems.org/gems'
 target: 'lockfile'
 checkers:
  - classname: NotNaviteGemChecker
  - classname: ExistsInUpstream
  - classname: NotRailsChecker
+comments:
+  gem1: "this is a comment on gem1"
+  gem2: "this is a comment on gem2"
 

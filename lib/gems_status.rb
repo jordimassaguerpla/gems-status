@@ -21,7 +21,7 @@ class GemStatus
     begin
       @conf = YAML::load(File::open(conf_file))
     rescue
-      Utils::log_error "ERROR: There was a problem opening #{conf_file}"
+      Utils::log_error("?", "There was a problem opening #{conf_file}")
     end
   end
 
@@ -35,6 +35,9 @@ class GemStatus
       @conf["checkers"].each do |c|
        gems_composite_command.add_checker(eval(c["classname"]))
       end
+    end
+    if @conf["comments"]
+      gems_composite_command.add_comments(@conf["comments"])
     end
     gems_composite_command.execute
     gems_composite_command.print

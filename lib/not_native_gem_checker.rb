@@ -17,7 +17,7 @@ class NotNativeGemChecker < GemChecker
       #io.close if io && !io.closed? 
       #or is a bug on rubygems???
     rescue => e
-      Utils::log_error "ERROR: There was a problem opening #{gem_uri} #{e.class} #{e.message}" 
+      Utils::log_error(gem.name, "There was a problem opening #{gem_uri} #{e.class} #{e.message}")
     end
     return false unless result 
     return result.spec.extensions.empty?

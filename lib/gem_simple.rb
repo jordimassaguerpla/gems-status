@@ -12,7 +12,7 @@ class GemSimple
   #TODO: write a test for this
   def depends?(gem)
     if !@dependencies
-      Utils::log_error("ERROR: trying to get depends on a gem that has no info on dependencies #{@name} depends #{gem.name}")
+      Utils::log_error(@name, "trying to get depends on a gem that has no info on dependencies #{@name} depends #{gem.name}")
       return false
     end
     @dependencies.each do |dep|
@@ -24,7 +24,7 @@ class GemSimple
   #TODO: write a test for this
   def merge_deps(gem)
     if !@dependencies || !gem.dependencies
-      Utils::log_error("ERROR: trying to merge depends on a gem that has no info on dependencies #{@name} merge #{gem.name}")
+      Utils::log_error(@name, "trying to merge depends on a gem that has no info on dependencies #{@name} merge #{gem.name}")
       return false
     end
     changes = false
@@ -32,7 +32,7 @@ class GemSimple
       if !@dependencies.include?(dep)
         changes = true
         @dependencies << dep
-        Utils::log_debug("DEBUG: adding #{dep} to dependencies")
+        Utils::log_debug("adding #{dep} to dependencies")
       end
     end
     return changes

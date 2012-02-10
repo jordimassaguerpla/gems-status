@@ -9,6 +9,8 @@ class GemsCompositeCommand < GemsCommand
   def initialize(target)
     @commands = []
     @checkers = []
+    @checker_results = {}
+    @comments = {}
     @results = {}
     @target = target
   end
@@ -32,6 +34,11 @@ class GemsCompositeCommand < GemsCommand
     threads.each { |aThread| aThread.join }
     @commands.each do |command|
       @results[command.ident] = command.result
+    end
+    @checkers.each do |check_class|
+      @results[@target].sort.each do |k, gem|
+        @checker_results[gem.name] = check_class::description + gem.name unless check_class::check?(gem)
+      end
     end
   end
 
@@ -69,6 +76,10 @@ class GemsCompositeCommand < GemsCommand
     return true
   end
 
+  def add_comments(comments)
+    @comments = comments
+  end
+
   def are_there_results?
     if !@results or @results.empty?
       return false
@@ -92,19 +103,26 @@ class GemsCompositeCommand < GemsCommand
     end
     @results[@target].sort.each do |k,v| 
       if !common_key?(k) then 
-        Utils::log_error "ERROR: #{k} in #{@target} but not found in all the sources!"
+        Utils::log_error(k, "#{k} in #{@target} but not found in all the sources!")
         next
       end
       if equal_gems?(k) then
         next
       end
-      ViewResults::print_diff(k, @results, @target)
-    end
-    @checkers.each do |check_class|
-      @results[@target].sort.each do |k, gem|
-        ViewResults::print_check(check_class::description, gem.name) unless check_class::check?(gem)
+      if @checker_results[k]
+        checker_results = @checker_results[k]
+      else
+        checker_results = nil
       end
+      if @comments[k]
+        comments = @comments[k]
+      else
+        comments = nil
+      end
+      ViewResults::print_results(k, @results, @target, checker_results, comments)
+      @checker_results.delete(k) 
+      @comments.delete(k)
     end
-    ViewResults::print_tail
+    ViewResults::print_tail(@checker_results, @comments)
   end
 end
