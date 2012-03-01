@@ -19,9 +19,9 @@ class TestRubyGemsGems < Test::Unit::TestCase
    rubygemsgems = RubyGemsGemsTest.new 
    rubygemsgems.execute
    rubygemsgems.result.each {|k,v| puts "k: #{k} v: #{v}"}
-   result = rubygemsgems.result["test"].name
+   result = rubygemsgems.result["test"][0].name
    assert_equal("test",result)
-   result = rubygemsgems.result["test"].version
+   result = rubygemsgems.result["test"][0].version
    assert_equal(Gem::Version.new("0.8.6"), result)
  end
 end

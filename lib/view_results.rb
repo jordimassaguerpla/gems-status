@@ -52,54 +52,56 @@ class ViewResults
   def ViewResults.print_results(k, results, target, checker_results, comments)
     puts "<p>"
     puts "<table width='100%' class='table_results'>"
-    version = results[target][k].version
-    md5 = results[target][k].md5
+    version = results[target][k][0].version
+    md5 = results[target][k][0].md5
     name_color = "info"
     html_string = ""
     results.each do |key, result|
       if !result[k]
         next
       end
-      html_string << "<tr>"
-      html_string << "<td>"
-      html_string << "#{result[k].origin}"
-      html_string << "</td>"
-      html_string << "<td>"
       v_color = "info"
       md5_color = "info"
-      if result[k].from_git? then
-        md5_color = name_color = "alert"
-      end
-      if version != result[k].version then
-        v_color = "warning"
-        name_color = "warning" if name_color != "alert"
-      else
-        if !result[k].md5 || md5 != result[k].md5 then
+      result[k].each do |gem|
+        html_string << "<tr>"
+        html_string << "<td>"
+        html_string << "#{gem.origin}"
+        html_string << "</td>"
+        html_string << "<td>"
+        if gem.from_git? then
           md5_color = name_color = "alert"
         end
-      end
-      html_string << "<span class='#{v_color}'>"
-      if !version then
-        html_string << "error: look error log"
-      end
-      html_string << "#{result[k].version}"
-      html_string << "</span>"
-      html_string << "</td>"
-      html_string << "<td>"
-      html_string << "<span class='#{md5_color}'>"
-      if !result[k].md5 || result[k].md5.empty? then
-        if result[k].from_git? then
-          html_string << "this comes from #{result[k].gems_url}"
+        if version != gem.version then
+          v_color = "warning"
+          name_color = "warning" if name_color != "alert"
         else
+          if !gem.md5 || md5 != gem.md5 then
+            md5_color = name_color = "alert"
+          end
+        end
+        html_string << "<span class='#{v_color}'>"
+        if !version then
           html_string << "error: look error log"
         end
+        html_string << "#{gem.version}"
+        html_string << "</span>"
+        html_string << "</td>"
+        html_string << "<td>"
+        html_string << "<span class='#{md5_color}'>"
+        if !gem.md5 || gem.md5.empty? then
+          if gem.from_git? then
+            html_string << "this comes from #{gem.gems_url}"
+          else
+            html_string << "error: look error log"
+          end
+        end
+        html_string << "#{gem.md5}"
+        html_string << "</span>"
+        html_string << "</td>"
+        html_string << "</tr>"
+        version = gem.version
+        md5 = gem.md5
       end
-      html_string << "#{result[k].md5}"
-      html_string << "</span>"
-      html_string << "</td>"
-      html_string << "</tr>"
-      version = result[k].version
-      md5 = result[k].md5
     end
     puts "<tr><td width='50%'><span class='#{name_color}'>#{k.upcase}</span></td><td width='10%'>version</td><td width='40%'>md5</td></tr>"
     puts html_string

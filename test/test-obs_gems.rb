@@ -25,11 +25,11 @@ class TestObsGems < Test::Unit::TestCase
  def test_get_rubygem_data
    obsgems = OBSGemsTest.new
    obsgems.execute
-   result = obsgems.result["test"].name
+   result = obsgems.result["test"][0].name
    assert_equal("test", result)
-   result = obsgems.result["test"].version
+   result = obsgems.result["test"][0].version
    assert_equal(Gem::Version.new("0.8.6"), result)
-   result = obsgems.result["test"].md5
+   result = obsgems.result["test"][0].md5
    assert_equal("123", result)
  end
 end

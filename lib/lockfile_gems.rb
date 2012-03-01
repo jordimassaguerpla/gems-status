@@ -31,9 +31,11 @@ class LockfileGems < GemsCommand
   def update_gem_dependencies(gem)
     Utils::log_debug("updating dependencies for #{gem.name}")
     changes = false
-    @result.each do |k, gem2|
-      if gem.depends?(gem2)
-        changes = gem.merge_deps(gem2) || changes
+    @result.each do |k, gems|
+      gems.each do |gem2|
+        if gem.depends?(gem2)
+          changes = gem.merge_deps(gem2) || changes
+        end
       end
     end
     return changes
@@ -41,8 +43,10 @@ class LockfileGems < GemsCommand
 
   def update_dependencies
     changes = false
-    @result.each do |k, gem|
-      changes = update_gem_dependencies(gem) || changes
+    @result.each do |k, gems|
+      gems.each do |gem|
+        changes = update_gem_dependencies(gem) || changes
+      end
     end
     update_dependencies if changes
   end
@@ -59,12 +63,6 @@ class LockfileGems < GemsCommand
       lockfile.specs.each do |spec|
         name = spec.name
         version = Gem::Version.create(spec.version)
-        if @result[name] && @result[name].version != version
-          Utils::log_error(name, " 
-            Same gem with different versions: 
-            #{name} - #{version} - #{filename}\n
-            #{name} - #{@result[name].version} - #{@result[name].origin} ")
-        end
         dependencies = spec.dependencies
         Utils::log_debug "dependencies for #{name} #{dependencies}"
         if spec.source.class.name == "Bundler::Source::Git"
@@ -73,7 +71,8 @@ class LockfileGems < GemsCommand
         else 
           gems_url = @gems_url
         end
-        @result[name] = RubyGemsGems_GemSimple.new(name, version , '', filename,
+        @result[name] = [] if !@result[name]
+        @result[name] << RubyGemsGems_GemSimple.new(name, version , '', filename,
                                                    gems_url, dependencies)
       end
       update_dependencies

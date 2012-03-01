@@ -37,7 +37,7 @@ class GemsCompositeCommand < GemsCommand
     end
     @checkers.each do |check_class|
       @results[@target].sort.each do |k, gem|
-        @checker_results[gem.name] = check_class::description + gem.name unless check_class::check?(gem)
+        @checker_results[gem.name].each { |g| check_class::description + gem.name unless check_class::check?(g) }
       end
     end
   end
@@ -50,28 +50,6 @@ class GemsCompositeCommand < GemsCommand
       if !result[k] then
         return false
       end
-    end
-    return true
-  end
-
-  def equal_gems?(k)
-    if !are_there_results?
-      return false
-    end
-    if !common_key?(k)
-      return false
-    end
-    version = @results[@target][k].version
-    md5 = @results[@target][k].md5
-    @results.each do |key, result|
-      if result[k].version != version
-        return false
-      end
-      if result[k].md5 != md5
-        return false
-      end
-      version = result[k].version
-      md5 = result[k].md5
     end
     return true
   end

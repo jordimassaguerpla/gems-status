@@ -42,7 +42,7 @@ class RubyGemsGems < GemsCommand
       name = line[0]
       version = Gem::Version.new(line[1])
       gems_url = "#{@url}/gems"
-      @result[name] = RubyGemsGems_GemSimple.new(name, version,'' , @url, gems_url)
+      @result[name] = [RubyGemsGems_GemSimple.new(name, version,'' , @url, gems_url)]
     end
   end
 
