@@ -104,10 +104,6 @@ class GemsCompositeCommand < GemsCommand
     @results[@target].sort.each do |k,v| 
       if !common_key?(k) then 
         Utils::log_error(k, "#{k} in #{@target} but not found in all the sources!")
-        next
-      end
-      if equal_gems?(k) then
-        next
       end
       if @checker_results[k]
         checker_results = @checker_results[k]
