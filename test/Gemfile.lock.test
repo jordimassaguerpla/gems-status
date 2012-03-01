@@ -1,3 +1,11 @@
+GIT
+  remote: git://github.com/openSUSE/from_git.git
+  revision: 11111111
+  tag: 1.0.3.p1
+  specs:
+    from_git (1.0.3)
+      dep_from_git (1.0.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -9,10 +17,12 @@ GEM
       test4 (1.2.3)
     test4 (1.2.3)
       test2 (1.2.3)
+    dep_from_git (1.0.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
 test
+from_git (= 1.0.3)!
 

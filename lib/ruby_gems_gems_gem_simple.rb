@@ -10,6 +10,9 @@ class RubyGemsGems_GemSimple < GemSimple
     if @md5
       return @md5
     end
+    if from_git?
+      return nil
+    end
     gem_uri = "#{@gems_url}/#{@name}-#{@version}.gem" 
     Utils::log_debug "download and md5 for #{@name} from #{gem_uri}"
     begin
@@ -20,6 +23,10 @@ class RubyGemsGems_GemSimple < GemSimple
       Utils::log_error(@name, "There was a problem opening #{gem_uri}")
     end 
     return nil
+  end
+
+  def from_git?
+    return @gems_url.start_with?("git://")
   end
 end
 

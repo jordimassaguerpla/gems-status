@@ -57,6 +57,9 @@ class ViewResults
     name_color = "info"
     html_string = ""
     results.each do |key, result|
+      if !result[k]
+        next
+      end
       html_string << "<tr>"
       html_string << "<td>"
       html_string << "#{result[k].origin}"
@@ -64,11 +67,14 @@ class ViewResults
       html_string << "<td>"
       v_color = "info"
       md5_color = "info"
+      if result[k].from_git? then
+        md5_color = name_color = "alert"
+      end
       if version != result[k].version then
         v_color = "warning"
         name_color = "warning" if name_color != "alert"
       else
-        if md5 != result[k].md5 then
+        if !result[k].md5 || md5 != result[k].md5 then
           md5_color = name_color = "alert"
         end
       end
@@ -82,7 +88,11 @@ class ViewResults
       html_string << "<td>"
       html_string << "<span class='#{md5_color}'>"
       if !result[k].md5 || result[k].md5.empty? then
-        html_string << "error: look error log"
+        if result[k].from_git? then
+          html_string << "this comes from #{result[k].gems_url}"
+        else
+          html_string << "error: look error log"
+        end
       end
       html_string << "#{result[k].md5}"
       html_string << "</span>"

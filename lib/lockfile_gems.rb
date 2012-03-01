@@ -67,8 +67,14 @@ class LockfileGems < GemsCommand
         end
         dependencies = spec.dependencies
         Utils::log_debug "dependencies for #{name} #{dependencies}"
+        if spec.source.class.name == "Bundler::Source::Git"
+          Utils::log_debug "this comes from git #{name} #{version}"
+          gems_url = spec.source.uri
+        else 
+          gems_url = @gems_url
+        end
         @result[name] = RubyGemsGems_GemSimple.new(name, version , '', filename,
-                                                   @gems_url, dependencies)
+                                                   gems_url, dependencies)
       end
       update_dependencies
     end

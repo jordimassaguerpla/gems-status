@@ -17,7 +17,7 @@ class TestLockfileGems < Test::Unit::TestCase
  def test_get_rubygems_names
    lockfilegems = LockfileGemsTest.new
    lockfilegems.execute
-   assert(lockfilegems.result.length == 4)
+   assert(lockfilegems.result.length == 6)
    result = lockfilegems.result["test"].name
    assert_equal("test",result)
    result = lockfilegems.result["test"].version
@@ -34,6 +34,10 @@ class TestLockfileGems < Test::Unit::TestCase
    assert_equal("test4",result)
    result = lockfilegems.result["test4"].version
    assert_equal(Gem::Version.new("1.2.3"), result)
+   result = lockfilegems.result["from_git"].version
+   assert_equal(Gem::Version.new("1.0.3"), result)
+   result = lockfilegems.result["dep_from_git"].version
+   assert_equal(Gem::Version.new("1.0.0"), result)
  end
 
  def test_get_rubygems_dependencies
@@ -53,6 +57,14 @@ class TestLockfileGems < Test::Unit::TestCase
    assert_equal(
      Gem::Dependency.new("test4", Gem::Requirement.new(["= 1.2.3"])),
      result[2]) 
+ end
+
+ def test_from_git
+   lockfilegems = LockfileGemsTest.new
+   lockfilegems.execute
+   result = lockfilegems.result["from_git"].gems_url
+   assert(result.start_with?("git://"))
+   assert(lockfilegems.result["from_git"].from_git?)
  end
 end
 
