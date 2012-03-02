@@ -18,12 +18,13 @@ class LockfileGems < GemsCommand
   end
 
   def get_data(dirname, filename)
-    Dir.chdir(dirname)
     data = ""
-    begin
-      data = File.open(filename).read
-    rescue
-      Utils::log_error("?", "There was a problem opening file #{filename} ")
+    Dir.chdir(dirname) do
+      begin
+        data = File.open(filename).read
+      rescue
+        Utils::log_error("?", "There was a problem opening file #{filename} ")
+      end
     end
     return data
   end

@@ -6,8 +6,9 @@ require 'rubygems/dependency'
 class LockfileGemsTest < LockfileGems
   attr_accessor :result
   def initialize
-    #TODO: this won't work in other development machines!
-    @filenames = ["/home/jordi/work/suse/gems-status/test/Gemfile.lock.test"]
+    dir=File.expand_path(File.dirname(__FILE__))
+    puts "DEBUG: dir : #{dir} #{dir.class.name}"
+    @filenames = ["#{dir}/Gemfile.lock.test"]
     @gems_url = ""
     @result = {}
   end
