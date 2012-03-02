@@ -199,7 +199,7 @@ class ViewResults
     self.print_hash("checks", checker_results, "check")
     self.print_hash("comments", comments, "comment")
     self.print_hash("errors", Utils::errors, "errors")
-    date = Time.now.strftime('%F0')
+    date = Time.now.strftime('%a %b %d %H:%M:%S %Z %Y')
     puts "<p class='footer'>run by <a href=\"https://github.com/jordimassaguerpla/gems-status\">gems-status</a> - #{date} - version: #{GemsStatusMetadata::VERSION}</p>
     </body>
     </html>"
