@@ -1,6 +1,4 @@
 #!/usr/bin/ruby
-#TODO: implement a nicer interface
-#
 
 
  
