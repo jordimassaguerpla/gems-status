@@ -36,8 +36,15 @@ class GemsCompositeCommand < GemsCommand
       @results[command.ident] = command.result
     end
     @checkers.each do |check_class|
-      @results[@target].sort.each do |k, gem|
-        @checker_results[gem.name].each { |g| check_class::description + gem.name unless check_class::check?(g) }
+      Utils::log_debug "checking #{check_class::description}"
+      @results[@target].sort.each do |k, gems|
+        @checker_results[k] = "" 
+        gems.each do |gem|
+          if !check_class::check?(gem)  
+           @checker_results[gem.name] << " #{check_class::description} 
+           #{gem.name} #{gem.version} #{gem.origin} " 
+          end
+        end
       end
     end
   end
