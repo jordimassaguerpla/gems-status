@@ -6,10 +6,21 @@ require 'gem_checker'
 class NotNativeGemChecker < GemChecker
   def NotNativeGemChecker.check?(gem)
     result = nil
-    gem_uri = "#{gem.gems_url}/#{gem.name}-#{gem.version}.gem" 
+    gem_uri = URI.parse("#{gem.gems_url}/#{gem.name}-#{gem.version}.gem" )
+    uri_debug = gem_uri.clone
+    uri_debug.password = "********" if uri_debug.password
+    Utils::log_debug "download #{@name} from #{uri_debug}"
     begin
-      source = open(gem_uri, Gem.binary_mode) do |io|
-        result = Gem::Format.from_io io
+      if gem_uri.user && gem_uri.password
+        source = open(gem_uri.scheme + "://" + gem_uri.host + "/" + gem_uri.path, 
+                      Gem.binary_mode,
+                      :http_basic_authentication=>[gem_uri.user, gem_uri.password]) do |io|
+          result = Gem::Format.from_io io
+        end
+      else
+        source = open(gem_uri, Gem.binary_mode) do |io|
+          result = Gem::Format.from_io io
+        end
       end
     rescue IOError
       #bug on open-uri:137 on closing strings
