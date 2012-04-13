@@ -107,14 +107,22 @@ class ViewResults
     puts html_string
     puts "</table>"
     puts "</p>"
-    puts "<p> <span class='check'>checks:"
-    puts "<br/>#{checker_results}</span>" if checker_results
-    puts "</p><p><span class='errors'>errors: "
-    puts "<br/>#{Utils::errors[k]}</span>" if Utils::errors[k]
-    Utils.errors.delete(k)
-    puts "</p><p><span class='comment'>comments: "
-    puts "<br/>#{comments}</span>" if comments
-    puts "</p>"
+    if checker_results
+      puts "<p> <span class='check'>checks:"
+      puts "<br/>#{checker_results}</span>" 
+      puts "</p>"
+    end
+    if Utils::errors[k]
+      puts "<p><span class='errors'>errors: "
+      puts "<br/>#{Utils::errors[k]}</span>" 
+      Utils.errors.delete(k)
+      puts "</p>"
+    end
+    if comments
+      puts "<p><span class='comment'>comments: "
+      puts "<br/>#{comments}</span>" 
+      puts "</p>"
+    end
   end
 
   def ViewResults.print_head
