@@ -3,6 +3,9 @@ require 'gems_status_metadata'
 require 'utils'
 
 class ViewResults
+  @@patched = 0
+  @@outdated = 0
+  @@up_to_date = 0
 
   def ViewResults.print_description(ids)
     puts "
@@ -47,6 +50,16 @@ class ViewResults
     You should run gems-status periodically until the lists of errors, patched, outdated and checks are gone.
     </p>
     "
+  end
+
+  def ViewResults.update_summary(name_color)
+    if name_color == "alert"
+      @@patched += 1
+    elsif name_color == "warning"
+      @@outdated += 1
+    else
+      @@up_to_date += 1
+    end
   end
 
   def ViewResults.print_results(k, results, target, checker_results, comments)
@@ -105,6 +118,7 @@ class ViewResults
     end
     puts "<tr><td width='50%'><span class='#{name_color}'>#{k.upcase}</span></td><td width='10%'>version</td><td width='40%'>md5</td></tr>"
     puts html_string
+    update_summary(name_color)
     puts "</table>"
     puts "</p>"
     if checker_results
@@ -197,17 +211,23 @@ class ViewResults
   end
 
   def ViewResults.print_hash(desc, data, style)
-    return if !data | data.length == 0
+    return if !data or data.length == 0
     puts "<p>"
     puts "<h2>#{desc}: #{data.length}</h2>"
     data.each {|k,v| puts "<span class='#{style}'>#{k.upcase} : #{v}</span><br/>"}
     puts "</p>"
   end
 
+  def ViewResults.print_summary
+    puts "<h2>summary</h2>"
+    puts "patched/errored: #{@@patched} outdated: #{@@outdated} up-to-date: #{@@up_to_date}"
+  end
+
   def ViewResults.print_tail(checker_results, comments)
     self.print_hash("checks", checker_results, "check")
     self.print_hash("comments", comments, "comment")
     self.print_hash("errors", Utils::errors, "errors")
+    self.print_summary
     date = Time.now.strftime('%a %b %d %H:%M:%S %Z %Y')
     puts "<p class='footer'>run by <a href=\"https://github.com/jordimassaguerpla/gems-status\">gems-status</a> - #{date} - version: #{GemsStatusMetadata::VERSION}</p>
     </body>
