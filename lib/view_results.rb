@@ -197,6 +197,7 @@ class ViewResults
   end
 
   def ViewResults.print_hash(desc, data, style)
+    return if !data | data.length == 0
     puts "<p>"
     puts "<h2>#{desc}: #{data.length}</h2>"
     data.each {|k,v| puts "<span class='#{style}'>#{k.upcase} : #{v}</span><br/>"}
