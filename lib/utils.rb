@@ -1,6 +1,7 @@
 class Utils
   attr_accessor :errors
   @@errors = {}
+  @@md5_sums = {}
 
   def Utils.errors
     return @@errors
@@ -28,6 +29,19 @@ class Utils
 
   def Utils.log_debug(msg)
     $stderr.puts "DEBUG: #{msg}"
+  end
+
+  def Utils.download_md5(gem_uri)
+    return @@md5_sums[gem_uri] if @@md5_sums[gem_uri]
+    if gem_uri.user && gem_uri.password
+      source = open(gem_uri.scheme + "://" + gem_uri.host + "/" + gem_uri.path, 
+                    :http_basic_authentication=>[gem_uri.user, gem_uri.password])
+    else
+      source = open(gem_uri)
+    end
+    md5 = Digest::MD5.hexdigest(source.read)
+    @@md5_sums[gem_uri] = md5
+    return md5
   end
 
 end

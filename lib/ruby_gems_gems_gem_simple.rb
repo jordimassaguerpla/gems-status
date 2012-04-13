@@ -17,19 +17,13 @@ class RubyGemsGems_GemSimple < GemSimple
     uri_debug = gem_uri.clone
     uri_debug.password = "********" if uri_debug.password
     Utils::log_debug "download and md5 for #{@name} from #{uri_debug}"
+    @md5 = nil
     begin
-      if gem_uri.user && gem_uri.password
-        source = open(gem_uri.scheme + "://" + gem_uri.host + "/" + gem_uri.path, 
-                      :http_basic_authentication=>[gem_uri.user, gem_uri.password])
-      else
-        source = open(gem_uri)
-      end
-      @md5 = Digest::MD5.hexdigest(source.read)
-      return @md5
+      @md5 = Utils::download_md5(gem_uri)
     rescue
       Utils::log_error(@name, "There was a problem opening #{gem_uri}")
     end 
-    return nil
+    return @md5
   end
 
   def from_git?
