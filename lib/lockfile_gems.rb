@@ -10,11 +10,12 @@ require "utils"
 
 class LockfileGems < GemsCommand
   def initialize(conf)
-    Utils::check_parameters('LockfileGems', conf, ["id", "filenames", "gems_url"])
+    Utils::check_parameters('LockfileGems', conf, ["id", "filenames", "gems_url", "upstream_url"])
     @filenames = conf['filenames']
     @gems_url = conf['gems_url']
     @result = {}
     @ident = conf['id']
+    @upstream_url = conf['upstream_url']
   end
 
   def get_data(dirname, filename)
@@ -75,6 +76,8 @@ class LockfileGems < GemsCommand
         @result[name] = [] if !@result[name]
         @result[name] << RubyGemsGems_GemSimple.new(name, version , '', filename,
                                                    gems_url, dependencies)
+        @result[name] << RubyGemsGems_GemSimple.new(name, version , '', @upstream_url,
+                                                   @upstream_url, dependencies)
       end
       update_dependencies
     end
