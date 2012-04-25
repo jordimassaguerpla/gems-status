@@ -1,5 +1,5 @@
 $LOAD_PATH.unshift 'lib'
-require 'gems_status_metadata'
+require 'gems-status/gems_status_metadata'
 
 Gem::Specification.new do |s|
   s.name     = "gems-status"
