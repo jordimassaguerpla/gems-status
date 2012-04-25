@@ -1,9 +1,9 @@
-require "gem_simple"
-require "gems_command"
-require "not_native_gem_checker"
-require "not_rails_checker"
-require "exists_in_upstream"
-require "view_results"
+require "gems-status/gem_simple"
+require "gems-status/gems_command"
+require "gems-status/not_native_gem_checker"
+require "gems-status/not_rails_checker"
+require "gems-status/exists_in_upstream"
+require "gems-status/view_results"
 
 class GemsCompositeCommand < GemsCommand
   def initialize(target)

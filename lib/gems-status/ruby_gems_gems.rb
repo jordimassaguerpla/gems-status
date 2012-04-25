@@ -3,9 +3,9 @@ require "xmlsimple"
 require "open-uri"
 require "zlib"
 
-require "ruby_gems_gems_gem_simple"
-require "gems_command"
-require "utils"
+require "gems-status/ruby_gems_gems_gem_simple"
+require "gems-status/gems_command"
+require "gems-status/utils"
 
 
 class RubyGemsGems < GemsCommand

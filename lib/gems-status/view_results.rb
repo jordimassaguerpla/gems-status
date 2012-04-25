@@ -1,6 +1,6 @@
 require 'rubygems'
-require 'gems_status_metadata'
-require 'utils'
+require 'gems-status/gems_status_metadata'
+require 'gems-status/utils'
 
 class ViewResults
   @@patched = 0

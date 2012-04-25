@@ -1,4 +1,4 @@
-require "gem_simple"
+require "gems-status/gem_simple"
 
 class RubyGemsGems_GemSimple < GemSimple
 

@@ -1,7 +1,7 @@
 require 'rubygems/format'
 require 'rubygems/old_format'
 require 'open-uri'
-require 'gem_checker'
+require 'gems-status/gem_checker'
 
 class NotRailsChecker < GemChecker
   RAILS_GEMS = ["rails", "railties","activesupport"]

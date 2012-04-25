@@ -2,9 +2,9 @@ require "rubygems"
 require "xmlsimple"
 require "open-uri"
 
-require "gem_simple"
-require "gems_command"
-require "utils"
+require "gems-status/gem_simple"
+require "gems-status/gems_command"
+require "gems-status/utils"
 
 class OBSGems < GemsCommand
   FILES_TO_IGNORE = /(\w(\.gem|\.spec|\.changes|\.rpmlintrc|-rpm-lintrc|-rpmlintrc))|README.SuSE/

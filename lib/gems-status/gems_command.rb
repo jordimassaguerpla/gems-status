@@ -1,5 +1,5 @@
 
-require "gem_simple"
+require "gems-status/gem_simple"
 
 class GemsCommand
   attr_reader :result

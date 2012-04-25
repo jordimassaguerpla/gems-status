@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'open-uri'
-require 'gem_checker'
-require 'utils'
+require 'gems-status/gem_checker'
+require 'gems-status/utils'
 
 class ExistsInUpstream < GemChecker
   def ExistsInUpstream.check?(gem)

@@ -4,9 +4,9 @@ require "open-uri"
 require "zlib"
 
 require "bundler"
-require "ruby_gems_gems_gem_simple"
-require "gems_command"
-require "utils"
+require "gems-status/ruby_gems_gems_gem_simple"
+require "gems-status/gems_command"
+require "gems-status/utils"
 
 class LockfileGems < GemsCommand
   def initialize(conf)
@@ -56,28 +56,30 @@ class LockfileGems < GemsCommand
   def execute
     @filenames.each do |filename|
       Utils::log_debug "reading #{filename}"
-      file_data = get_data(File::dirname(filename), File::basename(filename))
-      if file_data.empty?
-        Utils::log_error("?", "file empty #{filename}")
-        next
-      end
-      lockfile = Bundler::LockfileParser.new(file_data)
-      lockfile.specs.each do |spec|
-        name = spec.name
-        version = Gem::Version.create(spec.version)
-        dependencies = spec.dependencies
-        Utils::log_debug "dependencies for #{name} #{dependencies}"
-        if spec.source.class.name == "Bundler::Source::Git"
-          Utils::log_debug "this comes from git #{name} #{version}"
-          gems_url = spec.source.uri
-        else 
-          gems_url = @gems_url
+      Dir.chdir(File.dirname(filename)) do
+        file_data = get_data(File::dirname(filename), File::basename(filename))
+        if file_data.empty?
+          Utils::log_error("?", "file empty #{filename}")
+          next
         end
-        @result[name] = [] if !@result[name]
-        @result[name] << RubyGemsGems_GemSimple.new(name, version , '', filename,
-                                                   gems_url, dependencies)
-        @result[name] << RubyGemsGems_GemSimple.new(name, version , '', @upstream_url,
+        lockfile = Bundler::LockfileParser.new(file_data)
+        lockfile.specs.each do |spec|
+          name = spec.name
+          version = Gem::Version.create(spec.version)
+          dependencies = spec.dependencies
+          Utils::log_debug "dependencies for #{name} #{dependencies}"
+          if spec.source.class.name == "Bundler::Source::Git"
+            Utils::log_debug "this comes from git #{name} #{version}"
+            gems_url = spec.source.uri
+          else 
+            gems_url = @gems_url
+          end
+          @result[name] = [] if !@result[name]
+          @result[name] << RubyGemsGems_GemSimple.new(name, version , '', filename,
+                                                     gems_url, dependencies)
+          @result[name] << RubyGemsGems_GemSimple.new(name, version , '', @upstream_url,
                                                    @upstream_url, dependencies)
+        end
       end
       update_dependencies
     end
