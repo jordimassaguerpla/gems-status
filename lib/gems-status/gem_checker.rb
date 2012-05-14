@@ -1,6 +1,8 @@
 class GemChecker
-  def GemChecker.check?(gem)
+  def initialize(configuration)
   end
-  def GemChecker.description
+  def check?(gem)
+  end
+  def description
   end
 end

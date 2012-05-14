@@ -4,6 +4,7 @@ require "gems-status/not_native_gem_checker"
 require "gems-status/not_rails_checker"
 require "gems-status/exists_in_upstream"
 require "gems-status/view_results"
+require "gems-status/not_a_security_alert_checker"
 
 class GemsCompositeCommand < GemsCommand
   def initialize(target)
@@ -19,8 +20,8 @@ class GemsCompositeCommand < GemsCommand
     @commands << command
   end
 
-  def add_checker(check_class)
-    @checkers << check_class
+  def add_checker(check_object)
+    @checkers << check_object
   end
 
   def execute
@@ -35,14 +36,15 @@ class GemsCompositeCommand < GemsCommand
     @commands.each do |command|
       @results[command.ident] = command.result
     end
-    @checkers.each do |check_class|
-      Utils::log_debug "checking #{check_class::description}"
+    @checkers.each do |check_object|
+      Utils::log_debug "checking #{check_object.class.name}"
       @results[@target].sort.each do |k, gems|
-        @checker_results[k] = "" 
+        @checker_results[k] = "" unless @checker_results[k] 
         gems.each do |gem|
-          if !check_class::check?(gem)  
-           @checker_results[gem.name] << " #{check_class::description} 
-           #{gem.name} #{gem.version} #{gem.origin} " 
+          if !check_object.check?(gem)  
+           @checker_results[gem.name] << "
+           <br/>#{gem.name} #{gem.version} #{gem.origin}: <br/>
+           #{check_object.description} " 
           end
         end
       end

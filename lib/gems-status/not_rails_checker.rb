@@ -5,7 +5,7 @@ require 'gems-status/gem_checker'
 
 class NotRailsChecker < GemChecker
   RAILS_GEMS = ["rails", "railties","activesupport"]
-  def NotRailsChecker.check?(gem)
+  def check?(gem)
     return false if !gem.dependencies 
     gem.dependencies.each do |dep|
       if RAILS_GEMS.include?(dep.name)
@@ -15,7 +15,7 @@ class NotRailsChecker < GemChecker
     return true
     end
 
-  def NotRailsChecker.description
+  def description
     "This gem depends on rails or could not get spec: "
   end
 end

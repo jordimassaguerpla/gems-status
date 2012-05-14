@@ -4,7 +4,7 @@ require 'open-uri'
 require 'gems-status/gem_checker'
 
 class NotNativeGemChecker < GemChecker
-  def NotNativeGemChecker.check?(gem)
+  def check?(gem)
     result = nil
     gem_uri = URI.parse("#{gem.gems_url}/#{gem.name}-#{gem.version}.gem" )
     uri_debug = gem_uri.clone
@@ -33,7 +33,8 @@ class NotNativeGemChecker < GemChecker
     return false unless result 
     return result.spec.extensions.empty?
   end
-  def NotNativeGemChecker.description
+
+  def description
     "This gem is a native gem or could not get specs: "
   end
 end

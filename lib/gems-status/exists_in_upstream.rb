@@ -4,7 +4,7 @@ require 'gems-status/gem_checker'
 require 'gems-status/utils'
 
 class ExistsInUpstream < GemChecker
-  def ExistsInUpstream.check?(gem)
+  def check?(gem)
     Utils::log_debug("Looking for #{gem.name}")
     result = nil
     gem_uri = "#{gem.gems_url}/#{gem.name}-#{gem.version}.gem" 
@@ -15,7 +15,7 @@ class ExistsInUpstream < GemChecker
       return false
     end
   end
-  def ExistsInUpstream.description
+  def description
     "This gem does not exist in upstream: "
   end
 end

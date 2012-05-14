@@ -31,7 +31,8 @@ class GemStatus
     end
     if @conf["checkers"]
       @conf["checkers"].each do |c|
-       gems_composite_command.add_checker(eval(c["classname"]))
+        checker = eval(c["classname"]).new(c)
+       gems_composite_command.add_checker(checker)
       end
     end
     if @conf["comments"]
