@@ -20,6 +20,11 @@ checkers:
  - classname: NotNaviteGemChecker
  - classname: ExistsInUpstream
  - classname: NotRailsChecker
+ - classname: NotASecurityAlertChecker
+   fixed:
+     mail0: '2.4.4'
+   source_repos:
+     abingo: 'git://github.com/openSUSE/abingo.git'
 comments:
   gem1: "this is a comment on gem1"
   gem2: "this is a comment on gem2"
