@@ -21,8 +21,7 @@ class NotASecurityAlertChecker < GemChecker
     source_repo = source_repo(gem)
     if ! source_repo
       Utils::log_error gem.name, "Not source URL for #{gem.name}"
-      @security_messages = {gem.name => "Not source URL for #{gem.name}"} 
-      return false
+      return true
     end
     Utils::log_debug "Source URL for #{gem.name} #{source_repo}"
     look_for_security_messages(gem.name, source_repo)
