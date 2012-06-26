@@ -3,9 +3,9 @@ require 'gems-status/gems_status_metadata'
 require 'gems-status/utils'
 
 class ViewResults
-  @@patched = 0
-  @@outdated = 0
-  @@up_to_date = 0
+  @@patched = []
+  @@outdated = []
+  @@up_to_date = []
 
   def ViewResults.print_description(ids)
     puts "
@@ -47,18 +47,20 @@ class ViewResults
     <p> At the end there are the errors, checks and comments that do not apply to any of the gems. Look them carefully.
     </p>
     <p>
+    There is a summary at the end.
+    </p>
     You should run gems-status periodically until the lists of errors, patched, outdated and checks are gone.
     </p>
     "
   end
 
-  def ViewResults.update_summary(name_color)
-    if name_color == "alert"
-      @@patched += 1
-    elsif name_color == "warning"
-      @@outdated += 1
+  def ViewResults.update_summary(gem_name, status)
+    if status == "alert"
+      @@patched << gem_name
+    elsif status == "warning"
+      @@outdated << gem_name
     else
-      @@up_to_date += 1
+      @@up_to_date << gem_name
     end
   end
 
@@ -116,9 +118,9 @@ class ViewResults
         md5 = gem.md5
       end
     end
-    puts "<tr><td width='50%'><span class='#{name_color}'>#{k.upcase}</span></td><td width='10%'>version</td><td width='40%'>md5</td></tr>"
+    puts "<tr><td width='50%'><span class='#{name_color}'><a name=\"#{k}\" />#{k}</span></td><td width='10%'>version</td><td width='40%'>md5</td></tr>"
     puts html_string
-    update_summary(name_color)
+    update_summary(k, name_color)
     puts "</table>"
     puts "</p>"
     if checker_results
@@ -145,7 +147,7 @@ class ViewResults
     <style>
     body 
     {
-    font-size: 100%;
+    font-size: 90%;
     }
     h1
     {
@@ -155,7 +157,8 @@ class ViewResults
     h2
     {
     font-size: 100%;
-    font-weight: bold;
+    font-style: italic;
+    font-weight: normal;
     }
     .gem_name
     {
@@ -186,19 +189,19 @@ class ViewResults
     .errors
     {
     color: #ff0000;
-    font-size: 80%;
+    font-size: 100%;
     font-style: italic;
     }
     .check
     {
     color: #a0a0a0;
-    font-size: 80%;
+    font-size: 100%;
     font-style: italic;
     }
     .comment
     {
     color: #a0a0a0;
-    font-size: 80%;
+    font-size: 100%;
     font-style: italic;
     }
     .table_results
@@ -210,24 +213,48 @@ class ViewResults
     <body>"
   end
 
-  def ViewResults.print_hash(desc, data, style)
+  def ViewResults.print_hash(desc, data, style, anchor = false)
     return if !data or data.length == 0
     puts "<p>"
     puts "<h2>#{desc}: #{data.length}</h2>"
-    data.each {|k,v| puts "<span class='#{style}'>#{k.upcase} : #{v}</span><br/>"}
+    data.each do |k,v| 
+      if anchor
+        puts "<a href=\"\##{k}\"><span class='#{style}'>#{k}</span></a>"
+      else
+        puts "<span class='#{style}'>#{k}</span>"
+      end
+      puts "<span class='#{style}'> #{v}</span><br/>"
+
+    end
     puts "</p>"
   end
 
   def ViewResults.print_summary
-    puts "<h2>summary</h2>"
-    puts "patched/errored: #{@@patched} outdated: #{@@outdated} up-to-date: #{@@up_to_date}"
+    puts "<a name='summary'/><h1>Summary</h1>"
+    puts "<p><h2>patched/errored</h2>"
+    puts "<ul>"
+    @@patched.each do |p|
+      puts "<li><a href=\"\##{p}\">#{p}</a>"
+    end
+    puts "</ul></p>"
+    puts "<p><h2>outdated #{@@outdated.length}</h2>"
+    @@outdated.each do |p|
+      puts "<li><a href=\"\##{p}\">#{p}</a>"
+    end
+    puts "</ul></p>"
+    puts "<p> <h2>up-to-date #{@@up_to_date.length}</h2>"
+    @@up_to_date.each do |p|
+      puts "<li><a href=\"\##{p}\">#{p}</a>"
+    end
+    puts "</ul></p>"
   end
 
   def ViewResults.print_tail(checker_results, comments)
-    self.print_hash("checks", checker_results, "check")
+    puts "<h1>Others</h1>"
     self.print_hash("comments", comments, "comment")
     self.print_hash("errors", Utils::errors, "errors")
     self.print_summary
+    self.print_hash("checks", checker_results, "summary", true)
     date = Time.now.strftime('%a %b %d %H:%M:%S %Z %Y')
     puts "<p class='footer'>run by <a href=\"https://github.com/jordimassaguerpla/gems-status\">gems-status</a> - #{date} - version: #{GemsStatusMetadata::VERSION}</p>
     </body>

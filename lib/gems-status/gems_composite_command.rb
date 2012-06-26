@@ -39,9 +39,9 @@ class GemsCompositeCommand < GemsCommand
     @checkers.each do |check_object|
       Utils::log_debug "checking #{check_object.class.name}"
       @results[@target].sort.each do |k, gems|
-        @checker_results[k] = "" unless @checker_results[k] 
         gems.each do |gem|
           if !check_object.check?(gem)  
+           @checker_results[k] = "" unless @checker_results[k] 
            @checker_results[gem.name] << "
            <br/>#{gem.name} #{gem.version} #{gem.origin}: <br/>
            #{check_object.description} " 
@@ -103,7 +103,6 @@ class GemsCompositeCommand < GemsCommand
         comments = nil
       end
       ViewResults::print_results(k, @results, @target, checker_results, comments)
-      @checker_results.delete(k) 
       @comments.delete(k)
     end
     ViewResults::print_tail(@checker_results, @comments)
