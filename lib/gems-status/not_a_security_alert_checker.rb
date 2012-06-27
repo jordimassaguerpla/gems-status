@@ -1,3 +1,4 @@
+require "gmail"
 require "json"
 require "open-uri"
 
@@ -9,23 +10,93 @@ require "gems-status/scm_security_messages"
 
 class NotASecurityAlertChecker < GemChecker
   def initialize(conf)
-    Utils::check_parameters('NotASecurityAlertChecker', conf, ["fixed", "source_repos"])
+    Utils::check_parameters('NotASecurityAlertChecker', conf, ["fixed", "source_repos", "email_username", "email_password", "mailing_lists", "email_to"])
     @fixed = conf["fixed"]
     @source_repos = conf["source_repos"]
     @security_messages = {}
+    @email_username = conf["email_username"]
+    @email_password = conf["email_password"]
+    @mailing_lists = conf["mailing_lists"]
+    @email_to = conf["email_to"]
+    @emails = {}
+    download_emails
   end
 
-  def check?(gem)
-    @security_messages = {}
+  def download_emails
+    #TODO: only download new emails and keep the old ones in a database
+     #puts "Security email alerts from #{mailing_list} #{gmail.inbox.count(:unread, :to => mailing_list}"
+    Gmail.new(@email_username, @email_password) do |gmail|
+     @mailing_lists.each do |mailing_list|
+       @emails[mailing_list] = []
+       Utils::log_debug "Security email alerts from #{mailing_list} #{gmail.inbox.count( :to => mailing_list)}"
+       #TODO: only read new emails
+       #gmail.inbox.emails(:unread, :to => "rubyonrails-security@googlegroups.com").each do |email|
+       gmail.inbox.emails(:to => mailing_list).each do |email|
+         Utils::log_debug "Read #{email.subject}"
+         @emails[mailing_list] << email
+       end
+      end
+    end
+  end
+
+  def send_emails(gem)
+    return if @security_messages.length == 0
+    #gems.origin == gems.gems_url if we are looking to an upstream gem, 
+    #for example in rubygems.org. We only care about our application gems.
+    return if gem.origin == gem.gems_url
+    mssg = ""
+    mssg = "#{gem.name} #{gem.version} : #{gem.origin} \n"
+    @security_messages.each do |k,v|
+      mssg = mssg + "\n #{v}"
+    end
+    email_receiver = @email_to
+    Gmail.new(@email_username, @email_password) do |gmail|
+      gmail.deliver do
+        to email_receiver
+        subject "[gems-status] security alerts for #{gem.name}"
+        text_part do
+           body mssg
+         end
+      end
+    end
+    Utils::log_debug "Email sent to #{@email_to} "
+    Utils::log_debug "with body #{mssg} "
+  end
+
+  def look_in_scm(gem)
     version = gem.version
     source_repo = source_repo(gem)
     if ! source_repo
       Utils::log_error gem.name, "Not source URL for #{gem.name}"
-      return true
+      return 
     end
     Utils::log_debug "Source URL for #{gem.name} #{source_repo}"
     look_for_security_messages(gem.name, source_repo)
     filter_security_messages_already_fixed(gem.version)
+  end
+
+  def look_in_emails(gem)
+    @emails.each do |listname, emails|
+      emails.each do |email|
+        if listname.include?(gem.name)
+          @security_messages[Utils::next_key(gem.name)] = email.subject
+          Utils::log_debug "looking for security emails: listname matches gem #{gem.name}: #{listname}"
+          next
+        end
+        if email.subject.include?(gem.name)
+          @security_messages[Utils::next_key(gem.name)] = email.subject
+          Utils::log_debug "looking for security emails: subject matches gem #{gem.name}: #{email.subject}"
+          next
+        end
+      end
+    end
+  end
+
+  def check?(gem)
+    @security_messages = {}
+    look_in_scm(gem)
+    look_in_emails(gem)
+    send_emails(gem)
     return @security_messages.length == 0
   end
 
@@ -41,6 +112,7 @@ class NotASecurityAlertChecker < GemChecker
  private
 
  def filter_security_messages_already_fixed(version)
+   #TODO: let's use a database instead of having the info in yaml file
    @security_messages.delete_if do |k,v|
      @fixed[k] && Gem::Version.new(@fixed[k]) <= version 
    end
