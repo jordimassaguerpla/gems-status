@@ -30,7 +30,9 @@ checkers:
     mailing_lists: 
       - 'rubyonrails-security@googlegroups.com'
       - 'oss-security@lists.openwall.com'
-    email_to: 'jmassaguerpla@suse.de'
+    email_to: 
+      - 'jmassaguerpla@suse.de'
+      - 'someoneelse@suse.de'
 comments:
   gem1: "this is a comment on gem1"
   gem2: "this is a comment on gem2"

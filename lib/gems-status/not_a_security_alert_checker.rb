@@ -49,14 +49,15 @@ class NotASecurityAlertChecker < GemChecker
     @security_messages.each do |k,v|
       mssg = mssg + "\n #{v}"
     end
-    email_receiver = @email_to
-    Gmail.new(@email_username, @email_password) do |gmail|
-      gmail.deliver do
-        to email_receiver
-        subject "[gems-status] security alerts for #{gem.name}"
-        text_part do
-           body mssg
-         end
+    @email_to.each do |email_receiver|
+      Gmail.new(@email_username, @email_password) do |gmail|
+        gmail.deliver do
+          to email_receiver
+          subject "[gems-status] security alerts for #{gem.name}"
+          text_part do
+             body mssg
+           end
+        end
       end
     end
     Utils::log_debug "Email sent to #{@email_to} "
