@@ -231,7 +231,7 @@ class ViewResults
 
   def ViewResults.print_summary
     puts "<a name='summary'/><h1>Summary</h1>"
-    puts "<p><h2>patched/errored</h2>"
+    puts "<p><h2>patched/errored #{@@patched.length}</h2>"
     puts "<ul>"
     @@patched.each do |p|
       puts "<li><a href=\"\##{p}\">#{p}</a>"
