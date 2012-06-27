@@ -1,6 +1,5 @@
 class ScmCheckMessages
   MAX_RETRIES = 3
-  @@keys = {}
 
   def check_messages(name, source_repo, message_checker, counter = 0)
     begin
@@ -33,10 +32,7 @@ private
   end
 
   def next_key(name)
-    @@keys[name] = 0 unless @@keys[name]
-    key = name + @@keys[name].to_s
-    @@keys[name] = @@keys[name] + 1
-    return key
+    return Utils::next_key(name)
   end
 
   def message(commit)
