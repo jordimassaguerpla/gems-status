@@ -20,6 +20,11 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'xml-simple'
   s.add_runtime_dependency 'bundler'
+  s.add_runtime_dependency 'gmail'
+  s.add_runtime_dependency 'git'
+  s.add_runtime_dependency 'mercurial-ruby'
+  s.add_runtime_dependency 'json'
+
 end
 
 
