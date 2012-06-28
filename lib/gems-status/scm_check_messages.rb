@@ -23,7 +23,7 @@ private
     commits.each do |commit|
       if message_checker.check_message?(message(commit))
         Utils::log_debug "#{message(commit)}"
-        key = commit_key(commit)
+        key = "#{name}_#{commit_key(commit)}"
         if !key
           Utils::log_error "no key for #{name}"
           next
