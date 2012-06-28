@@ -23,7 +23,11 @@ private
     commits.each do |commit|
       if message_checker.check_message?(message(commit))
         Utils::log_debug "#{message(commit)}"
-        key = next_key(name)
+        key = commit_key(name)
+        if !key
+          Utils::log_error "no key for #{name}"
+          next
+        end
         Utils::log_debug "security key: #{key}"
         results[key] = message(commit)
       end
@@ -31,8 +35,8 @@ private
     return results
   end
 
-  def next_key(name)
-    return Utils::next_key(name)
+  def commit_key(commit)
+    raise NotImplementedError
   end
 
   def message(commit)

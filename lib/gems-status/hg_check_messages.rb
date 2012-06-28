@@ -23,5 +23,10 @@ private
     repo.pull
     return repo.commits
   end
+
+  def commit_key(commit)
+    return commit.hash_id
+  end
+
 end
 

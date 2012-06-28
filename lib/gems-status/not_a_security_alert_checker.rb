@@ -80,12 +80,12 @@ class NotASecurityAlertChecker < GemChecker
     @emails.each do |listname, emails|
       emails.each do |email|
         if listname.include?(gem.name)
-          @security_messages[Utils::next_key(gem.name)] = email.subject
+          @security_messages["email_#{listname}_#{gem.name}_#{email.uid}"] = email.subject
           Utils::log_debug "looking for security emails: listname matches gem #{gem.name}: #{listname}"
           next
         end
         if email.subject.include?(gem.name)
-          @security_messages[Utils::next_key(gem.name)] = email.subject
+          @security_messages["email_#{listname}_#{gem.name}_#{email.uid}"] = email.subject
           Utils::log_debug "looking for security emails: subject matches gem #{gem.name}: #{email.subject}"
           next
         end
@@ -114,6 +114,7 @@ class NotASecurityAlertChecker < GemChecker
 
  def filter_security_messages_already_fixed(version)
    #TODO: let's use a database instead of having the info in yaml file
+   #TODO: can we know which commits are in a particular version? by date?
    @security_messages.delete_if do |k,v|
      @fixed[k] && Gem::Version.new(@fixed[k]) <= version 
    end

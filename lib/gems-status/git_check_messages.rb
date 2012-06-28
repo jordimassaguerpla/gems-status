@@ -20,4 +20,8 @@ private
     return g.log
   end
 
+  def commit_key(commit)
+    return commit.sha
+  end
+
 end

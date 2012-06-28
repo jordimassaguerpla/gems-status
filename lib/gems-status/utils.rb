@@ -11,13 +11,6 @@ class Utils
     return @@errors
   end
 
-  def Utils.next_key(name)
-    @@keys[name] = 0 unless @@keys[name]
-    key = name + @@keys[name].to_s
-    @@keys[name] = @@keys[name] + 1
-    return key
-  end
-
   def Utils.check_parameters(classname, conf, parameters)
     if !conf['classname'] then
       raise "trying to initialize #{classname} when parameter classname does not exists"
