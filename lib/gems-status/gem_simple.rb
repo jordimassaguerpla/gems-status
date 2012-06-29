@@ -38,5 +38,9 @@ class GemSimple
     return changes
   end
 
+  def from_git?
+    return @gems_url && @gems_url.start_with?("git://")
+  end
+
 end
 

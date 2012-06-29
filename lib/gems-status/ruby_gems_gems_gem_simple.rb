@@ -25,9 +25,5 @@ class RubyGemsGems_GemSimple < GemSimple
     end 
     return @md5
   end
-
-  def from_git?
-    return @gems_url.start_with?("git://")
-  end
 end
 
