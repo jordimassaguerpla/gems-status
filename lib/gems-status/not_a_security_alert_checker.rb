@@ -72,20 +72,24 @@ class NotASecurityAlertChecker < GemChecker
       return 
     end
     Utils::log_debug "Source URL for #{gem.name} #{source_repo}"
-    look_for_security_messages(gem.name, source_repo)
+    look_for_security_messages(gem.name, source_repo, gem.origin)
     filter_security_messages_already_fixed(gem.version)
+  end
+
+  def key_for_emails(listname, gem, email)
+    "email_#{listname}_#{gem.name}_#{gem.origin}_#{email.uid}"
   end
 
   def look_in_emails(gem)
     @emails.each do |listname, emails|
       emails.each do |email|
         if listname.include?(gem.name)
-          @security_messages["email_#{listname}_#{gem.name}_#{email.uid}"] = email.subject
+          @security_messages[key_for_emails] = email.subject
           Utils::log_debug "looking for security emails: listname matches gem #{gem.name}: #{listname}"
           next
         end
         if email.subject.include?(gem.name)
-          @security_messages["email_#{listname}_#{gem.name}_#{email.uid}"] = email.subject
+          @security_messages[key_for_emails] = email.subject
           Utils::log_debug "looking for security emails: subject matches gem #{gem.name}: #{email.subject}"
           next
         end
@@ -146,7 +150,7 @@ class NotASecurityAlertChecker < GemChecker
    return uri
  end
 
- def look_for_security_messages(name, source_repo, counter = 0)
+ def look_for_security_messages(name, source_repo, origin, counter = 0)
     Utils::log_debug "looking for security messages on #{source_repo}"
     if ! File.exists?("build_security_messages_check")
       Dir.mkdir("build_security_messages_check")
@@ -170,7 +174,7 @@ class NotASecurityAlertChecker < GemChecker
           return {}
         end
         @security_messages = scmCheckMessages.check_messages(name, source_repo, 
-                                        ScmSecurityMessages.new)
+                                        ScmSecurityMessages.new, origin)
       end
     end
  end
