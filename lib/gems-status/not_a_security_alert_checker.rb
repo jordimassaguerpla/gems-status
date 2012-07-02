@@ -48,6 +48,7 @@ class NotASecurityAlertChecker < GemChecker
     mssg = "#{gem.name} #{gem.version} : #{gem.origin} \n"
     @security_messages.each do |k,v|
       mssg = mssg + "\n #{v}"
+      mssg = mssg + "Fixed in #{@fixed[k]}\n" if @fixed[k]
     end
     @email_to.each do |email_receiver|
       Gmail.new(@email_username, @email_password) do |gmail|
@@ -108,9 +109,11 @@ class NotASecurityAlertChecker < GemChecker
  def description
    result = ""
    @security_messages.keys.sort.each do |k|
-     result = result + "[#{k}] - #{@security_messages[k]}<br/>"
+     result = result + "[#{k}] - #{@security_messages[k]}"
+     result = result + "Fixed in #{@fixed[k]}" if @fixed[k]
+     result = result + "<br/>" 
    end
-   result = "Security alerts:" + result if result!=""
+   result = "Security alerts: #{result}" if result!=""
    return result
  end
 
