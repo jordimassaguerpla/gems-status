@@ -48,7 +48,7 @@ class NotASecurityAlertChecker < GemChecker
     mssg = "#{gem.name} #{gem.version} : #{gem.origin} \n"
     @security_messages.each do |k,v|
       mssg = mssg + "\n #{v}"
-      mssg = mssg + "Fixed in #{@fixed[k]}\n" if @fixed[k]
+      mssg = mssg + "\nFixed in #{@fixed[k]}\n" if @fixed[k]
     end
     @email_to.each do |email_receiver|
       Gmail.new(@email_username, @email_password) do |gmail|
@@ -99,6 +99,9 @@ class NotASecurityAlertChecker < GemChecker
   end
 
   def check?(gem)
+    #ignore upstream checks
+    return true if gem.origin == gem.gems_url
+
     @security_messages = {}
     look_in_scm(gem)
     look_in_emails(gem)
