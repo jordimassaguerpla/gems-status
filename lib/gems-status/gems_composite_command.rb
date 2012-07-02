@@ -5,6 +5,7 @@ require "gems-status/not_rails_checker"
 require "gems-status/exists_in_upstream"
 require "gems-status/view_results"
 require "gems-status/not_a_security_alert_checker"
+require "gems-status/print_gem_versions"
 
 class GemsCompositeCommand < GemsCommand
   def initialize(target)
