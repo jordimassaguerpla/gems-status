@@ -85,12 +85,12 @@ class NotASecurityAlertChecker < GemChecker
     @emails.each do |listname, emails|
       emails.each do |email|
         if listname.include?(gem.name)
-          @security_messages[key_for_emails] = email.subject
+          @security_messages[key_for_emails(listname, gem, email)] = email.subject
           Utils::log_debug "looking for security emails: listname matches gem #{gem.name}: #{listname}"
           next
         end
         if email.subject.include?(gem.name)
-          @security_messages[key_for_emails] = email.subject
+          @security_messages[key_for_emails(listname, gem, email)] = email.subject
           Utils::log_debug "looking for security emails: subject matches gem #{gem.name}: #{email.subject}"
           next
         end
