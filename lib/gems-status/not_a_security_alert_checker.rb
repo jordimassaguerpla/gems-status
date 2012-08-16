@@ -74,7 +74,6 @@ class NotASecurityAlertChecker < GemChecker
     end
     Utils::log_debug "Source URL for #{gem.name} #{source_repo}"
     look_for_security_messages(gem.name, source_repo, gem.origin)
-    filter_security_messages_already_fixed(gem.version)
   end
 
   def key_for_emails(listname, gem, email)
@@ -105,6 +104,7 @@ class NotASecurityAlertChecker < GemChecker
     @security_messages = {}
     look_in_scm(gem)
     look_in_emails(gem)
+    filter_security_messages_already_fixed(gem.version)
     send_emails(gem)
     return @security_messages.length == 0
   end
