@@ -11,7 +11,12 @@ require "gems-status/scm_security_messages"
 class NotASecurityAlertChecker < GemChecker
   def initialize(conf)
     Utils::check_parameters('NotASecurityAlertChecker', conf, ["fixed", "source_repos", "email_username", "email_password", "mailing_lists", "email_to"])
-    @fixed = conf["fixed"]
+    begin
+      @fixed = YAML::load(File::open(conf["fixed"]))
+    rescue
+      Utils::log_error("?", "There was a problem opening #{conf["fixed"]}")
+      @fixed = []
+    end
     @source_repos = conf["source_repos"]
     @security_messages = {}
     @email_username = conf["email_username"]
