@@ -1,0 +1,6 @@
+---
+#write a map of security key messages to fixed versions
+#for example
+# 'rails_commit_343434334' : '3.2.6'
+# use '0.0.0' as a version to ignore the security message
+
