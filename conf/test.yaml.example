@@ -15,16 +15,17 @@ sources:
   filenames:
     - '/home/nfs/work/studio/ui-server/Gemfile.lock'
   gems_url: 'http://rubygems.org/gems'
+  upstream_url: 'http://rubygems.org/gems'
 target: 'lockfile'
 checkers:
- - classname: NotNaviteGemChecker
- - classname: ExistsInUpstream
- - classname: NotRailsChecker
- - classname: NotASecurityAlertChecker
-   fixed:
-     mail0: '2.4.4'
-   source_repos:
-     abingo: 'git://github.com/openSUSE/abingo.git'
+  - classname: NotNativeGemChecker
+  - classname: ExistsInUpstream
+  - classname: NotRailsChecker
+  - classname: PrintGemVersions
+  - classname: NotASecurityAlertChecker
+    fixed: '/home/jordi/work/gems-status/conf/security.yaml'
+    source_repos:
+      abingo: 'git://github.com/openSUSE/abingo.git'
     email_username: 'yourusername@gmail.com'
     email_password: 'secret'
     mailing_lists: 
