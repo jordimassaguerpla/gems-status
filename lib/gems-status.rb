@@ -1,6 +1,4 @@
 #!/usr/bin/ruby
-
-
  
 require "rubygems"
 require "xmlsimple"
@@ -8,10 +6,9 @@ require "open-uri"
 require "yaml"
 
 require "gems-status/gem_simple"
-require "gems-status/obs_gems"
-require "gems-status/lockfile_gems"
-require "gems-status/ruby_gems_gems"
+require "gems-status/sources.rb"
 require "gems-status/gems_composite_command"
+require "gems-status/checkers"
 
 class GemStatus
   def initialize(conf_file)
