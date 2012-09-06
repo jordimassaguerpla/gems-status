@@ -1,6 +1,6 @@
 $:.unshift File.join(File.dirname(__FILE__), "..", "lib")
 require 'test/unit'
-require 'obs_gems'
+require 'gems-status'
 
 class OBSGemsTest < OBSGems
   attr_accessor :result

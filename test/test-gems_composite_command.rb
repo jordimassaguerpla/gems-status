@@ -1,6 +1,6 @@
 $:.unshift File.join(File.dirname(__FILE__), "..", "lib")
 require 'test/unit'
-require 'gems_composite_command'
+require 'gems-status'
 
 class GemsCompositeCommandTest < GemsCompositeCommand
   attr_accessor :results

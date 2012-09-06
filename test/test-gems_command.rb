@@ -1,6 +1,6 @@
 $:.unshift File.join(File.dirname(__FILE__), "..", "lib")
 require 'test/unit'
-require 'gems_command'
+require 'gems-status'
 
 class TestGemsCommand < Test::Unit::TestCase
   def test_gem_name_wrong_name

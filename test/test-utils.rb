@@ -1,7 +1,7 @@
 $:.unshift File.join(File.dirname(__FILE__), "..", "lib")
 require 'test/unit'
 require 'rubygems'
-require 'utils'
+require 'gems-status'
 
 class TestUtils < Test::Unit::TestCase
   def test_check_parameters_no_classname

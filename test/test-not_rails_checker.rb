@@ -1,20 +1,18 @@
 $:.unshift File.join(File.dirname(__FILE__), "..", "lib")
 require 'rubygems'
 require 'test/unit'
-require 'gems_command'
-require 'gem_simple'
-require 'not_rails_checker'
+require 'gems-status'
 
 class TestNotRailsChecker < Test::Unit::TestCase
   def test_gem_with_no_deps
     gem = GemSimple.new("name", Gem::Version.new("1.2.3"), nil, nil, nil, nil)
-    check = NotRailsChecker
+    check = NotRailsChecker.new nil
     result = check.check?(gem)
     assert(!result)
   end
   def test_gem_with_no_deps_2
     gem = GemSimple.new("name", Gem::Version.new("1.2.3"), nil, nil, nil, [])
-    check = NotRailsChecker
+    check = NotRailsChecker.new nil
     result = check.check?(gem)
     assert(result)
   end
@@ -25,7 +23,7 @@ class TestNotRailsChecker < Test::Unit::TestCase
     ]
 
     gem = GemSimple.new("name", Gem::Version.new("1.2.3"), nil, nil, nil, deps)
-    check = NotRailsChecker
+    check = NotRailsChecker.new nil
     result = check.check?(gem)
     assert(!result)
   end
@@ -36,7 +34,7 @@ class TestNotRailsChecker < Test::Unit::TestCase
     ]
 
     gem = GemSimple.new("name", Gem::Version.new("1.2.3"), nil, nil, nil, deps)
-    check = NotRailsChecker
+    check = NotRailsChecker.new nil
     result = check.check?(gem)
     assert(result)
   end
@@ -47,7 +45,7 @@ class TestNotRailsChecker < Test::Unit::TestCase
     ]
 
     gem = GemSimple.new("name", Gem::Version.new("1.2.3"), nil, nil, nil, deps)
-    check = NotRailsChecker
+    check = NotRailsChecker.new nil
     result = check.check?(gem)
     assert(!result)
   end
