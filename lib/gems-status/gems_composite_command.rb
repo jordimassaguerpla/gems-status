@@ -77,10 +77,11 @@ class GemsCompositeCommand < GemsCommand
   end
 
   def print
-    HTMLView::print_head
+    html_view = HTMLView.new
+    html_view.print_head
     ids = []
     @commands.each { |c| ids << c.ident }
-    HTMLView::print_description(ids)
+    html_view.print_description(ids)
     if !are_there_results?
       return
     end
@@ -98,9 +99,9 @@ class GemsCompositeCommand < GemsCommand
       else
         comments = nil
       end
-      HTMLView::print_results(k, @results, @target, checker_results, comments)
+      html_view.print_results(k, @results, @target, checker_results, comments)
       @comments.delete(k)
     end
-    HTMLView::print_tail(@checker_results, @comments)
+    html_view.print_tail(@checker_results, @comments)
   end
 end
