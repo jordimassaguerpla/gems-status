@@ -86,7 +86,7 @@ class NotASecurityAlertChecker < GemChecker
   end
 
   def match_name(str, name)
-    str =~ /\b#{name}\b/
+    str =~ /[gem|ruby].*\b#{name}\b/
   end
 
   def look_in_emails(gem)
