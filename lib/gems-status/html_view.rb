@@ -60,11 +60,11 @@ class HTMLView
 
   def update_summary(gem_name, status)
     if status == "alert"
-      @@patched << gem_name
+      @patched << gem_name
     elsif status == "warning"
-      @@outdated << gem_name
+      @outdated << gem_name
     else
-      @@up_to_date << gem_name
+      @up_to_date << gem_name
     end
   end
 
@@ -235,19 +235,19 @@ class HTMLView
 
   def print_summary
     puts "<a name='summary'/><h1>Summary</h1>"
-    puts "<p><h2>patched/errored #{@@patched.length}</h2>"
+    puts "<p><h2>patched/errored #{@patched.length}</h2>"
     puts "<ul>"
-    @@patched.each do |p|
+    @patched.each do |p|
       puts "<li><a href=\"\##{p}\">#{p}</a>"
     end
     puts "</ul></p>"
-    puts "<p><h2>outdated #{@@outdated.length}</h2>"
-    @@outdated.each do |p|
+    puts "<p><h2>outdated #{@outdated.length}</h2>"
+    @outdated.each do |p|
       puts "<li><a href=\"\##{p}\">#{p}</a>"
     end
     puts "</ul></p>"
-    puts "<p> <h2>up-to-date #{@@up_to_date.length}</h2>"
-    @@up_to_date.each do |p|
+    puts "<p> <h2>up-to-date #{@up_to_date.length}</h2>"
+    @up_to_date.each do |p|
       puts "<li><a href=\"\##{p}\">#{p}</a>"
     end
     puts "</ul></p>"

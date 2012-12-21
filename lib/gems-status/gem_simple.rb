@@ -42,5 +42,10 @@ class GemSimple
     return @gems_url && @gems_url.start_with?("git://")
   end
 
+  def date
+    Utils::log_error(@name, "I do not know when #{@name} was released")
+    nil
+  end
+
 end
 

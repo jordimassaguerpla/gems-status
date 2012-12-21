@@ -27,4 +27,8 @@ private
     return commit.sha
   end
 
+  def date(commit)
+    commit.date
+  end
+
 end

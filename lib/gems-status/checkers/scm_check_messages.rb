@@ -29,7 +29,7 @@ private
           next
         end
         Utils::log_debug "security key: #{key}"
-        results[key] = message(commit)
+        results[key] = SecurityAlert.new(message(commit), date(commit))
       end
     end
     return results
@@ -45,5 +45,9 @@ private
 
   def messages(name, source_repo)
     raise NotImplementedError 
+  end
+
+  def date(commit)
+    raise NotImplementedError
   end
 end

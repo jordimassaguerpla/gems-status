@@ -31,4 +31,9 @@ private
     source_repo_splitted = URI.parse(source_repo).path.split("/")
     return source_repo_splitted[-1]
   end
+
+ def date(commit)
+   nil
+ end
+
 end

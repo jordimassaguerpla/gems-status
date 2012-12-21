@@ -3,6 +3,7 @@ require "json"
 require "open-uri"
 
 require "gems-status/checkers/gem_checker"
+require "gems-status/checkers/security_alert"
 require "gems-status/checkers/git_check_messages"
 require "gems-status/checkers/hg_check_messages"
 require "gems-status/checkers/svn_check_messages"
@@ -93,12 +94,12 @@ class NotASecurityAlertChecker < GemChecker
     @emails.each do |listname, emails|
       emails.each do |email|
         if match_name(listname, gem.name)
-          @security_messages[key_for_emails(listname, gem, email)] = email.subject
+          @security_messages[key_for_emails(listname, gem, email)] = SecurityAlert.new(email.subject)
           Utils::log_debug "looking for security emails: listname matches gem #{gem.name}: #{listname}"
           next
         end
         if match_name(email.subject, gem.name)
-          @security_messages[key_for_emails(listname, gem, email)] = email.subject
+          @security_messages[key_for_emails(listname, gem, email)] = SecurityAlert.new(email.subject)
           Utils::log_debug "looking for security emails: subject matches gem #{gem.name}: #{email.subject}"
           next
         end
@@ -113,7 +114,7 @@ class NotASecurityAlertChecker < GemChecker
     @security_messages = {}
     look_in_scm(gem)
     look_in_emails(gem)
-    filter_security_messages_already_fixed(gem.version)
+    filter_security_messages_already_fixed(gem.version, gem.date)
     send_emails(gem)
     return @security_messages.length == 0
   end
@@ -121,7 +122,7 @@ class NotASecurityAlertChecker < GemChecker
  def description
    result = ""
    @security_messages.keys.sort.each do |k|
-     result = result + "[#{k}] - #{@security_messages[k]}"
+     result = result + "[#{k}] - #{@security_messages[k].desc}"
      result = result + "Fixed in #{@fixed[k]}" if @fixed[k]
      result = result + "<br/>" 
    end
@@ -131,11 +132,13 @@ class NotASecurityAlertChecker < GemChecker
 
  private
 
- def filter_security_messages_already_fixed(version)
+ def filter_security_messages_already_fixed(version, date)
    #TODO: let's use a database instead of having the info in yaml file
-   #TODO: can we know which commits are in a particular version? by date?
    @security_messages.delete_if do |k,v|
      @fixed[k] && Gem::Version.new(@fixed[k]) <= version 
+   end
+   @security_messages.delete_if do |k,v|
+     v.date && date && v.date < date
    end
  end
 

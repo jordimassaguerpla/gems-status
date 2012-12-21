@@ -28,5 +28,9 @@ private
     return commit.hash_id
   end
 
+  def date(commit)
+    commit.date
+  end
+
 end
 

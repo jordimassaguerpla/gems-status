@@ -1,4 +1,5 @@
 require "gems-status/gem_simple"
+require "time"
 
 class RubyGemsGems_GemSimple < GemSimple
 
@@ -25,5 +26,18 @@ class RubyGemsGems_GemSimple < GemSimple
     end 
     return @md5
   end
+
+  def date
+    Utils::log_debug "looking for date for #{@name} - #{@version}"
+    versions = JSON.parse(open("https://rubygems.org/api/v1/versions/#{@name}.json").read)
+    versions.each do |version|
+      if Gem::Version.new(version["number"]) == @version
+        Utils::log_debug  "Date for #{@name} - #{@version} : #{version["built_at"]}"
+        return Time.parse version["built_at"]
+      end
+    end
+    nil
+  end
+
 end
 
