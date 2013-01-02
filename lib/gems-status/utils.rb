@@ -37,11 +37,15 @@ class Utils
 
   def Utils.download_md5(gem_uri)
     return @@md5_sums[gem_uri] if @@md5_sums[gem_uri]
-    if gem_uri.user && gem_uri.password
-      source = open(gem_uri.scheme + "://" + gem_uri.host + "/" + gem_uri.path, 
-                    :http_basic_authentication=>[gem_uri.user, gem_uri.password])
-    else
-      source = open(gem_uri)
+    begin
+      if gem_uri.user && gem_uri.password
+        source = open(gem_uri.scheme + "://" + gem_uri.host + "/" + gem_uri.path, 
+                      :http_basic_authentication=>[gem_uri.user, gem_uri.password])
+      else
+        source = open(gem_uri)
+      end
+    rescue Exception => e
+      self.log_error e.message
     end
     md5 = Digest::MD5.hexdigest(source.read)
     @@md5_sums[gem_uri] = md5
