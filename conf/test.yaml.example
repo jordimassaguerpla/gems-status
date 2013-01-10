@@ -22,6 +22,7 @@ checkers:
   - classname: ExistsInUpstream
   - classname: NotRailsChecker
   - classname: PrintGemVersions
+    licenses: '/home/jordi/work/gems-status/conf/licenses.yaml'
   - classname: NotASecurityAlertChecker
     fixed: '/home/jordi/work/gems-status/conf/security.yaml'
     source_repos:
