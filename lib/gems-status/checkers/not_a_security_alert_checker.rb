@@ -53,7 +53,7 @@ class NotASecurityAlertChecker < GemChecker
     mssg = ""
     mssg = "#{gem.name} #{gem.version} : #{gem.origin} \n"
     @security_messages.each do |k,v|
-      mssg = mssg + "\n #{v}"
+      mssg = mssg + "\n #{v.desc}"
       mssg = mssg + "\nFixed in #{@fixed[k]}\n" if @fixed[k]
     end
     @email_to.each do |email_receiver|
