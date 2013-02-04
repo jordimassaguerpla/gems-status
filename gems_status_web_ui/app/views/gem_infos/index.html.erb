@@ -1,0 +1,29 @@
+<h1>Listing gem_infos</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Version</th>
+    <th>Md5sum</th>
+    <th>Source</th>
+    <th>Gem server</th>
+    <th>License</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @gem_infos.each do |gem_info| %>
+  <tr>
+    <td><%= gem_info.name %></td>
+    <td><%= gem_info.version %></td>
+    <td><%= gem_info.md5sum %></td>
+    <td><%= gem_info.source %></td>
+    <td><%= gem_info.gem_server %></td>
+    <td><%= gem_info.license %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+

@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  gem_info: 
+  rails_app: 
+
+two:
+  gem_info: 
+  rails_app: 
