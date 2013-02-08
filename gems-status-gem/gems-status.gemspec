@@ -25,6 +25,10 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'mercurial-ruby'
   s.add_runtime_dependency 'json'
 
+  s.add_development_dependency 'shoulda'
+  s.add_development_dependency 'mocha'
+  s.add_development_dependency 'ruby-debug'
+
   s.license = "MIT"
 
 end
