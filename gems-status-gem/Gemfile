@@ -1,0 +1,20 @@
+source :rubygems
+
+gem 'rake'
+gem 'rcov'
+gem 'git'
+gem 'xml-simple'
+gem 'bundler'
+gem 'mercurial-ruby'
+gem 'gmail'
+gem 'json'
+
+group :test do
+  gem 'shoulda'
+  gem 'mocha'
+end
+
+group :development do
+  gem 'ruby-debug'
+end
+
