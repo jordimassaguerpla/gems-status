@@ -1,0 +1,10 @@
+---
+# Write a map of name-version to licenses
+# for example
+# 'rails':
+#   '3.1.0' : 'MIT'
+# use license names from http://spdx.org/licenses/
+
+'curb':
+  '0.8.3' : 'Ruby'
+  '0.8.1' : 'MIT'
