@@ -2,7 +2,7 @@ source "http://rubygems.org"
 
 gemspec
 
-group :development do
+group :debugger do
   gem 'debugger'
 end
 
