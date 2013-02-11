@@ -41,6 +41,31 @@ namespace :db do
       )
       gc.checker_type = CheckerType.find_by_name("is_rubygems.org")
       gc.save
+      gc = GemCheckerResult.create(
+        :check_result => "no",
+      )
+      gc.checker_type = CheckerType.find_by_name("is_native")
+      gc.save
+      gc = GemCheckerResult.create(
+        :check_result => "no",
+      )
+      gc.checker_type = CheckerType.find_by_name("is_latest_version")
+      gc.save
+      gc = GemCheckerResult.create(
+        :check_result => "no",
+      )
+      gc.checker_type = CheckerType.find_by_name("has_security_alerts")
+      gc.save
+      gc = GemCheckerResult.create(
+        :check_result => "no",
+      )
+      gc.checker_type = CheckerType.find_by_name("has_changed")
+      gc.save
+      gc = GemCheckerResult.create(
+        :check_result => "no",
+      )
+      gc.checker_type = CheckerType.find_by_name("is_GPL_compatible")
+      gc.save
       GemInfo.find_by_name("gem 1").gem_checker_results = GemCheckerResult.all
     end
   end
