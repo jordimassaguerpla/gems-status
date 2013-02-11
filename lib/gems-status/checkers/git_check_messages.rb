@@ -19,7 +19,7 @@ private
     rescue
       g = Git.clone(source_repo, name)
     end
-    g.pull
+    g.lib.send(:command, 'pull')
     return g.log MAX_NUM_MESSAGES
   end
 
