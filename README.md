@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/jordimassaguerpla/gems-status.png)](https://travis-ci.org/jordimassaguerpla/gems-status)
+
 gem-status compares rubygems information from different sources and runs some checks on those gems.
 
 The goal is to create a report where one can see which gems are outdated, which gems are "patched", 
@@ -30,7 +32,7 @@ By specifying the version where a security issue was fixed, gems-status will onl
 The security check, looks for messages on the source repo for the gem. The source repo is guessed using the information on the gem server. However, there are cases where the information is not enough so the source repo can not be guessed. In those cases, you can specify the source repo on the configuration file (see conf/test.yaml.example).
 
 
-== INSTRUCTIONS
+# Instructions
 
 First of all you need to create a configuration file where you specify your sources.
 In order to do that you can copy the conf/test.yaml.example and use it as a template.
@@ -40,12 +42,12 @@ If you want to use the obs you need to change the credentials (username/password
 
 After you have a configuration file, you can run it by:
 
-bin/gems-status.rb conf_file > output.html 2> error
+`bin/gems-status.rb conf_file > output.html 2> error`
 
 have fun!
 
 
-== Extending gems-status
+# Extending gems-status
 
 Gems-status follows the composite command pattern in a way that there are two command classes:
 
