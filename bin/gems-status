@@ -17,5 +17,5 @@ if !File::exists?(ARGV[0]) then
   exit
 end
 
-GemStatus.new(ARGV[0]).execute
+GemsStatus::GemStatus.new(ARGV[0]).execute
 

@@ -10,33 +10,36 @@ require "gems-status/sources.rb"
 require "gems-status/gems_composite_command"
 require "gems-status/checkers"
 
-class GemStatus
-  def initialize(conf_file)
-    @conf_file = conf_file
-    begin
-      @conf = YAML::load(File::open(conf_file))
-    rescue
-      Utils::log_error("?", "There was a problem opening #{conf_file}")
-    end
-  end
+module GemsStatus
 
-  def execute
-    gems_composite_command = GemsCompositeCommand.new(@conf["target"])
-    @conf["sources"].each do |c| 
-      gems = eval(c["classname"]).new(c)
-      gems_composite_command.add_command(gems)
-    end
-    if @conf["checkers"]
-      @conf["checkers"].each do |c|
-        checker = eval(c["classname"]).new(c)
-       gems_composite_command.add_checker(checker)
+  class GemStatus
+    def initialize(conf_file)
+      @conf_file = conf_file
+      begin
+        @conf = YAML::load(File::open(conf_file))
+      rescue
+        Utils::log_error("?", "There was a problem opening #{conf_file}")
       end
     end
-    if @conf["comments"]
-      gems_composite_command.add_comments(@conf["comments"])
+
+    def execute
+      gems_composite_command = GemsCompositeCommand.new(@conf["target"])
+      @conf["sources"].each do |c| 
+        gems = eval(c["classname"]).new(c)
+        gems_composite_command.add_command(gems)
+      end
+      if @conf["checkers"]
+        @conf["checkers"].each do |c|
+          checker = eval(c["classname"]).new(c)
+         gems_composite_command.add_checker(checker)
+        end
+      end
+      if @conf["comments"]
+        gems_composite_command.add_comments(@conf["comments"])
+      end
+      gems_composite_command.execute
+      gems_composite_command.print
     end
-    gems_composite_command.execute
-    gems_composite_command.print
   end
 end
 
