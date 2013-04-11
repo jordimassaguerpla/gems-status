@@ -5,7 +5,7 @@ require "gems-status/html_view"
 module GemsStatus
 
   class GemsCompositeCommand < GemsCommand
-    attr_accessor results
+    attr_accessor :results
     def initialize(target)
       @commands = []
       @checkers = []
