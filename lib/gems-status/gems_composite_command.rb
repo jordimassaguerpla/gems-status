@@ -41,8 +41,8 @@ module GemsStatus
         @results[@target].sort.each do |k, gems|
           gems.each do |gem|
             if !check_object.check?(gem)  
-             @checker_results[k] = "" unless @checker_results[k] 
-             @checker_results[gem.name] << "
+             @checker_results[k] = {} unless @checker_results[k]
+             @checker_results[gem.name][check_object.class.name] = "
              <br/>#{gem.name} #{gem.version} #{gem.origin}: <br/>
              #{check_object.description} " 
             end
