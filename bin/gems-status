@@ -17,5 +17,11 @@ if !File::exists?(ARGV[0]) then
   exit
 end
 
-GemsStatus::GemStatus.new(ARGV[0]).execute
+conf_file = ARGV[0]
+begin
+  conf = YAML::load(File::open(conf_file))
+rescue
+  Utils::log_error("?", "There was a problem opening #{conf_file}")
+end
+GemsStatus::GemStatus.new(conf).execute
 

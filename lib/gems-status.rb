@@ -13,13 +13,8 @@ require "gems-status/checkers"
 module GemsStatus
 
   class GemStatus
-    def initialize(conf_file)
-      @conf_file = conf_file
-      begin
-        @conf = YAML::load(File::open(conf_file))
-      rescue
-        Utils::log_error("?", "There was a problem opening #{conf_file}")
-      end
+    def initialize(conf)
+      @conf = conf
     end
 
     def execute
