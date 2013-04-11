@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
   s.files    += Dir.glob("lib/**/*")
   s.files    += Dir.glob("bin/**/*")
   s.files    += Dir.glob("test/*")
+  s.files    += %w( VERSION )
 
   s.executables = %w( gems-status )
   s.description = "gem-status compares rubygems information from different sources as for reporting which gems are outdated. Sources can be opensuse build service, rubygems.org or a gemfile.lock. Data compared is version and md5sum"
