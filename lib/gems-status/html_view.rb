@@ -261,7 +261,7 @@ class HTMLView
     print_hash("checks", checker_results, "summary", true)
     puts "<a href='error.txt'>Check log</a>"
     date = Time.now.strftime('%a %b %d %H:%M:%S %Z %Y')
-    puts "<p class='footer'>run by <a href=\"https://github.com/jordimassaguerpla/gems-status\">gems-status</a> - #{date} - version: #{GemsStatusMetadata::VERSION}</p>
+    puts "<p class='footer'>run by <a href=\"https://github.com/jordimassaguerpla/gems-status\">gems-status</a> - #{date} - version: #{GemsStatus::VERSION}</p>
     </body>
     </html>"
   end

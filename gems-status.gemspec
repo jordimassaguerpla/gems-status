@@ -3,7 +3,7 @@ require 'gems-status/gems_status_metadata'
 
 Gem::Specification.new do |s|
   s.name     = "gems-status"
-  s.version  = GemsStatusMetadata::VERSION
+  s.version  = GemsStatus::VERSION
   s.date     = Time.now.strftime('%F')
   s.summary  = "compares rubygems from different sources"
   s.homepage = "http://github.com/jordimassaguerpla/gems-status"
