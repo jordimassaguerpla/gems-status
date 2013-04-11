@@ -1,6 +1,7 @@
 [![Build Status](https://travis-ci.org/jordimassaguerpla/gems-status.png)](https://travis-ci.org/jordimassaguerpla/gems-status)
 [![Dependency Status](https://gemnasium.com/jordimassaguerpla/gems-status.png)](https://gemnasium.com/jordimassaguerpla/gems-status)
 [![Code Climate](https://codeclimate.com/github/jordimassaguerpla/gems-status.png)](https://codeclimate.com/github/jordimassaguerpla/gems-status)
+[![Coverage Status](https://coveralls.io/repos/jordimassaguerpla/gems-status/badge.png?branch=master)](https://coveralls.io/r/jordimassaguerpla/gems-status)
 
 gem-status compares rubygems information from different sources and runs some checks on those gems.
 
