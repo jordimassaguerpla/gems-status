@@ -34,11 +34,14 @@ module GemsStatus
 
     def execute
       @gems_composite_command.execute
-      @gems_composite_command.print
     end
 
     def results
       @gems_composite_command.results
+    end
+
+    def print
+      @gems_composite_command.print
     end
   end
 end

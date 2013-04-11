@@ -23,5 +23,8 @@ begin
 rescue
   Utils::log_error("?", "There was a problem opening #{conf_file}")
 end
-GemsStatus::GemStatus.new(conf).execute
+gs = GemsStatus::GemStatus.new(conf)
+gs.execute
+gs.print
+
 
