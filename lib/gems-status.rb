@@ -37,7 +37,7 @@ module GemsStatus
     end
 
     def results
-      @gems_composite_command.results
+      {:results => @gems_composite_command.results, :checker_results => @gems_composite_command.checker_results}
     end
 
     def print
