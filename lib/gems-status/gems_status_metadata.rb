@@ -1,3 +1,3 @@
 module GemsStatus
-  VERSION = "0.40.0"
+  VERSION = open("#{File.dirname(__FILE__)}/../../VERSION").read().strip()
 end
