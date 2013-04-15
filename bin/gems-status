@@ -1,4 +1,7 @@
 #!/usr/bin/ruby
+# -*- coding: UTF-8 -*-
+
+require "erb"
 $:.unshift File.join(File.dirname(__FILE__), "..", "lib")
 require "gems-status"
 
@@ -19,9 +22,10 @@ end
 
 conf_file = ARGV[0]
 begin
-  conf = YAML::load(File::open(conf_file))
+require "debugger";debugger
+  conf = YAML::load(ERB.new(File::read(conf_file)).result)
 rescue
-  Utils::log_error("?", "There was a problem opening #{conf_file}")
+  GemsStatus::Utils::log_error("?", "There was a problem opening #{conf_file}")
 end
 gs = GemsStatus::GemStatus.new(conf)
 gs.execute
