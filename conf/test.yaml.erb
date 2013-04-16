@@ -23,9 +23,17 @@ checkers:
   - classname: ExistsInUpstream
   - classname: NotRailsChecker
   - classname: PrintGemVersions
-    licenses: '/home/jordi/work/gems-status/conf/licenses.yaml'
+    licenses:
+<% licenses = File::read('/home/jordi/work/gems-status/conf/licenses.yaml') %>
+<% licenses.split("\n").each do |line| %>
+      <%= line %>
+<% end %>
   - classname: NotASecurityAlertChecker
-    fixed: '/home/jordi/work/gems-status/conf/security.yaml'
+    fixed:
+<% security = File::read('/home/jordi/work/gems-status/conf/security.yaml') %>
+<% security.split("\n").each do |line| %>
+      <%= line %>
+<% end %>
     source_repos:
       abingo: 'git://github.com/openSUSE/abingo.git'
     email_username: 'yourusername@gmail.com'

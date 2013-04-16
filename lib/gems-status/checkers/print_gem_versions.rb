@@ -3,12 +3,7 @@ module GemsStatus
   class PrintGemVersions
     def initialize(conf)
       Utils::check_parameters('PrintGemVersions', conf, ["licenses"])
-      begin
-        @licenses = YAML::load(File::open(conf["licenses"]))
-      rescue
-        Utils::log_error("?", "There was a problem opening #{conf["licenses"]}")
-        @licenses = []
-      end
+      @licenses = conf["licenses"]
     end
 
     def check?(gem)
