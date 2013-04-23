@@ -1,5 +1,9 @@
 require 'simplecov'
-SimpleCov.start
 require 'coveralls'
-Coveralls.wear!
+
+if Coveralls.should_run?
+  Coveralls.wear!
+else
+  SimpleCov.start
+end
 
