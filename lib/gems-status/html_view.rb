@@ -131,7 +131,9 @@ module GemsStatus
       puts "</p>"
       if checker_results
         puts "<p> <span class='check'>checks:"
-        puts "<br/>#{checker_results}</span>" 
+        checker_results.each do |_,v|
+          puts "<br/>#{v}</span>" 
+        end
         puts "</p>"
       end
       if Utils::errors[k]
@@ -229,7 +231,13 @@ module GemsStatus
         else
           puts "<span class='#{style}'>#{k}</span>"
         end
-        puts "<span class='#{style}'> #{v}</span><br/>"
+        if v.is_a? Hash
+          v.each do |_,v|
+            puts "<span class='#{style}'> #{v}</span><br/>"
+          end
+        else
+         puts "<span class='#{style}'> #{v}</span><br/>"
+        end
 
       end
       puts "</p>"

@@ -74,9 +74,6 @@ module GemsStatus
       if !@results.has_key?(@target)
         return false
       end
-      if @results.length<2
-        return false
-      end
       return true
     end
 
