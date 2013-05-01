@@ -13,12 +13,11 @@ module GemsStatus
   class LockfileGems < GemsCommand
     attr_reader :filename
     def initialize(conf)
-      Utils::check_parameters('LockfileGems', conf, ["id", "filename", "gems_url", "upstream_url"])
+      Utils::check_parameters('LockfileGems', conf, ["id", "filename", "gems_url"])
       @filename = conf['filename']
       @gems_url = conf['gems_url']
       @result = {}
       @ident = conf['id']
-      @upstream_url = conf['upstream_url']
     end
 
     def get_data(dirname, filename)
