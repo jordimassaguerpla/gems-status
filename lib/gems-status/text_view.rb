@@ -20,7 +20,6 @@ module GemsStatus
             puts "#{msg}"
           end
           puts "#{comments[gem.name]}" if comments[gem.name]
-          puts "#{Utils::errors[gem.name]}" if Utils::errors[gem.name]
           puts ""
         end
       end

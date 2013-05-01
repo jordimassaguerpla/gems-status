@@ -10,6 +10,15 @@ module GemsStatus
     @@licenses = {}
     @@keys = {}
     @@gems = {}
+    @@known_licenses = {}
+
+    def Utils.known_licenses=(licenses)
+      @@known_licenses = licenses
+    end
+
+    def Utils.known_licenses
+      return @@known_licenses
+    end
 
     def Utils.errors
       return @@errors
@@ -54,6 +63,7 @@ module GemsStatus
     end
 
     def Utils.download_license(name, version, gems_url)
+      version = version.to_s if version.is_a? Gem::Version
       key = "#{name}-#{version}-#{gems_url.gsub("/", "_").gsub(":", "_")}"
       return @@licenses[key] if @@licenses[key]
       begin
@@ -63,6 +73,16 @@ module GemsStatus
         return nil
       end
       license = Gem::Format.from_file_by_path(gem_file_path).spec.license
+      if !license || license.empty?
+        if @@known_licenses[name]
+          if @@known_licenses[name][version]
+            license = @@known_licenses[name][version]
+            Utils::log_debug "get license from known licenses for #{name} #{version}"
+          else #@@known_licenses[name] but different version
+            Utils::log_debug "I can't find license for #{name} but I have info from another version #{@@known_licenses[name].sort.last}"
+          end
+        end
+      end
       @@licenses[key] = license
       return license
     end

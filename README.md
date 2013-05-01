@@ -4,30 +4,14 @@
 [![Coverage Status](https://coveralls.io/repos/jordimassaguerpla/gems-status/badge.png?branch=master)](https://coveralls.io/r/jordimassaguerpla/gems-status)
 [![Gem Version](https://badge.fury.io/rb/gems-status.png)](http://badge.fury.io/rb/gems-status)
 
-gem-status compares rubygems information from different sources and runs some checks on those gems.
-
-The goal is to create a report where one can see which gems are outdated, which gems are "patched", 
-that is that the versions are the same but not the md5sums, and which do not pass the checks.
-
-Source can be:
-
-- OpenSUSE BuildService
-- Rubygems.org
-- Gemfile.lock file
-
-NOTE: In OBS, when it founds a link it follows that. However, having patches in links that affect the gem file is not supported.
-
-Data compared is:
-
-- version
-- md5sum
+gem-status gets the list of gems you use from Gemfile.lock file and runs some checks on those gems.
 
 Checks that can be run are:
 
-- does it have security messages on the commits?
-- is it a native gem?
-- does this gem exists upstream?
-- does this gem depends on rails?
+- Does it has a license? If it does not, it can be a problem for distributing your software with this gem.
+- Is it Gpl? If it is, it can be a problem if your software or other gems are not GPL compatible.
+- Is the same in Rubygems.org? This is for people who uses his own gem server. This checks the gems are the same.
+- Does it has security alerts? This will search into the commits and into security mailing lists for possible security messages.
 
 In the case for the security messages, you can specify which messages have been fixed and in which version at the configuration file (see conf/test.yaml.example).
 
@@ -41,12 +25,9 @@ The security check, looks for messages on the source repo for the gem. The sourc
 First of all you need to create a configuration file where you specify your sources.
 In order to do that you can copy the conf/test.yaml.example and use it as a template.
 
-If you want to use the obs you need to change the credentials (username/password)
- to yours in the build service at the configuration file.
+After you have a configuration file, you can run it with:
 
-After you have a configuration file, you can run it by:
-
-`bin/gems-status.rb conf_file > output.html 2> error`
+`bin/gems-status.rb conf_file > output.txt 2> error`
 
 have fun!
 
@@ -55,10 +36,10 @@ have fun!
 
 Gems-status follows the composite command pattern in a way that there are two command classes:
 
-GemsCommand
-GemsChecker
+- GemsCommand
+- GemsChecker
 
-GemsCommand is the base class for the classes that represent a gem source, like ObsGems (openbuildservice gems), or LockFileGems (gems from a Gemfile.lock). GemsCommand has a method called execute that should store the results on an object variable called result. 
+GemsCommand is the base class for the classes that represent a gem source, i.e. LockFileGems (gems from a Gemfile.lock). GemsCommand has a method called execute that should store the results on an object variable called result. 
 
 GemsChecker is the base class for the classes that run a check, like NotASecurityAlertChecker. GemsChecker has a method called check? that returns true or false depending on the result of the check, and a method called description, that contains the description in case the check returned false.
 
@@ -67,13 +48,13 @@ In order to extend gems-status with new sources or checks, extend those classes 
 A part from that, there are two other main classes, that are:
 
 GemsCompositeCommand
-ViewResults
+TextView
 
-GemsCompositeCommand is the class that will run all the commands (GemsCommands and GemsCheckers) that are specified in the configuration file, and then, with the results of them it will call the ViewResults methods in order to create the final report.
+GemsCompositeCommand is the class that will run all the commands (GemsCommands and GemsCheckers) that are specified in the configuration file, and then, with the results of them it will call the TextView methods in order to create the final report.
 
-ViewResults contains the implementation for printing the report. 
+TextView contains the implementation for printing the report. 
 
-I know the report is not very nice and that the ViewResults class looks a little messy. Feel free to send me a pull request with a better/nicer implemenation :) .
+Feel free to send me a pull request!
 
 jordi massaguer pla - jmassaguerpla@suse.de
 

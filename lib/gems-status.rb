@@ -15,6 +15,7 @@ module GemsStatus
   class GemStatus
     def initialize(conf)
       @conf = conf
+      Utils::known_licenses = @conf["licenses"]
       @gems_composite_command = nil
       @gems_composite_command = GemsCompositeCommand.new
       c = @conf["source"]

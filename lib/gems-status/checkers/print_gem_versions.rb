@@ -2,8 +2,7 @@ module GemsStatus
 
   class PrintGemVersions
     def initialize(conf)
-      Utils::check_parameters('PrintGemVersions', conf, ["licenses"])
-      @licenses = conf["licenses"]
+      @licenses = Utils::known_licenses
     end
 
     def check?(gem)
