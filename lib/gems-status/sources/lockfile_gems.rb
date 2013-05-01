@@ -11,9 +11,10 @@ require "gems-status/utils"
 module GemsStatus
 
   class LockfileGems < GemsCommand
+    attr_reader :filename
     def initialize(conf)
-      Utils::check_parameters('LockfileGems', conf, ["id", "filenames", "gems_url", "upstream_url"])
-      @filenames = conf['filenames']
+      Utils::check_parameters('LockfileGems', conf, ["id", "filename", "gems_url", "upstream_url"])
+      @filename = conf['filename']
       @gems_url = conf['gems_url']
       @result = {}
       @ident = conf['id']
@@ -45,47 +46,30 @@ module GemsStatus
       return changes
     end
 
-    def update_dependencies
-      changes = false
-      @result.each do |k, gems|
-        gems.each do |gem|
-          changes = update_gem_dependencies(gem) || changes
-        end
-      end
-      update_dependencies if changes
-    end
-
     def execute
-      @filenames.each do |filename|
-        Utils::log_debug "reading #{filename}"
-        Dir.chdir(File.dirname(filename)) do
-          file_data = get_data(File::dirname(filename), File::basename(filename))
-          if file_data.empty?
-            Utils::log_error("?", "file empty #{filename}")
-            next
-          end
-          lockfile = Bundler::LockfileParser.new(file_data)
-          lockfile.specs.each do |spec|
-            name = spec.name
-            version = Gem::Version.create(spec.version)
-            dependencies = spec.dependencies
-            Utils::log_debug "dependencies for #{name} #{dependencies}"
-            if spec.source.class.name == "Bundler::Source::Git"
-              Utils::log_debug "this comes from git #{name} #{version}"
-              gems_url = spec.source.uri
-            else 
-              gems_url = @gems_url
-            end
-            @result[name] = [] if !@result[name]
-            @result[name] << RubyGemsGems_GemSimple.new(name, version , '', filename,
-                                                       gems_url, dependencies)
-            @result[name] << RubyGemsGems_GemSimple.new(name, version , '', @upstream_url,
-                                                     @upstream_url, dependencies)
-          end
+      Utils::log_debug "reading #{@filename}"
+      Dir.chdir(File.dirname(@filename)) do
+        file_data = get_data(File::dirname(@filename), File::basename(@filename))
+        if file_data.empty?
+          Utils::log_error("?", "file empty #{@filename}")
+          next
         end
-        update_dependencies
+        lockfile = Bundler::LockfileParser.new(file_data)
+        lockfile.specs.each do |spec|
+          name = spec.name
+          version = Gem::Version.create(spec.version)
+          dependencies = spec.dependencies
+          Utils::log_debug "dependencies for #{name} #{dependencies}"
+          if spec.source.class.name == "Bundler::Source::Git"
+            Utils::log_debug "this comes from git #{name} #{version}"
+            gems_url = spec.source.uri
+          else
+            gems_url = @gems_url
+          end
+          @result[name] = RubyGemsGems_GemSimple.new(name, version , '', @filename,
+                                                     gems_url, dependencies)
+        end
       end
     end
-
   end
 end
