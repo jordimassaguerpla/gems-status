@@ -20,7 +20,7 @@ module GemsStatus
       gem_uri = "http://rubygems.org/downloads/#{gem.name}-#{gem.version}.gem" 
       @rubygems_md5 = Utils::download_md5(gem.name, gem.version, "http://rubygems.org/downloads")
       @gem_md5 = gem.md5
-      !@rubygems_md5 && !@gem_md5 && @gem_md5== @rubygems_md5
+      @rubygems_md5 && @gem_md5 && @gem_md5 == @rubygems_md5
     end
     
     def description
