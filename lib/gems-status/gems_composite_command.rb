@@ -29,7 +29,7 @@ module GemsStatus
           gems.each do |name, gem|
             if !check_object.check?(gem)  
               @checker_results[name] = {} unless @checker_results[name]
-              @checker_results[gem.name][check_object.class.name] = "#{check_object.description}" 
+              @checker_results[gem.name][check_object.class.name] = check_object
             end
           end
         end

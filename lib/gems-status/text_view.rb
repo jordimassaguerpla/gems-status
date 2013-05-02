@@ -16,8 +16,8 @@ module GemsStatus
         result.each do |_, gem|
           puts "#{gem.name}: #{gem.version} #{gem.license}"
           next unless checker_results[gem.name]
-          checker_results[gem.name].each do |_, msg|
-            puts "#{msg}"
+          checker_results[gem.name].each do |_, checker|
+            puts "#{checker.description}"
           end
           puts "#{comments[gem.name]}" if comments[gem.name]
           puts ""
