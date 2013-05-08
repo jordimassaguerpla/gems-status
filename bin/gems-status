@@ -25,6 +25,7 @@ begin
   conf = YAML::load(ERB.new(File::read(conf_file)).result)
 rescue
   GemsStatus::Utils::log_error("?", "There was a problem opening #{conf_file}")
+  exit
 end
 gs = GemsStatus::GemStatus.new(conf)
 gs.execute
