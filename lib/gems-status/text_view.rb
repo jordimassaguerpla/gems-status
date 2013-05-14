@@ -26,9 +26,10 @@ module GemsStatus
       results.each do |result|
         result.each do |_, gem|
           if comments[gem.name]
-          puts "#{gem.name}:"
-          puts "#{comments[gem.name]}" 
-          puts ""
+            puts "#{gem.name}:"
+            puts "#{comments[gem.name]}" 
+            puts ""
+          end
         end
       end
       puts ""
