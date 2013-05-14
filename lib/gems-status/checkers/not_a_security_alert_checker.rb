@@ -42,17 +42,23 @@ module GemsStatus
       end
     end
 
-    def send_emails(gem)
-      return if @security_messages.length == 0
-      #gems.origin == gems.gems_url if we are looking to an upstream gem, 
-      #for example in rubygems.org. We only care about our application gems.
-      return if gem.origin == gem.gems_url
+    def message(gem)
+      return unless gem
       mssg = ""
       mssg = "#{gem.name} #{gem.version} : #{gem.origin} \n"
       @security_messages.each do |k,v|
         mssg = mssg + "\n #{v.desc}"
         mssg = mssg + "\nFixed in #{@fixed[k]}\n" if @fixed[k]
       end
+      mssg
+    end
+
+    def send_emails(gem)
+      return if @security_messages.length == 0
+      #gems.origin == gems.gems_url if we are looking to an upstream gem, 
+      #for example in rubygems.org. We only care about our application gems.
+      return if gem.origin == gem.gems_url
+      mssg = message(gem)
       @email_to.each do |email_receiver|
         Gmail.new(@email_username, @email_password) do |gmail|
           gmail.deliver do
@@ -117,14 +123,7 @@ module GemsStatus
     end
 
    def description
-     result = ""
-     @security_messages.keys.sort.each do |k|
-       result = result + "[#{k}] - #{@security_messages[k].desc}"
-       result = result + "Fixed in #{@fixed[k]}" if @fixed[k]
-       result = result + "<br/>" 
-     end
-     result = "Security alerts: #{result}" if result!=""
-     return result
+     message(gem)
    end
 
    private
