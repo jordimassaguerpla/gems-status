@@ -22,6 +22,7 @@ module GemsStatus
       @mailing_lists = conf["mailing_lists"]
       @email_to = conf["email_to"]
       @emails = {}
+      @gem = nil
       download_emails
     end
 
@@ -111,6 +112,7 @@ module GemsStatus
     end
 
     def check?(gem)
+      @gem = gem
       #ignore upstream checks
       return true if gem.origin == gem.gems_url
 
@@ -123,7 +125,11 @@ module GemsStatus
     end
 
    def description
-     message(gem)
+     if !@gem
+       Utils::log_debug("No gem. That means that check method has not been called in NotASecurityAlertChecker")
+       return
+     end
+     message(@gem)
    end
 
    private
