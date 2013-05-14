@@ -12,19 +12,33 @@ module GemsStatus
     end
 
     def print_results(results, checker_results, comments)
+      puts "Gem list"
+      puts ""
       results.each do |result|
         result.each do |_, gem|
           puts "#{gem.name} #{gem.version} #{gem.license}"
-          puts "#{comments[gem.name]}" if comments[gem.name]
+        end
+      end
+      puts ""
+      puts "---"
+      puts "Comments"
+      puts ""
+      results.each do |result|
+        result.each do |_, gem|
+          if comments[gem.name]
+          puts "#{gem.name}:"
+          puts "#{comments[gem.name]}" 
           puts ""
         end
       end
+      puts ""
       puts "---"
       if checker_results.length == 0
         puts "Checker results: SUCCESS"
       else
         puts "Checker results: FAILURE"
       end
+      puts ""
       checker_results.each do |gem_name, checker_r|
       puts "#{gem_name}"
         checker_r.each do |_, checker|
