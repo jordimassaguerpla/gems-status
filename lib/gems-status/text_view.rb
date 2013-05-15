@@ -41,7 +41,7 @@ module GemsStatus
       end
       puts ""
       checker_results.each do |gem_name, checker_r|
-      puts "#{gem_name}"
+        puts "#{gem_name}"
         checker_r.each do |_, checker|
           puts "#{checker.description}"
         end
