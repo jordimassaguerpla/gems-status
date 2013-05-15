@@ -6,7 +6,7 @@ module GemsStatus
       if !gem.license || gem.license.empty?
        return true
       end
-      gem.license.upcase != "GPL"
+      gem.license.upcase  !~ /\bGPL/ 
     end
     def description
       "This gem is GPL"
