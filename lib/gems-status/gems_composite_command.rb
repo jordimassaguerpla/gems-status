@@ -27,9 +27,9 @@ module GemsStatus
         Utils::log_debug "checking #{check_object.class.name}"
         @results.each do |gems|
           gems.each do |name, gem|
-            if !check_object.check?(gem)  
+            if !check_object.check?(gem)
               @checker_results[name] = {} unless @checker_results[name]
-              @checker_results[gem.name][check_object.class.name] = check_object
+              @checker_results[gem.name][check_object.class.name] = check_object.clone
             end
           end
         end
