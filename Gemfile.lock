@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    gems-status (0.57.0)
+    gems-status (0.58.0)
       bundler
       git
       gmail
@@ -40,10 +40,11 @@ GEM
       oauth (>= 0.3.6)
     i18n (0.6.4)
     json (1.7.7)
-    mail (2.5.4)
+    mail (2.5.3)
+      i18n (>= 0.4.0)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
-    mercurial-ruby (0.7.9)
+    mercurial-ruby (0.7.8)
       open4 (~> 1.3.0)
     metaclass (0.0.1)
     mime (0.1)
