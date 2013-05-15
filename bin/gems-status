@@ -31,5 +31,5 @@ gs = GemsStatus::GemStatus.new(conf)
 gs.execute
 gs.print
 checker_r = gs.results[:checker_results]
-return 1 if checker_r && checker_r.length > 0
+exit 1 if checker_r && checker_r.length > 0
 
