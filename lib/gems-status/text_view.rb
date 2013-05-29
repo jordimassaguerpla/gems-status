@@ -15,7 +15,7 @@ module GemsStatus
       puts "Gem list"
       puts ""
       results.each do |result|
-        result.each do |_, gem|
+        result.sort.each do |_, gem|
           puts "#{gem.name} #{gem.version} #{gem.license}"
         end
       end
@@ -24,7 +24,7 @@ module GemsStatus
       puts "Comments"
       puts ""
       results.each do |result|
-        result.each do |_, gem|
+        result.sort.each do |_, gem|
           if comments[gem.name]
             puts "#{gem.name}:"
             puts "#{comments[gem.name]}" 
@@ -40,7 +40,7 @@ module GemsStatus
         puts "Checker results: FAILURE"
       end
       puts ""
-      checker_results.each do |gem_name, checker_r|
+      checker_results.sort.each do |gem_name, checker_r|
         puts "#{gem_name}"
         checker_r.each do |_, checker|
           puts "#{checker.description}"
