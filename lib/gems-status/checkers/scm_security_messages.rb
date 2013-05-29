@@ -1,3 +1,5 @@
+require "gems-status/checkers/scm_check_messages.rb"
+
 module GemsStatus
   class ScmSecurityMessages
     def check_message?(msg)

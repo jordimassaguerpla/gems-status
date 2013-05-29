@@ -1,11 +1,5 @@
 require "gems-status/checkers/is_rubygems"
-require "gems-status/checkers/git_check_messages"
-require "gems-status/checkers/hg_check_messages"
 require "gems-status/checkers/not_a_security_alert_checker"
-require "gems-status/checkers/scm_check_messages"
-require "gems-status/checkers/scm_security_messages"
-require "gems-status/checkers/svn_check_messages"
-require "gems-status/checkers/print_gem_versions"
 require "gems-status/checkers/has_a_license"
 require "gems-status/checkers/is_not_gpl"
 
