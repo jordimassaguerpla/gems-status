@@ -12,6 +12,32 @@ module GemsStatus
     @@gems = {}
     @@known_licenses = {}
 
+    class Mail
+      attr_accessor :uid, :subject
+    end
+
+    def Utils.download_emails(email_username, email_password, mailing_lists)
+      emails = {}
+      #TODO: only download new emails and keep the old ones in a database
+       #puts "Security email alerts from #{mailing_list} #{gmail.inbox.count(:unread, :to => mailing_list}"
+      Gmail.new(email_username, email_password) do |gmail|
+       mailing_lists.each do |mailing_list|
+         emails[mailing_list] = []
+         Utils::log_debug "Security email alerts from #{mailing_list} #{gmail.inbox.count( :to => mailing_list)}"
+         #TODO: only read new emails
+         #gmail.inbox.emails(:unread, :to => "rubyonrails-security@googlegroups.com").each do |email|
+         gmail.inbox.emails(:to => mailing_list).each do |email|
+           mail = Utils.Mail.new
+           mail.uid = email.uid
+           mail.subject = email.subject
+           Utils::log_debug "Read #{mail.subject}"
+           emails[mailing_list] << mail
+         end
+        end
+      end
+      return emails
+    end
+
     def Utils.known_licenses=(licenses)
       @@known_licenses = licenses
     end

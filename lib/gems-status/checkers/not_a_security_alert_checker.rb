@@ -24,25 +24,9 @@ module GemsStatus
       @email_to = conf["email_to"]
       @emails = {}
       @gem = nil
-      download_emails
+      @emails = Utils.download_emails(@email_username, @email_password, @mailing_lists)
     end
 
-    def download_emails
-      #TODO: only download new emails and keep the old ones in a database
-       #puts "Security email alerts from #{mailing_list} #{gmail.inbox.count(:unread, :to => mailing_list}"
-      Gmail.new(@email_username, @email_password) do |gmail|
-       @mailing_lists.each do |mailing_list|
-         @emails[mailing_list] = []
-         Utils::log_debug "Security email alerts from #{mailing_list} #{gmail.inbox.count( :to => mailing_list)}"
-         #TODO: only read new emails
-         #gmail.inbox.emails(:unread, :to => "rubyonrails-security@googlegroups.com").each do |email|
-         gmail.inbox.emails(:to => mailing_list).each do |email|
-           Utils::log_debug "Read #{email.subject}"
-           @emails[mailing_list] << email
-         end
-        end
-      end
-    end
 
     def message(gem)
       return unless gem
