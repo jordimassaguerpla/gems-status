@@ -62,7 +62,7 @@ module GemsStatus
         self.log_error "", "There was a problem getting emails from filesystem"
         @@emails = {}
       end
-      self.log_debug "Emails read from filesystem #{@@emails.flatten(-1).length}"
+      self.log_debug "Emails read from filesystem #{@@emails.to_a.flatten.length}"
       Gmail.new(email_username, email_password) do |gmail|
        mailing_lists.each do |mailing_list|
          @@emails[mailing_list] = [] unless @@emails[mailing_list]
