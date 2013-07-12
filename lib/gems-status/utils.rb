@@ -2,40 +2,88 @@ require "openssl"
 OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
 module GemsStatus
+  class Mail
+    attr_accessor :uid, :subject
+  end
+
 
   class Utils
     attr_accessor :errors
+    EMAIL_TMP_PATH = "tmp/utils/mail"
     @@errors = {}
     @@md5_sums = {}
     @@licenses = {}
     @@keys = {}
     @@gems = {}
     @@known_licenses = {}
+    @@emails = nil
 
-    class Mail
-      attr_accessor :uid, :subject
+    def Utils.get_emails_from_fs
+      @@emails = {}
+      Dir.glob("#{EMAIL_TMP_PATH}/**/*").each do |filename|
+        next unless File.file?(filename)
+        open(filename, "r") do |file|
+          mail = GemsStatus::Mail.new
+          mailing_list = File.dirname(filename).split("/").pop
+          mail.uid = File.basename(filename)
+          mail.subject = file.read
+          
+          if @@emails[mailing_list]
+            @@emails[mailing_list] << mail
+          else
+            @@emails[mailing_list] = [mail]
+          end
+          self.log_debug "email from filesystem #{filename}"
+        end
+      end
+    end
+
+    def Utils.save_email_to_fs(listname, mail)
+      dirname = "#{EMAIL_TMP_PATH}/#{listname}"
+      filename = "#{dirname}/#{mail.uid}"
+      if File.exists?(filename)
+        self.log_debug "email had already been downloaded #{mail.uid} - skipping"
+        return
+      end
+      Dir.mkdir(dirname)  unless File.exists?(dirname)
+      open(filename, "w") do |f|
+        self.log_debug "writing email to fs #{mail.uid}"
+        f.write(mail.subject)
+      end
     end
 
     def Utils.download_emails(email_username, email_password, mailing_lists)
-      emails = {}
-      #TODO: only download new emails and keep the old ones in a database
-       #puts "Security email alerts from #{mailing_list} #{gmail.inbox.count(:unread, :to => mailing_list}"
+      begin
+        self.get_emails_from_fs if @@emails.nil?
+      rescue Exception => e
+        self.log_error "", "There was a problem getting emails from filesystem #{e.message}"
+      end
+      if @@emails.nil?
+        self.log_error "", "There was a problem getting emails from filesystem"
+        @@emails = {}
+      end
+      self.log_debug "Emails read from filesystem #{@@emails.flatten(-1).length}"
       Gmail.new(email_username, email_password) do |gmail|
        mailing_lists.each do |mailing_list|
-         emails[mailing_list] = []
-         Utils::log_debug "Security email alerts from #{mailing_list} #{gmail.inbox.count( :to => mailing_list)}"
-         #TODO: only read new emails
-         #gmail.inbox.emails(:unread, :to => "rubyonrails-security@googlegroups.com").each do |email|
-         gmail.inbox.emails(:to => mailing_list).each do |email|
-           mail = Utils.Mail.new
+         @@emails[mailing_list] = [] unless @@emails[mailing_list]
+         Utils::log_debug "New security email alerts from #{mailing_list} #{gmail.inbox.count( :unread, :to => mailing_list)}"
+         gmail.inbox.emails(:unread, :to => mailing_list).each do |email|
+           mail = GemsStatus::Mail.new
            mail.uid = email.uid
            mail.subject = email.subject
            Utils::log_debug "Read #{mail.subject}"
-           emails[mailing_list] << mail
+           @@emails[mailing_list] << mail
+           begin
+             self.save_email_to_fs(mailing_list, mail)
+             email.read!
+           rescue Exception => e
+             self.log_error "", "Error saving mail to filesystem #{e.message}"
+             email.unread!
+           end
          end
-        end
+       end
       end
-      return emails
+      return @@emails
     end
 
     def Utils.known_licenses=(licenses)

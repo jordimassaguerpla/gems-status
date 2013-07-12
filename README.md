@@ -58,3 +58,16 @@ Feel free to send me a pull request!
 
 jordi massaguer pla - jmassaguerpla@suse.de
 
+# Disc usage and emails
+
+gems-status gets emails from a gmail account and stores them in disc. Every time it downloads an email, it marks that as read so that it won't download it again. This is better in performance than reading all the emails from gmail each time and having them stored locally means you can run gems-status several times and gems-status will look into all the emails, not only the unread ones, thus these local email messages can be reused within different gems-status runs (i.e. for differen Gemfile.locks.).
+
+However, this has a drawback. Disc usage increases over time.
+
+My recomandation is that you remove files older than a year, for example, running:
+
+find tmp/utils/mail/ -mtime +365 -delete
+
+If, for any reason, you won't to reset the emails, you can remove the ones in your filesystem under tmp/utils/mail and go to your gmail account and mark all your emails as unread.
+
+
