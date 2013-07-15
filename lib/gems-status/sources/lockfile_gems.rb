@@ -10,7 +10,7 @@ require "gems-status/utils"
 module GemsStatus
 
   class LockfileGems
-    attr_reader :filename
+    attr_reader :filename, :result
     def initialize(conf)
       Utils::check_parameters('LockfileGems', conf, ["id", "filename", "gems_url"])
       @filename = conf['filename']
