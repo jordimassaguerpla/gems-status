@@ -54,19 +54,23 @@ module GemsStatus
         end
         lockfile = Bundler::LockfileParser.new(file_data)
         lockfile.specs.each do |spec|
-          name = spec.name
           version = Gem::Version.create(spec.version)
-          dependencies = spec.dependencies
-          Utils::log_debug "dependencies for #{name} #{dependencies}"
-          if spec.source.class.name == "Bundler::Source::Git"
-            Utils::log_debug "this comes from git #{name} #{version}"
-            gems_url = spec.source.uri
-          else
-            gems_url = @gems_url
-          end
-          @result[name] = GemSimple.new(name, version , nil, @filename,
-                                                     gems_url, dependencies)
+          Utils::log_debug "dependencies for #{spec.name} #{spec.dependencies}"
+          @result[spec.name] = GemSimple.new(spec.name, version , nil, 
+                                             @filename, gems_url(spec), 
+                                             spec.dependencies)
         end
+      end
+    end
+
+    private
+
+    def gems_url(spec)
+      if spec.source.class.name == "Bundler::Source::Git"
+        Utils::log_debug "this comes from git #{spec.name} #{spec.version}"
+        spec.source.uri
+      else
+        @gems_url
       end
     end
   end
