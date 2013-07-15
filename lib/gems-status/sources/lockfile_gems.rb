@@ -50,7 +50,7 @@ module GemsStatus
         file_data = get_data(File::dirname(@filename), File::basename(@filename))
         if file_data.empty?
           Utils::log_error("?", "file empty #{@filename}")
-          next
+          return
         end
         lockfile = Bundler::LockfileParser.new(file_data)
         lockfile.specs.each do |spec|
