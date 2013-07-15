@@ -84,12 +84,9 @@ module GemsStatus
           if match_name(listname, gem.name)
             @security_messages[key_for_emails(listname, gem, email)] = SecurityAlert.new(email.subject)
             Utils::log_debug "looking for security emails: listname matches gem #{gem.name}: #{listname}"
-            next
-          end
-          if match_name(email.subject, gem.name)
+          elsif match_name(email.subject, gem.name)
             @security_messages[key_for_emails(listname, gem, email)] = SecurityAlert.new(email.subject)
             Utils::log_debug "looking for security emails: subject matches gem #{gem.name}: #{email.subject}"
-            next
           end
         end
       end
@@ -138,20 +135,7 @@ module GemsStatus
        Utils::log_error gem.name, "There was a problem downloading info for #{gem.name} #{e.to_s}"
        return nil
      end
-     uri = nil
-     if gem_version_information["project_uri"] && 
-        gem_version_information["project_uri"].include?("github")
-       uri = gem_version_information["project_uri"]
-     end
-     if gem_version_information["homepage_uri"] && 
-        gem_version_information["homepage_uri"].include?("github")
-       uri = gem_version_information["homepage_uri"]
-     end
-     if gem_version_information["source_code_uri"] && 
-        gem_version_information["source_code_uri"].include?("github")
-       uri = gem_version_information["source_code_uri"]
-     end
-     return uri
+     gem_uri(gem_version_information)
    end
 
    def look_for_security_messages(name, source_repo, origin, counter = 0)
@@ -175,6 +159,22 @@ module GemsStatus
       end
    end
 
+   private
+
+   def gem_uri(gem_version_information)
+     if gem_version_information["project_uri"] && 
+        gem_version_information["project_uri"].include?("github")
+       return gem_version_information["project_uri"]
+     elsif gem_version_information["homepage_uri"] && 
+        gem_version_information["homepage_uri"].include?("github")
+       return gem_version_information["homepage_uri"]
+     elsif gem_version_information["source_code_uri"] && 
+        gem_version_information["source_code_uri"].include?("github")
+       return gem_version_information["source_code_uri"]
+     else
+       return nil
+     end
+   end
 
   end
 end
