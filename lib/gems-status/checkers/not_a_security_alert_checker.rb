@@ -4,10 +4,8 @@ require "open-uri"
 
 require "gems-status/checkers/gem_checker"
 require "gems-status/checkers/security_alert"
-require "gems-status/checkers/git_check_messages"
-require "gems-status/checkers/hg_check_messages"
-require "gems-status/checkers/svn_check_messages"
 require "gems-status/checkers/scm_security_messages"
+require "gems-status/checkers/scm_check_messages_factory"
 
 module GemsStatus
 
@@ -166,16 +164,8 @@ module GemsStatus
           Dir.mkdir(name)
         end
         Dir.chdir(name) do
-          if source_repo.include?("git")
-            scmCheckMessages = GitCheckMessages.new 
-            Utils::log_debug "git repo"
-          elsif source_repo.include?("svn")
-            scmCheckMessages = SvnCheckMessages.new
-            Utils::log_debug "svn repo"
-          elsif source_repo.include?("bitbucket")
-            scmCheckMessages = HgCheckMessages.new
-            Utils::log_debug "mercurial repo"
-          else
+          scmCheckMessages = ScmCheckMessagesFactory.get_instance(source_repo)
+          if scmCheckMessages == nil
             Utils::log_error name, "Not a valid source repo #{source_repo}"
             return {}
           end
@@ -184,6 +174,7 @@ module GemsStatus
         end
       end
    end
+
 
   end
 end
