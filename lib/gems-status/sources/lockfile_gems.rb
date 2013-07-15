@@ -4,7 +4,7 @@ require "open-uri"
 require "zlib"
 
 require "bundler"
-require "gems-status/sources/ruby_gems_gems_gem_simple"
+require "gems-status/gem_simple"
 require "gems-status/utils"
 
 module GemsStatus
@@ -64,7 +64,7 @@ module GemsStatus
           else
             gems_url = @gems_url
           end
-          @result[name] = RubyGemsGems_GemSimple.new(name, version , '', @filename,
+          @result[name] = GemSimple.new(name, version , nil, @filename,
                                                      gems_url, dependencies)
         end
       end
