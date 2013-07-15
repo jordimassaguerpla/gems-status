@@ -5,10 +5,10 @@ require 'gems-status'
 
 module GemsStatus
 
-  class GemsCompositeCommandTest < GemsCompositeCommand
+  class GemsRunnerTest < GemsStatus::Runner
     attr_accessor :results
   end
 
-  class TestGemsCompositeCommand < Test::Unit::TestCase
+  class RunnerTest < Test::Unit::TestCase
   end
 end

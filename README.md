@@ -32,31 +32,6 @@ After you have a configuration file, you can run it with:
 have fun!
 
 
-# Extending gems-status
-
-Gems-status follows the composite command pattern in a way that there are two command classes:
-
-- GemsCommand
-- GemsChecker
-
-GemsCommand is the base class for the classes that represent a gem source, i.e. LockFileGems (gems from a Gemfile.lock). GemsCommand has a method called execute that should store the results on an object variable called result. 
-
-GemsChecker is the base class for the classes that run a check, like NotASecurityAlertChecker. GemsChecker has a method called check? that returns true or false depending on the result of the check, and a method called description, that contains the description in case the check returned false.
-
-In order to extend gems-status with new sources or checks, extend those classes and then add them to the configuration file.
-
-A part from that, there are two other main classes, that are:
-
-GemsCompositeCommand
-TextView
-
-GemsCompositeCommand is the class that will run all the commands (GemsCommands and GemsCheckers) that are specified in the configuration file, and then, with the results of them it will call the TextView methods in order to create the final report.
-
-TextView contains the implementation for printing the report. 
-
-Feel free to send me a pull request!
-
-jordi massaguer pla - jmassaguerpla@suse.de
 
 # Disc usage and emails
 
@@ -71,3 +46,6 @@ find tmp/utils/mail/ -mtime +365 -delete
 If, for any reason, you won't to reset the emails, you can remove the ones in your filesystem under tmp/utils/mail and go to your gmail account and mark all your emails as unread.
 
 
+Feel free to send me a pull request!
+
+jordi massaguer pla - jmassaguerpla@suse.de

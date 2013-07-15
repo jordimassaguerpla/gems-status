@@ -7,7 +7,7 @@ require "yaml"
 
 require "gems-status/gem_simple"
 require "gems-status/sources.rb"
-require "gems-status/gems_composite_command"
+require "gems-status/runner"
 require "gems-status/checkers"
 
 module GemsStatus
@@ -16,32 +16,32 @@ module GemsStatus
     def initialize(conf)
       @conf = conf
       Utils::known_licenses = @conf["licenses"]
-      @gems_composite_command = nil
-      @gems_composite_command = GemsCompositeCommand.new
+      @runner = nil
+      @runner = GemsStatus::Runner.new
       c = @conf["source"]
       gems = eval(c["classname"]).new(c)
-      @gems_composite_command.command = gems
+      @runner.command = gems
       if @conf["checkers"]
         @conf["checkers"].each do |c|
           checker = eval(c["classname"]).new(c)
-         @gems_composite_command.add_checker(checker)
+         @runner.add_checker(checker)
         end
       end
       if @conf["comments"]
-        @gems_composite_command.add_comments(@conf["comments"])
+        @runner.add_comments(@conf["comments"])
       end
     end
 
     def execute
-      @gems_composite_command.execute
+      @runner.execute
     end
 
     def results
-      {:results => @gems_composite_command.results, :checker_results => @gems_composite_command.checker_results}
+      {:results => @runner.results, :checker_results => @runner.checker_results}
     end
 
     def print
-      @gems_composite_command.print
+      @runner.print
     end
   end
 end

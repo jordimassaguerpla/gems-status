@@ -3,7 +3,7 @@ require "gems-status/text_view"
 
 module GemsStatus
 
-  class GemsCompositeCommand
+  class Runner
     attr_accessor :results, :checker_results, :command
 
     def initialize
