@@ -11,7 +11,26 @@ module GemsStatus
       puts "---"
     end
 
+
     def print_results(results, checker_results, comments)
+      print_gem_list(results)
+      print_gem_comments(results, comments)
+      print_gem_checker_results(checker_results)
+    end
+
+    def print_head
+    end
+
+    def print_tail
+      puts "---"
+      date = Time.now.strftime('%a %b %d %H:%M:%S %Z %Y')
+      puts "run by https://github.com/jordimassaguerpla/gems-status"
+      puts "#{date} - version: #{GemsStatus::VERSION}"
+    end
+
+    private
+
+    def print_gem_list(results)
       puts "Gem list"
       puts ""
       results.each do |result|
@@ -21,6 +40,9 @@ module GemsStatus
       end
       puts ""
       puts "---"
+    end
+
+    def print_gem_comments(results, comments)
       puts "Comments"
       puts ""
       results.each do |result|
@@ -34,6 +56,10 @@ module GemsStatus
       end
       puts ""
       puts "---"
+    end
+
+
+    def print_gem_checker_results(checker_results)
       if checker_results.length == 0
         puts "Checker results: SUCCESS"
       else
@@ -47,16 +73,6 @@ module GemsStatus
         end
         puts ""
       end
-    end
-
-    def print_head
-    end
-
-    def print_tail
-      puts "---"
-      date = Time.now.strftime('%a %b %d %H:%M:%S %Z %Y')
-      puts "run by https://github.com/jordimassaguerpla/gems-status"
-      puts "#{date} - version: #{GemsStatus::VERSION}"
     end
 
   end
