@@ -1,10 +1,9 @@
 require "gems-status/gem_simple"
-require "gems-status/gems_command"
 require "gems-status/text_view"
 
 module GemsStatus
 
-  class GemsCompositeCommand < GemsCommand
+  class GemsCompositeCommand
     attr_accessor :results, :checker_results, :command
 
     def initialize

@@ -5,12 +5,11 @@ require "zlib"
 
 require "bundler"
 require "gems-status/sources/ruby_gems_gems_gem_simple"
-require "gems-status/gems_command"
 require "gems-status/utils"
 
 module GemsStatus
 
-  class LockfileGems < GemsCommand
+  class LockfileGems
     attr_reader :filename
     def initialize(conf)
       Utils::check_parameters('LockfileGems', conf, ["id", "filename", "gems_url"])
