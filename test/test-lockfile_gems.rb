@@ -42,6 +42,14 @@ module GemsStatus
      result = gem_list["dep_from_git"].version
      assert_equal(Gem::Version.new("1.0.0"), result)
    end
+   def test_filename
+     conf = {}
+     conf["filename"] = "fn"
+     conf["gems_url"] = "gu"
+     conf["classname"] = "LockfileGems"
+     lg = GemsStatus::LockfileGems.new(conf)
+     assert_equal(lg.filename, "fn")
+   end
 
   end
 

@@ -20,6 +20,25 @@ if !File::exists?(ARGV[0]) then
   exit
 end
 
+
+def setup_runner(conf)
+  GemsStatus::Utils::known_licenses = conf["licenses"]
+  runner = GemsStatus::Runner.new
+  c = conf["source"]
+  gems = eval("GemsStatus::#{c["classname"]}").new(c)
+  runner.source = gems
+  if conf["checkers"]
+    conf["checkers"].each do |c|
+      checker = eval("GemsStatus::#{c["classname"]}").new(c)
+     runner.add_checker(checker)
+    end
+  end
+  if conf["comments"]
+    runner.add_comments(conf["comments"])
+  end
+  return runner
+end
+
 conf_file = ARGV[0]
 begin
   conf = YAML::load(ERB.new(File::read(conf_file)).result)
@@ -27,9 +46,9 @@ rescue
   GemsStatus::Utils::log_error("?", "There was a problem opening #{conf_file}")
   exit
 end
-gs = GemsStatus::GemStatus.new(conf)
-gs.execute
-gs.print
-checker_r = gs.results[:checker_results]
-exit 1 if checker_r && checker_r.length > 0
+
+runner = setup_runner(conf)
+runner.execute
+runner.print
+exit 1 if runner.checker_results && runner.checker_results.length > 0
 
