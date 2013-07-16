@@ -7,11 +7,7 @@ require 'gems-status'
 module GemsStatus
   class Utils
     def self.download_md5(name, version, gems_url)
-      if name == "name"
-        "12345"
-      else
-        "_"
-      end
+      "12345"
     end
     def self.download_license(name, version, gems_url)
       "license"
