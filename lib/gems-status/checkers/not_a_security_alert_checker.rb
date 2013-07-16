@@ -42,6 +42,7 @@ module GemsStatus
       return if @security_messages.length == 0
       #gems.origin == gems.gems_url if we are looking to an upstream gem, 
       #for example in rubygems.org. We only care about our application gems.
+      #where the origin will be a gemfile.lock file
       return if gem.origin == gem.gems_url
       mssg = message(gem)
       @email_to.each do |email_receiver|
@@ -116,7 +117,6 @@ module GemsStatus
    private
 
    def filter_security_messages_already_fixed(version, date)
-     #TODO: let's use a database instead of having the info in yaml file
      @security_messages.delete_if do |k,v|
        @fixed[k] && Gem::Version.new(@fixed[k]) <= version 
      end
