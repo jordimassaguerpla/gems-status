@@ -13,34 +13,33 @@ module GemsStatus
       puts "DEBUG: dir : #{dir} #{dir.class.name}"
       @filename = "#{dir}/Gemfile.lock.test"
       @gems_url = ""
-      @result = {}
     end
   end
 
   class TestLockfileGems < Test::Unit::TestCase
    def test_get_rubygems_names
      lockfilegems = LockfileGemsTest.new
-     lockfilegems.execute
-     assert(lockfilegems.result.length == 6)
-     result = lockfilegems.result["test"].name
+     gem_list = lockfilegems.gem_list
+     assert(gem_list.length == 6)
+     result = gem_list["test"].name
      assert_equal("test",result)
-     result = lockfilegems.result["test"].version
+     result = gem_list["test"].version
      assert_equal(Gem::Version.new("0.8.6"), result)
-     result = lockfilegems.result["test2"].name
+     result = gem_list["test2"].name
      assert_equal("test2",result)
-     result = lockfilegems.result["test2"].version
+     result = gem_list["test2"].version
      assert_equal(Gem::Version.new("1.2.3"), result)
-     result = lockfilegems.result["test3"].name
+     result = gem_list["test3"].name
      assert_equal("test3",result)
-     result = lockfilegems.result["test3"].version
+     result = gem_list["test3"].version
      assert_equal(Gem::Version.new("1.2.3"), result)
-     result = lockfilegems.result["test4"].name
+     result = gem_list["test4"].name
      assert_equal("test4",result)
-     result = lockfilegems.result["test4"].version
+     result = gem_list["test4"].version
      assert_equal(Gem::Version.new("1.2.3"), result)
-     result = lockfilegems.result["from_git"].version
+     result = gem_list["from_git"].version
      assert_equal(Gem::Version.new("1.0.3"), result)
-     result = lockfilegems.result["dep_from_git"].version
+     result = gem_list["dep_from_git"].version
      assert_equal(Gem::Version.new("1.0.0"), result)
    end
 

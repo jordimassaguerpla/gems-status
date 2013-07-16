@@ -20,7 +20,7 @@ module GemsStatus
       @runner = GemsStatus::Runner.new
       c = @conf["source"]
       gems = eval(c["classname"]).new(c)
-      @runner.command = gems
+      @runner.source = gems
       if @conf["checkers"]
         @conf["checkers"].each do |c|
           checker = eval(c["classname"]).new(c)
@@ -37,7 +37,7 @@ module GemsStatus
     end
 
     def results
-      {:results => @runner.results, :checker_results => @runner.checker_results}
+      {:gem_list => @runner.gem_list, :checker_results => @runner.checker_results}
     end
 
     def print

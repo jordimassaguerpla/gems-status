@@ -10,12 +10,11 @@ require "gems-status/utils"
 module GemsStatus
 
   class LockfileGems
-    attr_reader :filename, :result
+    attr_reader :filename
     def initialize(conf)
       Utils::check_parameters('LockfileGems', conf, ["id", "filename", "gems_url"])
       @filename = conf['filename']
       @gems_url = conf['gems_url']
-      @result = {}
       @ident = conf['id']
     end
 
@@ -31,20 +30,8 @@ module GemsStatus
       return data
     end
 
-    def update_gem_dependencies(gem)
-      Utils::log_debug("updating dependencies for #{gem.name}")
-      changes = false
-      @result.each do |k, gems|
-        gems.each do |gem2|
-          if gem.depends?(gem2)
-            changes = gem.merge_deps(gem2) || changes
-          end
-        end
-      end
-      return changes
-    end
-
-    def execute
+    def gem_list
+      gems = {}
       Utils::log_debug "reading #{@filename}"
       Dir.chdir(File.dirname(@filename)) do
         file_data = get_data(File::dirname(@filename), File::basename(@filename))
@@ -56,11 +43,12 @@ module GemsStatus
         lockfile.specs.each do |spec|
           version = Gem::Version.create(spec.version)
           Utils::log_debug "dependencies for #{spec.name} #{spec.dependencies}"
-          @result[spec.name] = GemSimple.new(spec.name, version , nil, 
+          gems[spec.name] = GemSimple.new(spec.name, version , nil, 
                                              @filename, gems_url(spec), 
                                              spec.dependencies)
         end
       end
+      gems
     end
 
     private

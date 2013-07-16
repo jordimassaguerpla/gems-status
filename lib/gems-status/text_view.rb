@@ -12,9 +12,9 @@ module GemsStatus
     end
 
 
-    def print_results(results, checker_results, comments)
-      print_gem_list(results)
-      print_gem_comments(results, comments)
+    def print_results(gem_list, checker_results, comments)
+      print_gem_list(gem_list)
+      print_gem_comments(gem_list, comments)
       print_gem_checker_results(checker_results)
     end
 
@@ -30,28 +30,24 @@ module GemsStatus
 
     private
 
-    def print_gem_list(results)
+    def print_gem_list(gem_list)
       puts "Gem list"
       puts ""
-      results.each do |result|
-        result.sort.each do |_, gem|
-          puts "#{gem.name} #{gem.version} #{gem.license}"
-        end
+      gem_list.sort.each do |_, gem|
+        puts "#{gem.name} #{gem.version} #{gem.license}"
       end
       puts ""
       puts "---"
     end
 
-    def print_gem_comments(results, comments)
+    def print_gem_comments(gem_list, comments)
       puts "Comments"
       puts ""
-      results.each do |result|
-        result.sort.each do |_, gem|
-          if comments[gem.name]
-            puts "#{gem.name}:"
-            puts "#{comments[gem.name]}" 
-            puts ""
-          end
+      gem_list.sort.each do |_, gem|
+        if comments[gem.name]
+          puts "#{gem.name}:"
+          puts "#{comments[gem.name]}" 
+          puts ""
         end
       end
       puts ""
@@ -68,7 +64,7 @@ module GemsStatus
       puts ""
       checker_results.sort.each do |gem_name, checker_r|
         puts "#{gem_name}"
-        checker_r.each do |_, checker|
+        checker_r.each do |checker|
           puts "#{checker.description}"
         end
         puts ""
