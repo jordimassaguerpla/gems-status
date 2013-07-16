@@ -1,4 +1,3 @@
-require "gmail"
 require "json"
 require "open-uri"
 
@@ -46,15 +45,8 @@ module GemsStatus
       return if gem.origin == gem.gems_url
       mssg = message(gem)
       @email_to.each do |email_receiver|
-        Gmail.new(@email_username, @email_password) do |gmail|
-          gmail.deliver do
-            to email_receiver
-            subject "[gems-status] security alerts for #{gem.name}"
-            text_part do
-               body mssg
-             end
-          end
-        end
+        GemsStatus::Utils.send_email(email_receiver, @email_username,
+                                     @email_password, gem.name, mssg)
       end
       Utils::log_debug "Email sent to #{@email_to} "
       Utils::log_debug "with body #{mssg} "
