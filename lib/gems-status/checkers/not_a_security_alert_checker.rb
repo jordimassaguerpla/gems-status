@@ -76,7 +76,7 @@ module GemsStatus
     end
 
     def match_name(str, name)
-      str =~ /[gem|ruby].*\b#{name}\b/
+      str =~ /[gem|ruby].*\b#{name}\b/ || str =~ /#{name}\b.*[gem|ruby].*\b/
     end
 
     def look_in_emails(gem)
