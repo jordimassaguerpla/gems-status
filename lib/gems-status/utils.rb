@@ -174,6 +174,22 @@ module GemsStatus
         end
     end
 
+    def Utils.download_date(name, version)
+      Utils::log_debug "looking for date for #{name} - #{version}"
+      begin
+        versions = JSON.parse(open("https://rubygems.org/api/v1/versions/#{name}.json").read)
+        versions.each do |version|
+          if Gem::Version.new(version["number"]) == version
+            Utils::log_debug  "Date for #{name} - #{version} : #{version["built_at"]}"
+            return Time.parse version["built_at"]
+          end
+        end
+      rescue
+        Utils::log_error(name, "There was a problem opening https://rubygems.org/api/v1/versions/#{name}.json")
+      end
+      nil
+    end
+
     private
 
     def Utils.download_gem(name, version, gems_url)
