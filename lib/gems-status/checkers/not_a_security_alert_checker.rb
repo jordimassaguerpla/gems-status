@@ -96,7 +96,7 @@ module GemsStatus
     def look_in_emails(gem)
       @emails.each do |listname, emails|
         emails.each do |email|
-          if match_name(listname, gem.name)
+          if listname.strip == "rubyonrails-security@googlegroups.com" && gem.name == "rails" 
             @security_messages[key_for_emails(listname, gem, email)] = SecurityAlert.new(email.subject)
             Utils::log_debug "looking for security emails: listname matches gem #{gem.name}: #{listname}"
           elsif match_name(email.subject, gem.name)
