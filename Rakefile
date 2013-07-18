@@ -6,15 +6,7 @@ Rake::TestTask.new(:test) do |test|
   test.verbose = true
 end
 
-desc "release next version"
-task :release do
-  f = open("VERSION", "r")
-  version = f.read().strip
-  f.close
-  version_split = version.scan /([0-9]+)\.([0-9]+)\.([0-9]+)/
-  version_split.flatten!
-  next_minor = eval(version_split[1]) + 1
-  next_version = "#{version_split[0]}.#{next_minor}.#{version_split[2]}"
+def release(next_version)
   puts "update VERSION file with #{next_version}"
   f = open("VERSION", "w")
   f.write(next_version)
@@ -33,6 +25,29 @@ task :release do
   puts "push gems-status-#{next_version}.gem to rubygems"
   `gem push gems-status-#{next_version}.gem`
   puts "Done!"
+end
+
+desc "release next version"
+task :release do
+  f = open("VERSION", "r")
+  version = f.read().strip
+  f.close
+  version_split = version.scan /([0-9]+)\.([0-9]+)\.([0-9]+)/
+  version_split.flatten!
+  next_minor = eval(version_split[1]) + 1
+  next_version = "#{version_split[0]}.#{next_minor}.#{version_split[2]}"
+  release(next_version)
+
+desc "release next MAJOR version"
+task :release_major do
+  f = open("VERSION", "r")
+  version = f.read().strip
+  f.close
+  version_split = version.scan /([0-9]+)\.([0-9]+)\.([0-9]+)/
+  version_split.flatten!
+  next_major = eval(version_split[0]) + 1
+  next_version = "#{next_major}.#{version_split[1]}.#{version_split[2]}"
+  release(next_version)
 end
 
 
