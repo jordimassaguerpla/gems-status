@@ -26,7 +26,7 @@ module GemsStatus
         @gem_list.each do |name, gem|
           if !check_object.check?(gem)
             @checker_results[name] = [] unless @checker_results[name]
-            @checker_results[gem.name] << check_object.clone
+            @checker_results[name] << check_object.clone
           end
         end
       end
