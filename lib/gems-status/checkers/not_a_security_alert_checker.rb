@@ -24,6 +24,32 @@ module GemsStatus
       @emails = Utils.download_emails(@email_username, @email_password, @mailing_lists)
     end
 
+    def check?(gem)
+      @gem = gem
+      #ignore upstream checks
+      return true if gem.origin == gem.gems_url
+
+      @security_messages = {}
+      look_in_scm(gem)
+      look_in_emails(gem)
+      filter_security_messages_already_fixed(gem.version, gem.date)
+      send_emails(gem)
+      return @security_messages.length == 0
+    end
+
+   def description
+     if !@gem
+       Utils::log_debug("No gem. That means that check method has not been called in NotASecurityAlertChecker")
+       return
+     end
+     message(@gem)
+   end
+
+   private
+
+    def match_name(str, name)
+      str =~ /[gem|ruby].*\b#{name}\b/ || str =~ /#{name}\b.*[gem|ruby].*\b/
+    end
 
     def message(gem)
       return unless gem
@@ -67,10 +93,6 @@ module GemsStatus
       "email_#{listname}_#{gem.name}_#{gem.origin}_#{email.uid}"
     end
 
-    def match_name(str, name)
-      str =~ /[gem|ruby].*\b#{name}\b/ || str =~ /#{name}\b.*[gem|ruby].*\b/
-    end
-
     def look_in_emails(gem)
       @emails.each do |listname, emails|
         emails.each do |email|
@@ -84,29 +106,6 @@ module GemsStatus
         end
       end
     end
-
-    def check?(gem)
-      @gem = gem
-      #ignore upstream checks
-      return true if gem.origin == gem.gems_url
-
-      @security_messages = {}
-      look_in_scm(gem)
-      look_in_emails(gem)
-      filter_security_messages_already_fixed(gem.version, gem.date)
-      send_emails(gem)
-      return @security_messages.length == 0
-    end
-
-   def description
-     if !@gem
-       Utils::log_debug("No gem. That means that check method has not been called in NotASecurityAlertChecker")
-       return
-     end
-     message(@gem)
-   end
-
-   private
 
    def filter_security_messages_already_fixed(version, date)
      @security_messages.delete_if do |k,v|
@@ -150,8 +149,6 @@ module GemsStatus
         end
       end
    end
-
-   private
 
    def gem_uri(gem_version_information)
      if gem_version_information["project_uri"] && 

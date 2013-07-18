@@ -7,6 +7,7 @@ module GemsStatus
   class NotASecurityAlertChecker
     def initialize(conf)
     end
+    public :match_name
   end
   class NotASecurityAlertCheckerTest <Test::Unit::TestCase 
     def test_match_name
