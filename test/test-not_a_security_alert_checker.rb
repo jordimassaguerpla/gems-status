@@ -23,6 +23,12 @@ module GemsStatus
     def date
       Date.new(2012, 12, 12)
     end
+    def gems_url
+      "http://rubygems.org/gems"
+    end
+    def version
+      "1.2.3"
+    end
   end
   class MockEmail
     def uid
@@ -152,6 +158,24 @@ module GemsStatus
       date = Date.new(2013, 12, 12)
       ch.filter_security_messages_already_fixed(version, date)
       assert_equal 0, ch.security_messages.length
+    end
+
+    def test_check
+      ch = NotASecurityAlertChecker.new([])
+      gem = MockGem.new
+      def ch.look_in_scm(gem)
+      end
+      def ch.look_in_emails(gem)
+      end
+      def ch.filter_security_messages_already_fixed(version, date)
+      end
+      def ch.send_emails(gem)
+      end
+      assert ch.check?(gem)
+      def ch.look_in_scm(gem)
+        @security_messages[gem] = ""
+      end
+      assert !ch.check?(gem)
     end
 
   end
