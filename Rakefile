@@ -37,6 +37,7 @@ task :release do
   next_minor = eval(version_split[1]) + 1
   next_version = "#{version_split[0]}.#{next_minor}.#{version_split[2]}"
   release(next_version)
+end
 
 desc "release next MAJOR version"
 task :release_major do
