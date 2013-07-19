@@ -4,6 +4,11 @@ require 'test/unit'
 require 'gems-status'
 
 module GemsStatus
+  class MockSecurityAlert
+    def desc
+      "description"
+    end
+  end
   class NotASecurityAlertChecker
     attr_reader :security_messages, :fixed
     attr_accessor :emails
@@ -186,6 +191,28 @@ module GemsStatus
       assert result.split("\n")[0].include?(gem.name)
       assert result.split("\n")[0].include?(gem.version)
       assert result.split("\n")[0].include?(gem.origin)
+    end
+
+    def test_description
+      ch = NotASecurityAlertChecker.new([])
+      gem = MockGem.new
+      def ch.look_in_scm(gem)
+        @security_messages[gem] = MockSecurityAlert.new
+      end
+      def ch.look_in_emails(gem)
+      end
+      def ch.filter_security_messages_already_fixed(version, date)
+      end
+      def ch.send_emails(gem)
+      end
+      result = ch.description
+      assert result == nil
+      result = ch.check?(gem)
+      result = ch.description
+      assert result.split("\n")[0].include?(gem.name)
+      assert result.split("\n")[0].include?(gem.version)
+      assert result.split("\n")[0].include?(gem.origin)
+
     end
 
   end
