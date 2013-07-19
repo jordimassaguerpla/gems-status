@@ -35,7 +35,7 @@ task :release do
   version_split = version.scan /([0-9]+)\.([0-9]+)\.([0-9]+)/
   version_split.flatten!
   next_minor = eval(version_split[1]) + 1
-  next_version = "#{version_split[0]}.#{next_minor}.#{version_split[2]}"
+  next_version = "#{version_split[0]}.#{next_minor}.0"
   release(next_version)
 end
 
@@ -47,7 +47,7 @@ task :release_major do
   version_split = version.scan /([0-9]+)\.([0-9]+)\.([0-9]+)/
   version_split.flatten!
   next_major = eval(version_split[0]) + 1
-  next_version = "#{next_major}.#{version_split[1]}.#{version_split[2]}"
+  next_version = "#{next_major}.0.0"
   release(next_version)
 end
 
