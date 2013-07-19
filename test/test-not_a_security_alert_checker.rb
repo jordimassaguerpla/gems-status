@@ -11,7 +11,8 @@ module GemsStatus
       @security_messages = {}
       @fixed = {}
     end
-    public :match_name, :key_for_emails, :look_in_emails, :gem_uri, :filter_security_messages_already_fixed
+    #make this methods public in order to test them
+    public :match_name, :key_for_emails, :look_in_emails, :gem_uri, :filter_security_messages_already_fixed, :message
   end
   class MockGem
     def name
@@ -176,6 +177,15 @@ module GemsStatus
         @security_messages[gem] = ""
       end
       assert !ch.check?(gem)
+    end
+
+    def test_message
+      ch = NotASecurityAlertChecker.new([])
+      gem = MockGem.new
+      result = ch.message(gem)
+      assert result.split("\n")[0].include?(gem.name)
+      assert result.split("\n")[0].include?(gem.version)
+      assert result.split("\n")[0].include?(gem.origin)
     end
 
   end
