@@ -48,9 +48,22 @@ module GemsStatus
     def test_match_name
       ch = NotASecurityAlertChecker.new([])
       assert ch.match_name("rubygem mail", "mail")
+      assert ch.match_name("mail rubygem", "mail")
       assert !ch.match_name("mail","mail")
-      assert ch.match_name("ruby mail", "mail")
+      assert ch.match_name("gem mail", "mail")
+      assert ch.match_name("gem mail something", "mail")
+      assert ch.match_name("ruby something mail", "mail")
+      assert ch.match_name("ruby something mail something", "mail")
+      assert ch.match_name("something ruby something mail", "mail")
       assert ch.match_name("mail gem", "mail")
+      assert ch.match_name("mail something gem", "mail")
+      assert ch.match_name("mail gem something", "mail")
+      assert ch.match_name("mail ruby", "mail")
+      assert ch.match_name("something mail ruby", "mail")
+      assert ch.match_name("something mail ruby something", "mail")
+      assert ch.match_name("ruby something mail", "mail")
+      assert !ch.match_name("ruby somethingmail", "mail")
+      assert !ch.match_name("somethingmail ruby", "mail")
     end
 
     def test_key_for_emails
@@ -75,7 +88,7 @@ module GemsStatus
       assert_equal 1, ch.security_messages.length
     end
 
-    def test_look_in_emails_for_other_mail
+    def test_look_in_emails_for_gem_name
       mail = MockEmail.new
       def mail.subject
         "gem rails"
@@ -93,6 +106,106 @@ module GemsStatus
       ch.look_in_emails(gem)
       assert_equal Hash, ch.security_messages.class
       assert_equal 1, ch.security_messages.length
+    end
+
+    def test_look_in_emails_for_invalid_gem_name
+      mail = MockEmail.new
+      def mail.subject
+        "rails issue"
+      end
+      ch  = NotASecurityAlertChecker.new([])
+      ch.emails = {
+        "other" => [mail]
+      }
+      gem = MockGem.new
+      def gem.name
+        "rails"
+      end
+      assert_equal Hash, ch.security_messages.class
+      assert_equal 0, ch.security_messages.length
+      ch.look_in_emails(gem)
+      assert_equal Hash, ch.security_messages.class
+      assert_equal 0, ch.security_messages.length
+    end
+
+    def test_look_in_emails_for_other_gem
+      mail = MockEmail.new
+      def mail.subject
+        "gem rails"
+      end
+      ch  = NotASecurityAlertChecker.new([])
+      ch.emails = {
+        "other" => [mail]
+      }
+      gem = MockGem.new
+      def gem.name
+        "other"
+      end
+      assert_equal Hash, ch.security_messages.class
+      assert_equal 0, ch.security_messages.length
+      ch.look_in_emails(gem)
+      assert_equal Hash, ch.security_messages.class
+      assert_equal 0, ch.security_messages.length
+    end
+
+    def test_look_in_emails_for_ruby_and_gem_name
+      mail = MockEmail.new
+      def mail.subject
+        "ruby blablabla rails"
+      end
+      ch  = NotASecurityAlertChecker.new([])
+      ch.emails = {
+        "other" => [mail]
+      }
+      gem = MockGem.new
+      def gem.name
+        "rails"
+      end
+      assert_equal Hash, ch.security_messages.class
+      assert_equal 0, ch.security_messages.length
+      ch.look_in_emails(gem)
+      assert_equal Hash, ch.security_messages.class
+      assert_equal 1, ch.security_messages.length
+    end
+
+    def test_look_in_emails_for_gem_name_in_a_word
+      mail = MockEmail.new
+      def mail.subject
+        "gem something_rails"
+      end
+      ch  = NotASecurityAlertChecker.new([])
+      ch.emails = {
+        "other" => [mail]
+      }
+      gem = MockGem.new
+      def gem.name
+        "rails"
+      end
+      assert_equal Hash, ch.security_messages.class
+      assert_equal 0, ch.security_messages.length
+      ch.look_in_emails(gem)
+      assert_equal Hash, ch.security_messages.class
+      assert_equal 0, ch.security_messages.length
+    end
+
+    def test_look_in_emails_for_gem_name_in_a_word_2
+      mail = MockEmail.new
+      def mail.subject
+        "gem rails_something"
+      end
+      ch  = NotASecurityAlertChecker.new([])
+      ch.emails = {
+        "other" => [mail]
+      }
+      gem = MockGem.new
+      def gem.name
+        "rails"
+      end
+      assert_equal Hash, ch.security_messages.class
+      assert_equal 0, ch.security_messages.length
+      ch.look_in_emails(gem)
+      assert_equal Hash, ch.security_messages.class
+      assert_equal 0, ch.security_messages.length
     end
 
     def test_gem_uri_with_project_uri

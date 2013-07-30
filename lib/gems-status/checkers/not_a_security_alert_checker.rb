@@ -48,7 +48,7 @@ module GemsStatus
    private
 
     def match_name(str, name)
-      str =~ /[gem|ruby].*\b#{name}\b/ || str =~ /#{name}\b.*[gem|ruby].*\b/
+      str =~ /(gem|ruby).*\b#{name}\b/ || str =~ /\b#{name}\b.*(gem|ruby).*/
     end
 
     def message(gem)
