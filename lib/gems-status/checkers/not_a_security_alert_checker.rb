@@ -99,6 +99,8 @@ module GemsStatus
           if listname.strip == "rubyonrails-security@googlegroups.com" && gem.name == "rails" 
             @security_messages[key_for_emails(listname, gem, email)] = SecurityAlert.new(email.subject)
             Utils::log_debug "looking for security emails: listname matches gem #{gem.name}: #{listname}"
+          elsif email.subject.start_with? "Re:"
+            Utils::log_debug "ignoring message that starts with Re:"
           elsif match_name(email.subject, gem.name)
             @security_messages[key_for_emails(listname, gem, email)] = SecurityAlert.new(email.subject)
             Utils::log_debug "looking for security emails: subject matches gem #{gem.name}: #{email.subject}"

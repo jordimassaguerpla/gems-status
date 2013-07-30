@@ -168,6 +168,26 @@ module GemsStatus
       assert_equal 1, ch.security_messages.length
     end
 
+    def test_look_in_emails_and_ignore_if_re_in_subject
+      mail = MockEmail.new
+      def mail.subject
+        "Re: ruby blablabla rails"
+      end
+      ch  = NotASecurityAlertChecker.new([])
+      ch.emails = {
+        "other" => [mail]
+      }
+      gem = MockGem.new
+      def gem.name
+        "rails"
+      end
+      assert_equal Hash, ch.security_messages.class
+      assert_equal 0, ch.security_messages.length
+      ch.look_in_emails(gem)
+      assert_equal Hash, ch.security_messages.class
+      assert_equal 0, ch.security_messages.length
+    end
+
     def test_look_in_emails_for_gem_name_in_a_word
       mail = MockEmail.new
       def mail.subject
