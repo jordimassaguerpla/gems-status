@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    gems-status (1.67.0)
+    gems-status (1.68.0)
       bundler
       git
       gmail
