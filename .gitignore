@@ -1,3 +1,7 @@
 coverage
 TODO
 *.swp
+gems-status-*.gem
+build_security_messages_check
+tmp
+
