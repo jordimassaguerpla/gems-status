@@ -21,23 +21,6 @@ if !File::exists?(ARGV[0]) then
 end
 
 
-def setup_runner(conf)
-  GemsStatus::Utils::known_licenses = conf["licenses"]
-  runner = GemsStatus::Runner.new
-  c = conf["source"]
-  gems = eval("GemsStatus::#{c["classname"]}").new(c)
-  runner.source = gems
-  if conf["checkers"]
-    conf["checkers"].each do |c|
-      checker = eval("GemsStatus::#{c["classname"]}").new(c)
-     runner.add_checker(checker)
-    end
-  end
-  if conf["comments"]
-    runner.add_comments(conf["comments"])
-  end
-  return runner
-end
 
 conf_file = ARGV[0]
 begin
@@ -47,7 +30,7 @@ rescue
   exit
 end
 
-runner = setup_runner(conf)
+runner = GemsStatus::Runner::setup_runner(conf)
 runner.execute
 runner.print
 exit 1 if runner.checker_results && runner.checker_results.length > 0

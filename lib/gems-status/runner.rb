@@ -14,6 +14,24 @@ module GemsStatus
       @gem_list = nil
     end
 
+    def Runner.setup_runner(conf)
+      GemsStatus::Utils::known_licenses = conf["licenses"]
+      runner = GemsStatus::Runner.new
+      c = conf["source"]
+      gems = eval("GemsStatus::#{c["classname"]}").new(c)
+      runner.source = gems
+      if conf["checkers"]
+        conf["checkers"].each do |c|
+          checker = eval("GemsStatus::#{c["classname"]}").new(c)
+         runner.add_checker(checker)
+        end
+      end
+      if conf["comments"]
+        runner.add_comments(conf["comments"])
+      end
+      return runner
+    end
+
     def add_checker(check_object)
       @checkers << check_object
     end
