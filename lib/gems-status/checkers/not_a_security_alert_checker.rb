@@ -9,7 +9,7 @@ require "gems-status/checkers/scm_check_messages_factory"
 module GemsStatus
 
   class NotASecurityAlertChecker < GemChecker
-    attr_reader :security_messages
+    attr_reader :security_messages, :gem
     def initialize(conf)
       Utils::check_parameters('NotASecurityAlertChecker', conf, ["fixed", "source_repos", "email_username", "email_password", "mailing_lists", "email_to"])
       @fixed = conf["fixed"]
