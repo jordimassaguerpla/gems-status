@@ -21,7 +21,7 @@ module GemsStatus
       data = ""
       Dir.chdir(dirname) do
         begin
-          data = File.open(filename).read
+          data = File.read(filename)
         rescue
           Utils::log_error("?", "There was a problem opening file #{filename} ")
         end
