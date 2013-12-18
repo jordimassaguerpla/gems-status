@@ -47,7 +47,7 @@ module GemsStatus
         self.log_debug "email had already been downloaded #{mail.uid} - skipping"
         return
       end
-      Dir.mkdir(dirname)  unless File.exists?(dirname)
+      FileUtils::mkdir_p(dirname)  unless File.exists?(dirname)
       open(filename, "w") do |f|
         self.log_debug "writing email to fs #{mail.uid}"
         f.write(mail.subject)
