@@ -17,11 +17,17 @@ module GemsStatus
 
     def messages(name, source_repo)
       begin
+        puts "DEBUG: about to open #{source_repo}"
         g = Git.open(name)
+        puts "DEBUG: opened #{source_repo}"
       rescue
+        puts "DEBUG: about to clone #{source_repo}"
         g = Git.clone(source_repo, name)
+        puts "DEBUG: cloned #{source_repo}"
       end
+      puts "DEBUG: about to pull from #{source_repo}"
       g.lib.send(:command, 'pull')
+      puts "DEBUG: pulling finished"
       return g.log MAX_NUM_MESSAGES
     end
 
