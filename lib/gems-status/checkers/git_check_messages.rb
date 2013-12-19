@@ -22,6 +22,7 @@ module GemsStatus
         puts "DEBUG: opened #{source_repo}"
       rescue
         puts "DEBUG: about to clone #{source_repo}"
+        puts "in #{Dir.pwd}"
         g = Git.clone(source_repo, name)
         puts "DEBUG: cloned #{source_repo}"
       end
