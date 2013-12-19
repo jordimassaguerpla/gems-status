@@ -134,6 +134,7 @@ module GemsStatus
    def look_for_security_messages(name, source_repo, origin, counter = 0)
       Utils::log_debug "looking for security messages on #{source_repo}"
       if ! File.exists?("build_security_messages_check")
+        Utils::log_debug "creating build_security_messages_check in #{Dir.pwd}"
         Dir.mkdir("build_security_messages_check")
       end
       Dir.chdir("build_security_messages_check") do
