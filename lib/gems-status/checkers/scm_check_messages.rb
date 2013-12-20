@@ -1,3 +1,5 @@
+require "timeout"
+
 module GemsStatus
 
   class ScmCheckMessages
@@ -5,7 +7,9 @@ module GemsStatus
 
     def check_messages(name, source_repo, message_checker, origin, counter = 0)
       begin
-        messages = messages(name, source_repo)
+        messages = Timeout::timeout(300) {
+          messages(name, source_repo)
+        }
         return security_alerts(name, messages, message_checker, origin)
       rescue => e
         if counter == MAX_RETRIES
