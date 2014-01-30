@@ -148,7 +148,7 @@ module GemsStatus
         self.log_error(name, e.message)
         return nil
       end
-      license = Gem::Format.from_file_by_path(gem_file_path).spec.license
+      license = Gem::Package.new(gem_file_path).spec.license
       if !license || license.empty?
         if @@known_licenses[name]
           if @@known_licenses[name][version]
